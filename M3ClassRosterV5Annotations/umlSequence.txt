@@ -1,0 +1,88 @@
+@startuml
+title Class Roster MVC II - createStudent Sequence
+
+Controller -> View : getNewStudentInfo()
+View --> Controller : Student
+
+Controller -> Service: createStudent()
+Service --> Service : validates Student
+Service -> DAO: addStudent()
+DAO --> Service: Student
+
+Service -> AuditDao: writeAuditEntry()
+AuditDao --> Service: void
+
+Service --> Controller: void
+
+Controller -> View: displayCreateSuccessBanner()
+View --> Controller: void
+
+@enduml
+
+@startuml
+title Class Roster MVC II - listStudent Sequence
+
+View -> Controller
+
+Controller -> View: displayDisplayAllBanner()
+View -> Controller: void
+
+Controller -> Service: getAllStudents()
+Service -> studentDao: getAllStudents()
+studentDao --> studentDao: loadRoster() 
+studentDao -> Service: List<Student>
+Service -> Controller: List<Student>
+
+Controller -> View: displayStudentList(List<Student>)
+
+View -> Controller: void
+
+@enduml
+
+@startuml
+title Class Roster MVC II - removeStudent Sequence
+
+App -> Controller : run()
+
+Controller -> View: displayRemoveStudentBanner()
+View -> Controller: void
+
+Controller -> View: getStudentIDChoice()
+View -> Controller: studentID
+
+Controller -> Service: removeStudent(studentID)
+Service -> studentDao: removeStudent(studentID)
+studentDao --> studentDao: loadRoster()
+studentDao --> studentDao: removedStudent
+studentDao --> studentDao: writeRoster()
+studentDao -> Service: removedStudent
+Service -> auditDao: writeAuditEntry(entry)
+auditDao -> Service: void
+
+Service -> Controller: removedStudent
+
+Controller -> View: displayRemoveSuccessBanner()
+
+
+@enduml
+
+@startuml
+title Class Roster MVC II - viewStudent Sequence
+
+View -> Controller
+Controller -> View: displayDisplayStudentBanner()
+View -> Controller: void
+
+Controller -> View: getStudentIDChoice()
+View -> Controller: studentID
+
+Controller -> Service: getStudent(studentID)
+Service -> studentDao: getStudent(studentID)
+studentDao --> studentDao: loadRoster()
+studentDao -> Service: student
+
+Service -> Controller: student
+
+Controller -> View: displayStudent(student)
+
+@enduml
