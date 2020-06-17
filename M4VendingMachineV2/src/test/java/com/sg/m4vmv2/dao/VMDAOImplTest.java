@@ -24,7 +24,7 @@ public class VMDAOImplTest {
         String testFile = "testInventory.txt";
         new FileWriter(testFile);
 //        testDAO = new VMDAOImpl(testFile);
-        
+
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDAO = actx.getBean("testDao", VMDAOImpl.class);
     }
@@ -60,15 +60,14 @@ public class VMDAOImplTest {
         System.out.println("removeItem");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        int itemCt = 1;
         Item test1 = new Item(testName1, testCost1, itemCt);
 
         String testName2 = "Coconut Water";
         BigDecimal testCost2 = new BigDecimal("2.99");
-        int itemCt2 = 1;
-        Item test2 = new Item(testName2, testCost2, itemCt2);
+        Item test2 = new Item(testName2, testCost2, itemCt);
 
         //act and assert
         testDAO.addItem(test1);
@@ -91,15 +90,14 @@ public class VMDAOImplTest {
         System.out.println("getInventory");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        int itemCt = 1;
         Item test1 = new Item(testName1, testCost1, itemCt);
 
         String testName2 = "Coconut Water";
         BigDecimal testCost2 = new BigDecimal("2.99");
-        int itemCt2 = 1;
-        Item test2 = new Item(testName2, testCost2, itemCt2);
+        Item test2 = new Item(testName2, testCost2, itemCt);
 
         //act and assert
         testDAO.addItem(test1);
@@ -120,9 +118,10 @@ public class VMDAOImplTest {
         System.out.println("dispenseItemChange - Success");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        Item test1 = new Item(testName1, testCost1, 1);
+        Item test1 = new Item(testName1, testCost1, itemCt);
 
         BigDecimal overpay = new BigDecimal("2.00");
 
@@ -150,9 +149,10 @@ public class VMDAOImplTest {
         System.out.println("dispenseItemChange - Success, No Change");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        Item test1 = new Item(testName1, testCost1, 1);
+        Item test1 = new Item(testName1, testCost1, itemCt);
 
         BigDecimal exactPay = new BigDecimal("1.00");
 
@@ -180,9 +180,10 @@ public class VMDAOImplTest {
         System.out.println("dispenseItemChange - Fail");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        Item test1 = new Item(testName1, testCost1, 1);
+        Item test1 = new Item(testName1, testCost1, itemCt);
 
         BigDecimal underpay = new BigDecimal("0.50");
 
@@ -201,13 +202,14 @@ public class VMDAOImplTest {
         System.out.println("inventoryCount");
 
         //arrange
+        int itemCt = 1;
         String testName1 = "Arizona Iced Tea";
         BigDecimal testCost1 = new BigDecimal("1.00");
-        Item test1 = new Item(testName1, testCost1, 1);
+        Item test1 = new Item(testName1, testCost1, itemCt);
 
         String testName2 = "Coconut Water";
         BigDecimal testCost2 = new BigDecimal("2.99");
-        Item test2 = new Item(testName2, testCost2, 1);
+        Item test2 = new Item(testName2, testCost2, itemCt);
 
         //act
         testDAO.addItem(test1);
@@ -219,5 +221,4 @@ public class VMDAOImplTest {
         //assert
         assertEquals(2, inventoryCount, "Inventory should be counting 2 items stored in memory");
     }
-
 }
