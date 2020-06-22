@@ -1,7 +1,8 @@
 package com.sg.M4DVD;
 
 import com.sg.M4DVD.controller.DVDLibraryController;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class App {
 
@@ -13,11 +14,9 @@ public class App {
         DVDLibraryController c = new DVDLibraryController(dao, v);
          */
 
-        AnnotationConfigApplicationContext actx = new AnnotationConfigApplicationContext();
-        actx.scan("com.sg.M4DVD");
-        actx.refresh();
+        ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-        DVDLibraryController c = actx.getBean("dVDLibraryController", DVDLibraryController.class);
+        DVDLibraryController c = actx.getBean("controller", DVDLibraryController.class);
 
         c.run();
     }

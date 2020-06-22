@@ -6,18 +6,14 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class DVDLibraryDAOImpl implements DVDLibraryDAO {
 
     private Map<String, DVD> library = new HashMap<>();
-    public final String LIBRARY_FILE;
+    public String LIBRARY_FILE = "dvdlibrary.txt";
     public static final String DELIMITER = "::";
 
     /*CTORS*/
-    @Autowired
     public DVDLibraryDAOImpl() {
         LIBRARY_FILE = "dvdlibrary.txt";
     }

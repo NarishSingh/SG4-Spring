@@ -8,14 +8,10 @@ import com.sg.M4DVD.ui.DVDLibraryView;
 import com.sg.M4DVD.ui.UserIO;
 import com.sg.M4DVD.ui.UserIOImpl;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class DVDLibraryController {
 
     //since no service, need to get these instantiated
-    @Autowired
     private UserIO io = new UserIOImpl();
     private DVDLibraryDAO dao = new DVDLibraryDAOImpl(); 
     private DVDLibraryView view = new DVDLibraryView(io);

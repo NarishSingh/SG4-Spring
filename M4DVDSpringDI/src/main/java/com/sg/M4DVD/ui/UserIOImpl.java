@@ -1,14 +1,12 @@
 package com.sg.M4DVD.ui;
 
 import java.util.Scanner;
-import org.springframework.stereotype.Component;
 
 /**
  * Implementation of UserIO interface
  *
  * @author Narish
  */
-@Component
 public class UserIOImpl implements UserIO {
 
     final private Scanner input = new Scanner(System.in);
