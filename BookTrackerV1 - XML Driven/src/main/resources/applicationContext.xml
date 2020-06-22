@@ -57,6 +57,11 @@
                 method="createAuditEntry"
                 pointcut="execution(* com.sg.booktracker.service.BookService.deleteBookByTitle(..))"
             />
+            <aop:after-throwing 
+                method="createExceptionEntry"
+                pointcut="execution(* *(..))"
+                throwing="ex"
+            />
         </aop:aspect>
     </aop:config>
 </beans>

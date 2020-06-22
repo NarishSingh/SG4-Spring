@@ -26,4 +26,14 @@ public class LoggingAdvice {
                     "ERROR: Could not create audit entry in LoggingAdvice.");
         }
     }
+    
+    public void createExceptionEntry(Exception ex) {
+        String auditEntry = "Thrown: " + ex.getMessage();
+
+        try {
+            auditDAO.writeAuditEntry(auditEntry);
+        } catch (Exception e) {
+            System.err.println("ERROR: could not write audit entry in LoggingAdvice.");
+        }
+    }
 }
