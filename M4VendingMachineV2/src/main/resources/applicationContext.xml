@@ -50,6 +50,11 @@
                 method="createAuditEntry"
                 pointcut="execution(* com.sg.m4vmv2.service.VMService.sellItem(..))"
             />
+            <aop:after-throwing 
+                method="createExceptionEntry"
+                pointcut="execution(* *(..))"
+                throwing="ex"
+            />
         </aop:aspect>
     </aop:config>
 </beans>
