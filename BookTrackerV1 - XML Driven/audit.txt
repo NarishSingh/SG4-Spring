@@ -1,0 +1,3 @@
+2020-06-22T10:33:06.839775 : addBook: Book{title=Bionicle, author=Bionicle Guy, year=1888, genre=Non-Fiction}
+2020-06-22T10:33:45.776374600 : updateBook: Book{title=Bionicle, author=Bionicle Dude, year=2020, genre=Fiction}
+2020-06-22T10:34:07.583970500 : deleteBookByTitle: Bionicle

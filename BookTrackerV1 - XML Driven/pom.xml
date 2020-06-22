@@ -16,5 +16,11 @@
             <artifactId>spring-context</artifactId>
             <version>5.2.2.RELEASE</version>
         </dependency>
+        <!--AspectJ dep for AOP-->
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.5.4</version>
+        </dependency>
     </dependencies>
 </project>

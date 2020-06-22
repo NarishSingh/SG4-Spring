@@ -92,4 +92,8 @@ public class Book {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" + "title=" + title + ", author=" + author + ", year=" + year + ", genre=" + genre + '}';
+    }
 }

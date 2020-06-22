@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-                http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/mvc
+          http://www.springframework.org/schema/mvc/spring-mvc.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/aop  
+          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
     <!--bean = how the spring handles an object or package-->
     <!--id will be used as the name/reference-->
     <!--make sure the class path is the full path with same exact capitalization-->
@@ -27,4 +37,26 @@
         <constructor-arg ref="view" />
     </bean>
     <!--if we wanted to change any part of the MVC...we just need to change the path of the class file!!-->
+    <bean id="auditDAO" class="com.sg.booktracker.dao.BookAuditDAOImpl"/>
+    
+    <bean id="loggingAdvice" class="com.sg.booktracker.advice.LoggingAdvice">
+        <constructor-arg ref="auditDAO"/>
+    </bean>
+    
+    <aop:config>
+        <aop:aspect ref="loggingAdvice">
+            <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.booktracker.service.BookService.addBook(..))"
+            />
+            <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.booktracker.service.BookService.updateBook(..))"
+            />
+            <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.booktracker.service.BookService.deleteBookByTitle(..))"
+            />
+        </aop:aspect>
+    </aop:config>
 </beans>
