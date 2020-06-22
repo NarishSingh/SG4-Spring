@@ -55,6 +55,11 @@
                 method="createAuditEntry"
                 pointcut="execution(* com.sg.classroster.service.ClassRosterServiceLayer.removeStudent(..))"
             />
+            <aop:after-throwing 
+                method="createExceptionEntry"
+                pointcut="execution(* *(..))"
+                throwing="ex"
+            />
         </aop:aspect>
     </aop:config>
 </beans>
