@@ -34,4 +34,22 @@
         <constructor-arg ref="service"/>
         <constructor-arg ref="view"/>
     </bean>
+    
+    <!--AOP beans-->
+    <bean id="loggingAdvice" class="com.sg.m4vmv2.advice.LoggingAdvice">
+        <constructor-arg ref="auditDAO"/>
+    </bean>
+    
+    <aop:config>
+        <aop:aspect ref="loggingAdvice">
+            <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.m4vmv2.service.VMService.stockItem(..))"
+            />
+            <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.m4vmv2.service.VMService.sellItem(..))"
+            />
+        </aop:aspect>
+    </aop:config>
 </beans>

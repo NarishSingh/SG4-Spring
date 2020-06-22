@@ -78,5 +78,9 @@ public class Item {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Item{" + "name=" + name + ", cost=" + cost + ", itemCount=" + itemCount + '}';
+    }
 }
