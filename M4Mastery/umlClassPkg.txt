@@ -1,0 +1,324 @@
+@startuml
+
+title M4 Mastery - TSG Flooring Corp
+
+
+package view {
+    interface UserIO{
+        +print(): void {message: String}
+        +readString(): String {prompt: String}
+        +readInt(): int {prompt: String}
+        +readInt(): int {prompt: String, min: int, max: int}
+        +readDouble(): double {prompt: String}
+        +readDouble(): double {prompt: String, min: double, max: double}
+        +readFloat(): float {prompt: String}
+        +readFloat(): float {prompt: String, min: float, max: float}
+        +readLong(): long {prompt: String}
+        +readLong(): long {prompt: String, min: long, max: long}
+    }
+
+    class UserIOImpl{
+        -input: Scanner
+
+        +print(): void {message: String}
+        +readString(): String {prompt: String}
+        +readInt(): int {prompt: String}
+        +readInt(): int {prompt: String, min: int, max: int}
+        +readDouble(): double {prompt: String}
+        +readDouble(): double {prompt: String, min: double, max: double}
+        +readFloat(): float {prompt: String}
+        +readFloat(): float {prompt: String, min: float, max: float}
+        +readLong(): long {prompt: String}
+        +readLong(): long {prompt: String, min: long, max: long}
+    }
+
+    UserIO <|-down- UserIOImpl: implements
+
+    class FlView{
+        -io: UserIO
+
+        +FlView() {io: UserIO}
+
+        +mainMenuAndSelection(): int
+
+        +displayAddOrderBanner(): void
+        +getNewOrderInfo(): Order
+        +displayAddOrderSuccessBanner(): void
+        +displayAddOrderFailBanner(): void
+
+        +displayDisplayOrdersBanner(): void
+        +getOrdersDate(): LocalDate
+        +displayOrdersInfo(): void {Map<Integer, Order}
+        +displayDisplayOrdersFailBanner(): void
+
+        +displayEditOrderBanner(): void
+        +getEditedOrderInfo(): Order
+        +displayEditOrderSuccessBanner(): void
+        +displayEditOrderFailBanner(): void
+
+        +displayRemoveOrderBanner(): void
+        +getOrderRemovalDate(): LocalDate
+        +getOrderRemovalNum(): int
+        +displayRemoveOrderSuccessBanner(): void
+        +displayRemoveOrderFailBanner(): void
+
+        +displayExportOrderBanner():void
+        +displayExportOrderSuccessBanner(): void
+        +displayExportOrderFailBanner(): void
+        
+        +displayExitBanner(): void
+        +displayUnknownCommandBanner(): void
+        +displayErrorMessage(): void {errorMsg: String}
+    }
+}
+
+package controller {
+    class FlController{
+        -FlService: service
+        -FlView: view
+
+        +FlController() {FlService: service, FlView: view}
+        
+        +run(): void
+        -getMenuSelection(): int
+        +unknownCommand(): void
+        +exitMessage(): void
+
+        +displayOrders(): void
+        -addOrder(): void
+        -editOrder(): void
+        -removeOrder(): void
+        -exportOrders(): void
+    }
+}
+
+package service {
+    interface FlService{
+        +addOrder(): Order {newOrder: Order}
+        +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +exportOrders(): void
+    }
+
+    class FlServiceImpl{
+        -dao: FlDao
+        -auditDao: FlAuditDao
+
+        +flServiceImpl() {dao: FlDao, auditDAO: FlAuditDao}
+
+        +addOrder(): Order {newOrder: Order}
+        +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +exportOrders(): void
+
+        -validateOrder(): boolean {newOrder: Order}
+        -calcMaterialCost(): BigDecimal {newOrder: Order}
+        -calcLaborCost(): BigDecimal {newOrder: Order}
+        -calcTax(): BigDecimal {newOrder: Order}
+        -calcTotal(): BigDecimal {newOrder: Order}
+    }
+
+    FlService <|-down- FlServiceImpl: implements
+
+    class InvalidProductTypeException <<Exception>>{
+        +InvalidProductTypeException() {message: String}
+        +InvalidProductTypeException() {message: String, cause: Throwable}
+    }
+
+    class InvalidStateException <<Exception>>{
+        +InvalidStateException() {message: String}
+        +InvalidStateException() {message: String, cause: Throwable}
+    }
+
+    class InvalidAreaException <<Exception>>{
+        +InvalidAreaException() {message: String}
+        +InvalidAreaException() {message: String, cause: Throwable}
+    }
+
+    class InvalidOrderNumberException <<Exception>>{
+        +InvalidOrderNumberException() {message: String}
+        +InvalidOrderNumberException() {message: String, cause: Throwable}
+    }
+
+    class NoOrdersOnDateException <<Exception>>{
+        +NoOrdersOnDateException() {message: String}
+        +NoOrdersOnDateException() {message: String, cause: Throwable}
+    }
+
+}
+
+package dao {
+    class stateDao{
+        -states: Map<String, State>
+        +STATES_FILE: String
+        +DELIMITER: String
+
+        +stateDao()
+        +stateDao() {statesTextFile: String}
+
+        -loadStates(): void
+        -verifyOrderState(): boolean {newOrder: Order}
+    }
+    
+    class ProductDao{
+        -products: Map<String, ProductTypes>
+        +PRODUCT_FILE: String
+        +DELIMITER: String
+
+        +ProductDao()
+        +ProductDao() {productsTextFile: String}
+
+        -loadProducts(): void
+        -verifyOrderProduct(): boolean {newOrder: Order}
+    }
+    
+    interface FlDao{
+        +addOrder(): Order {newOrder: Order}
+        +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +getAllOrders(): Map<LocalDate, Map<Integer, Order>>
+        +exportOrders(): void
+    }
+
+    'this handles the backup file also
+    class FlDaoImpl{
+        'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
+        -orders: Map<LocalDate, Map<Integer, Order>>
+        +ORDER_FILE: String
+        +DELIMITER: String
+
+        +FlDaoImpl()
+        +FlDaoImpl() {ordersTextFile: String}
+
+        +addOrder(): Order {newOrder: Order}
+        +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrder(): Order {date: LocalDate, orderNum: int}
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +getAllOrders(): Map<LocalDate, Map<Integer, Order>>
+        +exportOrders(): void
+
+        'move to another dao?
+        -marshallOrder(): String {anOrder: Item}
+        -unmarshallOrder(): Item {orderAsText: String}
+        -loadAllOrders(): void
+        -writeAllOrders(): void
+    }
+
+    FlDao <|-down- FlDaoImpl: implements
+
+    interface FlAuditDao{
+        +writeAuditEntry(): void {entry: String}
+    }
+
+    class FlAuditDaoImpl{
+        -AUDIT_FILE: String
+
+        +writeAuditEntry(): void {entry: String}
+    }
+
+    FlAuditDao <|-down- FlAuditDaoImpl: implements
+
+    class OrderPersistenceException <<Exception>>{
+        OrderPersistenceException() {message: String}
+        OrderPersistenceException() {message: String, cause: Throwable}
+    }
+}
+
+package model {
+    class ProductTypes{
+        -productType: String
+        -costPerSqFt: BigDecimal
+        -laborCostPerSqFt: BigDecimal
+
+        +ProductTypes() {productType: String, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal}
+
+        'read-only
+        +getProductType(): String
+        +getCostPerSqFt(): BigDecimal
+        +getLaborCostPerSqFt(): BigDecimal
+    }
+
+    class State{
+        -stateAbbreviation: String
+        -stateName: String
+        -taxRate: BigDecimal
+
+        +State() {stateAbbreviation: String, stateName: String, taxRate: BigDecimal}
+
+        'read-only
+        +getStateAbbreviation(): String
+        +getStateName(): String
+        +getTaxRate(): BigDecimal
+    }
+    
+    class Order{
+        -orderDate: LocalDate
+        -orderNumber: int
+        -customerName: String
+        -state: State
+        -taxRate: BigDecimal
+        -productType: ProductTypes
+        -area: BigDecimal
+        -costPerSqFt: BigDecimal
+        -laborCostPerSqFt: BigDecimal
+        -materialCost: BigDecimal
+        -laborCost: BigDecimal
+        -tax: BigDecimal
+        -total: BigDecimal
+
+        'ctor for view/user input
+        +Order() {orderDate: LocalDate, customerName: String, state: State, productType: ProductTypes, area: BigDecimal}
+        'ctor for dao
+        +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, taxRate: BigDecimal, productType: ProductTypes, area: BigDecimal, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
+
+        +getOrderDate(): LocalDate
+        +getOrderNumber(): int
+        +getCustomerName(): String
+        +getState(): State
+        +getTaxRate(): BigDecimal
+        +getProductType(): ProductTypes
+        +getArea(): BigDecimal
+        +getCostPerSqFt(): BigDecimal
+        +getLaborCostPerSqFt(): BigDecimal
+        +getMaterialCost(): BigDecimal
+        +getLaborCost(): BigDecimal
+        +getTax(): BigDecimal
+        +getTotal(): BigDecimal
+
+        'can be set by edit functionality
+        +setCustomerName(): void {customerName: String}
+        +setState(): void {state: State}
+        +setProductType(): void {productTypes: ProductTypes}
+        +setArea(): void {area: BigDecimal}
+
+        'service layer will have to calculate and set these
+        +setCostPerSqFt(): void {costPerSqFt: BigDecimal}
+        +setLaborCostPerSqFt(): void {laborCostPerSqFt: BigDecimal}
+        +setMaterialCost(): void {materialCost: BigDecimal}
+        +setLaborCost(): void {laborCost: BigDecimal}
+        +setTax(): void {tax: BigDecimal}
+        +setTotal(): void {total: BigDecimal}
+    }
+}
+
+package advice{
+    class LoggingAdvice{
+        -auditDao: FlAuditDao
+
+        +LoggingAdvice() {auditDao: FlAuditDao}
+
+        +createAuditEntry(): void {jp: JoinPoint}
+        +createExceptionEntry(): void {ex: Exception}
+    }
+}
+
+controller *-up- view
+controller *-down- service
+service *-down- dao
+dao *-down- model
+controller *-down- advice
+
+@enduml
