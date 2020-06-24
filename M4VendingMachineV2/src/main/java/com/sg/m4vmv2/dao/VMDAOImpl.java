@@ -47,16 +47,8 @@ public class VMDAOImpl implements VMDAO {
             NoSuchItemExistsException {
         loadInventory();
 
-        /*
-        Item matchingItem = inventory.stream()
-                .filter((item) -> item.getName().equals(itemName))
-                .findFirst()
-                .orElse(null);
-
-        */
-        
         Item matchingItem = inventory.get(itemName);
-        
+
         if (matchingItem == null) {
             throw new NoSuchItemExistsException("No such item in inventory");
         } else {
