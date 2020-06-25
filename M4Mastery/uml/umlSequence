@@ -25,6 +25,9 @@ Dao --> Service : Order
 Dao -[#blue]-> AuditDao : writeAuditEntry()
 Service --> Controller : Order
 
+Controller -> View : displayOrderInfo(Order)
+View --> Controller : void
+
 Controller -> View : displayAddOrderSuccessBanner()
 View --> Controller : void
 
@@ -81,6 +84,9 @@ Dao --> Service : Order
 Dao -[#blue]-> AuditDao : writeAuditEntry()
 Service --> Controller : Order
 
+Controller -> View : displayOrderInfo(Order)
+View --> Controller : void
+
 Controller -> View : displayEditOrderSuccessBanner()
 View --> Controller : void
 
@@ -102,7 +108,7 @@ Dao --> Dao : loadAllOrders()
 Dao --> Service : Map<Integer, Order>
 Service --> Controller : Map<Integer, Order>
 
-Controller -> View : displayOrdersInfo(Map<Integer, Order>)
+Controller -> View : displayOrdersByDateInfo(Map<Integer, Order>)
 View --> Controller : void
 
 @enduml
