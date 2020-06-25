@@ -26,7 +26,20 @@ public class VMView {
         io.print("2 | Stock Machine -Admin-");
         io.print("0 | Exit");
 
-        return io.readInt("Enter Action", 0, 2);
+        boolean hasErrors;
+        int selection = 0;
+
+        do {
+            try {
+                hasErrors = false;
+                selection = io.readInt("Enter Action", 0, 2);
+            } catch (NumberFormatException e) {
+                displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        return selection;
     }
 
     /*BUY*/
@@ -51,7 +64,7 @@ public class VMView {
             allItems.stream()
                     .forEach((item) -> {
                         if (!(item.getItemCount() <= 0)) {
-                            io.print(item.getName() + " | $" + item.getCost());   
+                            io.print(item.getName() + " | $" + item.getCost());
                         }
                     });
 
