@@ -15,7 +15,7 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
-    <!--stateless test needs dao testing ctor-->
+    <!--stateless test needs dao testing ctor, use value to pass the file as arg-->
     <!--<bean id="dao" class="com.sg.m4vmv2.dao.VMDAOImpl"/>-->
     
     <bean id="testDao" class="com.sg.m4vmv2.dao.VMDAOImpl">

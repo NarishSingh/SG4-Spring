@@ -15,6 +15,7 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
           
+    <!--FW beans-->
     <bean id="userIO" class="com.sg.m4vmv2.view.UserIOImpl" />
     
     <bean id="view" class="com.sg.m4vmv2.view.VMView">

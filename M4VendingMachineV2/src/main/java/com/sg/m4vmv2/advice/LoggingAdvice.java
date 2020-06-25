@@ -12,6 +12,12 @@ public class LoggingAdvice {
         this.auditDAO = auditDAO;
     }
 
+    /**
+     * Create an audit entry that logs the method call and its arguments - used
+     * in Spring AOP
+     *
+     * @param jp {JoinPoint} the method called at the pointcuts
+     */
     public void createAuditEntry(JoinPoint jp) {
         Object[] args = jp.getArgs(); //gets the parameters
         String auditEntry = jp.getSignature().getName() + ": ";
@@ -27,6 +33,12 @@ public class LoggingAdvice {
         }
     }
 
+    /**
+     * Create and audit entry that logs the exceptions thrown at any point in
+     * the program - used in Spring AOP
+     *
+     * @param ex {Exception} the exception thrown by any method in the program
+     */
     public void createExceptionEntry(Exception ex) {
         String auditEntry = "Thrown: " + ex.getMessage();
 

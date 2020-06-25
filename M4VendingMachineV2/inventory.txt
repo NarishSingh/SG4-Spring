@@ -1,4 +1,4 @@
 Water::1.00::20
 Apple::0.50::23
 Fizzy Drank::3.50::50
-Bubble Gum::0.25::0
+Bubble Gum::0.25::10
