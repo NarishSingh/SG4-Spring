@@ -151,7 +151,7 @@ package service {
 }
 
 package dao {
-    class stateDao{
+    class StateDao{
         -states: Map<String, State>
         +STATES_FILE: String
         +DELIMITER: String
@@ -188,6 +188,8 @@ package dao {
     class FlDaoImpl{
         'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
         -orders: Map<LocalDate, Map<Integer, Order>>
+        -states: StateDao
+        -Product: ProductDao
         +ORDER_FILE: String
         +DELIMITER: String
 
@@ -209,6 +211,8 @@ package dao {
     }
 
     FlDao <|-down- FlDaoImpl: implements
+    FlDao *-down- StateDao
+    FlDao *-down- ProductDao
 
     interface FlAuditDao{
         +writeAuditEntry(): void {entry: String}
