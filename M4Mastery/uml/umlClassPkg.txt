@@ -108,7 +108,7 @@ package service {
         -dao: FlDao
         -auditDao: FlAuditDao
 
-        +flServiceImpl() {dao: FlDao, auditDAO: FlAuditDao}
+        +FlServiceImpl() {dao: FlDao, auditDAO: FlAuditDao}
 
         +addOrder(): Order {orderRequest: String[]}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
@@ -166,8 +166,8 @@ package dao {
         +STATES_FILE: String
         +DELIMITER: String
 
-        +stateDao() 'production
-        +stateDao() {statesTextFile: String} 'testing
+        +StateDao() 'production
+        +StateDao() {statesTextFile: String} 'testing
 
         -unmarshallState() : State {stateAsText: String}
         -loadStates(): void
@@ -281,10 +281,8 @@ package model {
         -tax: BigDecimal
         -total: BigDecimal
 
-        'ctor for view/user input
-        +Order() {orderDate: LocalDate, customerName: String, state: State, productType: ProductTypes, area: BigDecimal}
         'ctor for dao
-        +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, taxRate: BigDecimal, productType: ProductTypes, area: BigDecimal, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
+        +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, productType: Product, area: BigDecimal, laborCostPerSqFt: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
 
         +getOrderDate(): LocalDate
         +getOrderNumber(): int
