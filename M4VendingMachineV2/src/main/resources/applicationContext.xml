@@ -37,6 +37,7 @@
     </bean>
     
     <!--AOP beans-->
+    <!--pointcut="execution(* com.sg.m4vmv2.service.VMService.*(..))"-->
     <bean id="loggingAdvice" class="com.sg.m4vmv2.advice.LoggingAdvice">
         <constructor-arg ref="auditDAO"/>
     </bean>
@@ -51,7 +52,7 @@
                 method="createAuditEntry"
                 pointcut="execution(* com.sg.m4vmv2.service.VMService.sellItem(..))"
             />
-            <aop:after-throwing 
+            <aop:after-throwing
                 method="createExceptionEntry"
                 pointcut="execution(* *(..))"
                 throwing="ex"
