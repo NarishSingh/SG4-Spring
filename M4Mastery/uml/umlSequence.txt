@@ -6,20 +6,21 @@ title TSG Flooring Corp - addOrder() Sequence
 View <- Controller : displayAddOrderBanner()
 View --> Controller : void 
 View <- Controller : addNewOrderInfo()
-View --> Controller : Order
+View --> Controller : String[]
 
-Controller -> Service: addOrder(Order)
-Service --> Service : validateOrder(Order)
-Service --> StateDao : verifyOrderState(Order)
+Controller -> Service: addOrder(String[])
+Service --> Service : validateOrder(String[])
+Service --> StateDao : verifyOrderState(String)
 StateDao --> StateDao : loadStates()
-StateDao --> Service : boolean
-Service --> StateDao : verifyOrderProduct(Order)
+StateDao --> Service : State
+Service --> StateDao : verifyOrderProduct(String)
 StateDao --> StateDao : loadProducts()
-StateDao --> Service : boolean
+StateDao --> Service : Product
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
 Service --> Service : calcTax()
 Service --> Service : calcTotal()
+Service --> Service : Order
 Service -> Dao : addOrder(Order)
 Dao --> Service : Order
 Dao -[#blue]-> AuditDao : writeAuditEntry()
@@ -64,21 +65,22 @@ title TSG Flooring Corp - editOrder() Sequence
 View <-- Controller : displayEditOrderBanner()
 View --> Controller : void
 View <- Controller : getEditedOrderInfo()
-View --> Controller : Order 
-'all \n user entries will be copied over
+View --> Controller : String[]
+'all \n user entries must  be copied over
 
-Controller -> Service : addOrder(Order)
-Service --> Service : validateOrder(Order)
-Service --> StateDao : verifyOrderState(Order)
+Controller -> Service: addOrder(String[])
+Service --> Service : validateOrder(String[])
+Service --> StateDao : verifyOrderState(String)
 StateDao --> StateDao : loadStates()
-StateDao --> Service : boolean
-Service --> StateDao : verifyOrderProduct(Order)
+StateDao --> Service : State
+Service --> StateDao : verifyOrderProduct(String)
 StateDao --> StateDao : loadProducts()
-StateDao --> Service : boolean
+StateDao --> Service : Product
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
 Service --> Service : calcTax()
 Service --> Service : calcTotal()
+Service --> Service : Order
 Service -> Dao : addOrder(Order)
 Dao --> Service : Order
 Dao -[#blue]-> AuditDao : writeAuditEntry()
@@ -105,6 +107,7 @@ View --> Controller : LocalDate
 Controller -> Service : getOrdersByDate(LocalDate)
 Service -> Dao : getOrdersByDate(LocalDate)
 Dao --> Dao : loadAllOrders()
+Dao --> Dao : unmarshallOrder(String)
 Dao --> Service : Map<Integer, Order>
 Service --> Controller : Map<Integer, Order>
 
@@ -124,7 +127,9 @@ View --> Controller : void
 Controller -> Service : exportOrders()
 Service -> Dao : exportOrders()
 Dao --> Dao : writeAllOrders()
+Dao --> Dao : marshallOrder(Order)
 Dao --> Service : void
+Dao -[#blue]-> AuditDao : writeAuditEntry()
 Service --> Controller : void
 
 Controller -> View : displayExportOrderSuccessBanner()

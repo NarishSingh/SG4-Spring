@@ -42,7 +42,7 @@ package view {
         +mainMenuAndSelection(): int
 
         +displayAddOrderBanner(): void
-        +getNewOrderInfo(): Order
+        +getNewOrderInfo(): String[]
         +displayOrderInfo(): void {anOrder: Order}
         +displayAddOrderSuccessBanner(): void
         +displayAddOrderFailBanner(): void
@@ -53,7 +53,7 @@ package view {
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
-        +getEditedOrderInfo(): Order
+        +getEditedOrderInfo(): String[]
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
@@ -95,11 +95,13 @@ package controller {
 
 package service {
     interface FlService{
-        +addOrder(): Order {newOrder: Order}
+        +addOrder(): Order {orderRequest: String[]}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
         +exportOrders(): void
+        +getAllOrders(): List<LocalDate, Map<Integer, Order>>
+        +getHighestOrderNumber(): int 'get highest value of the order number after using getAllOrders()
     }
 
     class FlServiceImpl{
@@ -108,17 +110,20 @@ package service {
 
         +flServiceImpl() {dao: FlDao, auditDAO: FlAuditDao}
 
-        +addOrder(): Order {newOrder: Order}
+        +addOrder(): Order {orderRequest: String[]}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
         +exportOrders(): void
+        +getAllOrders(): List<LocalDate, Map<Integer, Order>>
+        +getHighestOrderNumber(): int
 
-        -validateOrder(): boolean {newOrder: Order}
+        -validateOrder(): Order {orderRequest: String[]}
         -calcMaterialCost(): BigDecimal {newOrder: Order}
         -calcLaborCost(): BigDecimal {newOrder: Order}
         -calcTax(): BigDecimal {newOrder: Order}
         -calcTotal(): BigDecimal {newOrder: Order}
+        -getHighestOrderNumber(): int 'get highest value of the order number after getting all orders, will call get all orders
     }
 
     FlService <|-down- FlServiceImpl: implements
@@ -143,6 +148,11 @@ package service {
         +InvalidOrderNumberException() {message: String, cause: Throwable}
     }
 
+    class BadOrderRequestException <<Exception>>{
+        +BadOrderRequestException() {message: String}
+        +BadOrderRequestException() {message: String, cause: Throwable}
+    }
+
     class NoOrdersOnDateException <<Exception>>{
         +NoOrdersOnDateException() {message: String}
         +NoOrdersOnDateException() {message: String, cause: Throwable}
@@ -156,11 +166,12 @@ package dao {
         +STATES_FILE: String
         +DELIMITER: String
 
-        +stateDao()
-        +stateDao() {statesTextFile: String}
+        +stateDao() 'production
+        +stateDao() {statesTextFile: String} 'testing
 
+        -unmarshallState() : State {stateAsText: String}
         -loadStates(): void
-        -verifyOrderState(): boolean {newOrder: Order}
+        -verifyOrderState(): State {stateInput: String}
     }
     
     class ProductDao{
@@ -168,19 +179,20 @@ package dao {
         +PRODUCT_FILE: String
         +DELIMITER: String
 
-        +ProductDao()
-        +ProductDao() {productsTextFile: String}
+        +ProductDao() 'production
+        +ProductDao() {productsTextFile: String} 'testing
 
+        -unmarshallProduct() : Product {productAsText: String}
         -loadProducts(): void
-        -verifyOrderProduct(): boolean {newOrder: Order}
+        -verifyOrderProduct(): Product {productInput: String}
     }
     
     interface FlDao{
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
-        +getAllOrders(): Map<LocalDate, Map<Integer, Order>>
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate} 'can be List
+        +getAllOrders(): List<Order>
         +exportOrders(): void
     }
 
@@ -188,8 +200,6 @@ package dao {
     class FlDaoImpl{
         'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
         -orders: Map<LocalDate, Map<Integer, Order>>
-        -states: StateDao
-        -Product: ProductDao
         +ORDER_FILE: String
         +DELIMITER: String
 
@@ -200,19 +210,18 @@ package dao {
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
-        +getAllOrders(): Map<LocalDate, Map<Integer, Order>>
+        'this is to ensure we are getting the right order numbers
+        +getAllOrders(): List<Order>
         +exportOrders(): void
 
         'move to another dao?
-        -marshallOrder(): String {anOrder: Item}
-        -unmarshallOrder(): Item {orderAsText: String}
+        -marshallOrder(): String {anOrder: Order}
+        -unmarshallOrder(): Order {orderAsText: String}
         -loadAllOrders(): void
         -writeAllOrders(): void
     }
 
     FlDao <|-down- FlDaoImpl: implements
-    FlDao *-down- StateDao
-    FlDao *-down- ProductDao
 
     interface FlAuditDao{
         +writeAuditEntry(): void {entry: String}
@@ -233,12 +242,12 @@ package dao {
 }
 
 package model {
-    class ProductTypes{
+    class Product{
         -productType: String
         -costPerSqFt: BigDecimal
         -laborCostPerSqFt: BigDecimal
 
-        +ProductTypes() {productType: String, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal}
+        +Product() {productType: String, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal}
 
         'read-only
         +getProductType(): String
@@ -264,10 +273,8 @@ package model {
         -orderNumber: int
         -customerName: String
         -state: State
-        -taxRate: BigDecimal
-        -productType: ProductTypes
+        -productType: Product
         -area: BigDecimal
-        -costPerSqFt: BigDecimal
         -laborCostPerSqFt: BigDecimal
         -materialCost: BigDecimal
         -laborCost: BigDecimal
