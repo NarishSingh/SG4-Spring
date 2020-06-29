@@ -58,7 +58,6 @@ package view {
         +displayEditOrderFailBanner(): void
 
         +displayRemoveOrderBanner(): void
-        +getOrderRemovalDate(): LocalDate
         +getOrderRemovalNum(): int
         +displayRemoveOrderSuccessBanner(): void
         +displayRemoveOrderFailBanner(): void
@@ -175,7 +174,7 @@ package dao {
     }
     
     class ProductDao{
-        -products: Map<String, ProductTypes>
+        -products: Map<String, Product>
         +PRODUCT_FILE: String
         +DELIMITER: String
 
@@ -214,7 +213,6 @@ package dao {
         +getAllOrders(): List<Order>
         +exportOrders(): void
 
-        'move to another dao?
         -marshallOrder(): String {anOrder: Order}
         -unmarshallOrder(): Order {orderAsText: String}
         -loadAllOrders(): void
