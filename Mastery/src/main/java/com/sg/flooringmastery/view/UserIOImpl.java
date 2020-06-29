@@ -1,5 +1,6 @@
 package com.sg.flooringmastery.view;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 /**
@@ -183,6 +184,40 @@ public class UserIOImpl implements UserIO {
             System.out.print("Enter long: ");
             userInput = Long.parseLong(input.nextLine());
         } while (userInput < min || userInput > max);
+
+        return userInput;
+    }
+
+    /**
+     * Get a BigDecimal value from user input
+     *
+     * @param prompt {String} the prompt to print to the user
+     * @return {BigDecimal} the user's BigDecimal value
+     */
+    @Override
+    public BigDecimal readBigDecimal(String prompt) {
+        System.out.println(prompt);
+        return new BigDecimal(input.nextLine());
+    }
+
+    /**
+     * Get a BigDecimal value from user input between a specified range
+     * @param prompt {String} the prompt to print to the user
+     * @param min {BigDecimal} the minimum input
+     * @param max {BigDecimal} the maximum input
+     * @return {BigDecimal} the user's BigDecimal value in range
+     */
+    @Override
+    public BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) {
+        BigDecimal userInput;
+
+        System.out.println(prompt);
+        System.out.println("min = " + min);
+        System.out.println("max = " + max);
+        do {
+            System.out.print("Enter long: ");
+            userInput = new BigDecimal(input.nextLine());
+        } while (userInput.compareTo(min) < 0 || userInput.compareTo(max) > 0);
 
         return userInput;
     }

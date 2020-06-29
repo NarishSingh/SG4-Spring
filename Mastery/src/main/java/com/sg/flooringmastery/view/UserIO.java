@@ -4,11 +4,13 @@ will be used for the menu system
  */
 package com.sg.flooringmastery.view;
 
+import java.math.BigDecimal;
+
 /**
  * Handles I/O, taking prompts as arguments with overloads to take within a
  * range
  *
- * @author Software Guild
+ * @author Narish Singh
  */
 public interface UserIO {
 
@@ -31,4 +33,8 @@ public interface UserIO {
     long readLong(String prompt);
 
     long readLong(String prompt, long min, long max);
+    
+    BigDecimal readBigDecimal(String prompt);
+
+    BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max);
 }
