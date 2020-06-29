@@ -4,6 +4,7 @@ import com.sg.flooringmastery.model.Order;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 public class FlView {
 
@@ -13,6 +14,11 @@ public class FlView {
         this.io = io;
     }
 
+    /**
+     * Print main menu and get a user action
+     *
+     * @return {int} 0-5 corresponding with user's desired menu action
+     */
     public int mainMenuAndSelection() {
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         io.print("* 1. Display Orders");
@@ -104,7 +110,7 @@ public class FlView {
      */
     public LocalDate getOrdersDate() {
         boolean hasErrors;
-        LocalDate date = LocalDate.now(); //just for initialization purposes
+        LocalDate date = LocalDate.now(); //just for initialization
 
         do {
             try {
@@ -118,6 +124,46 @@ public class FlView {
 
         return date;
     }
+
+    /**
+     * Display all orders for a given date
+     *
+     * @param ordersOnDate {Map} all orders on a given date, sorted by order
+     *                     number
+     */
+    public void displayOrdersByDate(Map<Integer, Order> ordersOnDate) {
+        ordersOnDate.forEach((orderNum, Order) -> {
+            //FIXME idk why the param buggin like that
+            //TODO print out all the fields
+        });
+
+        io.readString("Press ENTER to continue");
+    }
+
+    /**
+     * Display closing Display Order banner for a failed date entry
+     */
+    public void displayDisplayOrdersFailBanner() {
+        io.print("***No Orders to Show***");
+        io.readString("Press ENTER to continue");
+    }
+
+    /*EDIT ORDER*/
+    /**
+     * Display opening Edit Order banner to UI
+     */
+    public void displayEditOrderBanner() {
+        io.print("===EDIT ORDER===");
+    }
+    
+    public String[] getEditedOrderInfo(Order orderToEdit){
+        String[] editRequest = new String[5];
+        
+        //TODO get new request array, on \n write in the original order's field
+        
+        return editRequest;
+    }
+    
     
     //TODO continue here
 
