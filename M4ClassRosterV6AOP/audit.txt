@@ -1,2 +1,3 @@
 2020-06-22T14:09:39.791252100 : createStudent: Student{firstName=Narish, lastName=Singh, studentID=001, cohort=Java 2020}
 2020-06-22T14:09:50.341578 : Thrown: ERROR: Student ID 001 already exists
+2020-06-29T13:24:13.521023 : Exception Thrown in: createStudent:: Message: ERROR: Student ID 001 already exists

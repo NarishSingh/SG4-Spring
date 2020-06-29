@@ -56,7 +56,7 @@
                 pointcut="execution(* com.sg.classroster.service.ClassRosterServiceLayer.removeStudent(..))"
             />
             <aop:after-throwing 
-                method="createExceptionEntry"
+                method="createExceptionWithJPEntry"
                 pointcut="execution(* *(..))"
                 throwing="ex"
             />
