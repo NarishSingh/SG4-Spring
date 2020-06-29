@@ -49,11 +49,11 @@ package view {
 
         +displayDisplayOrdersBanner(): void
         +getOrdersDate(): LocalDate
-        +displayOrdersByDateInfo(): void {Map<Integer, Order>}
+        +displayOrdersByDateInfo(): void {ordersOnDate: Map<Integer, Order>}
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
-        +getEditedOrderInfo(): String[]
+        +getEditedOrderInfo(): String[] {orderToEdit: Order}
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
