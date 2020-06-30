@@ -15,6 +15,8 @@ package view {
         +readFloat(): float {prompt: String, min: float, max: float}
         +readLong(): long {prompt: String}
         +readLong(): long {prompt: String, min: long, max: long}
+        +readBigDecimal(): BigDecimal {prompt: String}
+        +readBigDecimal(): BigDecimal {prompt: String, min: BigDecimal, max: BigDecimal}
     }
 
     class UserIOImpl{
@@ -30,6 +32,8 @@ package view {
         +readFloat(): float {prompt: String, min: float, max: float}
         +readLong(): long {prompt: String}
         +readLong(): long {prompt: String, min: long, max: long}
+        +readBigDecimal(): BigDecimal {prompt: String}
+        +readBigDecimal(): BigDecimal {prompt: String, min: BigDecimal, max: BigDecimal}
     }
 
     UserIO <|-down- UserIOImpl: implements
@@ -42,7 +46,11 @@ package view {
         +mainMenuAndSelection(): int
 
         +displayAddOrderBanner(): void
-        +getNewOrderInfo(): String[]
+        +inputOrderDate(): LocalDate
+        +inputCustomerName(): String
+        +inputState(): String
+        +inputProductType(): String
+        +inputArea(): BigDecimal
         +displayOrderInfo(): void {anOrder: Order}
         +displayAddOrderSuccessBanner(): void
         +displayAddOrderFailBanner(): void
@@ -53,7 +61,13 @@ package view {
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
-        +getEditedOrderInfo(): String[] {orderToEdit: Order}
+
+        +inputEditOrderDate(): LocalDate {orderToEdit: Order}
+        +inputEditCustomerName(): String {orderToEdit: Order}
+        +inputEditState(): String {orderToEdit: Order}
+        +inputEditProductType(): String {orderToEdit: Order}
+        +inputEditArea(): BigDecimal {orderToEdit: Order}
+
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
@@ -94,35 +108,42 @@ package controller {
 
 package service {
     interface FlService{
-        +addOrder(): Order {orderRequest: String[]}
+        +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
         +exportOrders(): void
-        +getAllOrders(): List<LocalDate, Map<Integer, Order>>
-        +getHighestOrderNumber(): int 'get highest value of the order number after using getAllOrders()
+        +getAllOrders(): List<Order>
+        +getHighestOrderNumber(): int 
+        'get highest value of the order number after using getAllOrders()
     }
 
     class FlServiceImpl{
-        -dao: FlDao
+        -state: StateDao
+        -product: ProductDao
+        -dao: OrderDao
         -auditDao: FlAuditDao
+        -export: ExportFileDao
 
-        +FlServiceImpl() {dao: FlDao, auditDAO: FlAuditDao}
+        +FlServiceImpl() {state: StateDao, product: ProductDao, dao: OrderDao, auditDao: FlAuditDao, export: ExportFileDao}
 
         +addOrder(): Order {orderRequest: String[]}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
         +exportOrders(): void
-        +getAllOrders(): List<LocalDate, Map<Integer, Order>>
-        +getHighestOrderNumber(): int
+        +getAllOrders(): List<Order>
 
-        -validateOrder(): Order {orderRequest: String[]}
+        -validateOrderDate(): LocalDate {userDate: LocalDate}
+        -validateCustomerName(): String {userName: String}
+        -validateState(): State {userState: String}
+        -validateProductType(): Product {userProduct: String}
         -calcMaterialCost(): BigDecimal {newOrder: Order}
         -calcLaborCost(): BigDecimal {newOrder: Order}
         -calcTax(): BigDecimal {newOrder: Order}
         -calcTotal(): BigDecimal {newOrder: Order}
-        -getHighestOrderNumber(): int 'get highest value of the order number after getting all orders, will call get all orders
+        -getHighestOrderNumber(): int 
+        'get highest value of the order number after getting all orders, will call get all orders
     }
 
     FlService <|-down- FlServiceImpl: implements
@@ -147,6 +168,7 @@ package service {
         +InvalidOrderNumberException() {message: String, cause: Throwable}
     }
 
+    'might not need this one
     class BadOrderRequestException <<Exception>>{
         +BadOrderRequestException() {message: String}
         +BadOrderRequestException() {message: String, cause: Throwable}
@@ -160,17 +182,19 @@ package service {
 }
 
 package dao {
+    'all will have a production and testing ctor
+    
     class StateDao{
         -states: Map<String, State>
         +STATES_FILE: String
         +DELIMITER: String
 
-        +StateDao() 'production
-        +StateDao() {statesTextFile: String} 'testing
+        +StateDao()
+        +StateDao() {statesTextFile: String}
 
         -unmarshallState() : State {stateAsText: String}
         -loadStates(): void
-        -verifyOrderState(): State {stateInput: String}
+        -readStateByID(): State {userState: State}
     }
     
     class ProductDao{
@@ -178,28 +202,26 @@ package dao {
         +PRODUCT_FILE: String
         +DELIMITER: String
 
-        +ProductDao() 'production
-        +ProductDao() {productsTextFile: String} 'testing
+        +ProductDao()
+        +ProductDao() {productsTextFile: String}
 
         -unmarshallProduct() : Product {productAsText: String}
         -loadProducts(): void
-        -verifyOrderProduct(): Product {productInput: String}
+        -readProductByID(): Product {userProduct: Product}
     }
-    
-    interface FlDao{
+
+    interface OrderDao{
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate} 'can be List
+        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
         +getAllOrders(): List<Order>
-        +exportOrders(): void
     }
 
-    'this handles the backup file also
-    class FlDaoImpl{
+    class OrderDaoImpl{
         'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
         -orders: Map<LocalDate, Map<Integer, Order>>
-        +ORDER_FILE: String
+        +ORDER_DIRECTORY: String
         +DELIMITER: String
 
         +FlDaoImpl()
@@ -209,17 +231,15 @@ package dao {
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
-        'this is to ensure we are getting the right order numbers
         +getAllOrders(): List<Order>
-        +exportOrders(): void
 
         -marshallOrder(): String {anOrder: Order}
         -unmarshallOrder(): Order {orderAsText: String}
         -loadAllOrders(): void
-        -writeAllOrders(): void
+        -writeAllOrders(): void 
     }
 
-    FlDao <|-down- FlDaoImpl: implements
+    OrderDao <|-down- OrderDaoImpl: implements
 
     interface FlAuditDao{
         +writeAuditEntry(): void {entry: String}
@@ -232,6 +252,17 @@ package dao {
     }
 
     FlAuditDao <|-down- FlAuditDaoImpl: implements
+
+    class ExportFileDao{
+        +EXPORT_FILE: String
+        +DELIMITER: String
+
+        +ExportFileDao()
+        +ExportFileDao() {exportFileText: String}
+
+        -exportOrders(): void {activeOrders: List<Order>}
+        -marshallOrder(): String {anOrder: Order}
+    }
 
     class OrderPersistenceException <<Exception>>{
         OrderPersistenceException() {message: String}
@@ -247,10 +278,13 @@ package model {
 
         +Product() {productType: String, costPerSqFt: BigDecimal, laborCostPerSqFt: BigDecimal}
 
-        'read-only
         +getProductType(): String
         +getCostPerSqFt(): BigDecimal
         +getLaborCostPerSqFt(): BigDecimal
+
+        +setProductType(): void {productType: String}
+        +setCostPerSqFt(): void {costPerSqFt: BigDecimal}
+        +setLaborCostPerSqFt(): void {laborCostPerSqFt: BigDecimal}
     }
 
     class State{
@@ -260,10 +294,13 @@ package model {
 
         +State() {stateAbbreviation: String, stateName: String, taxRate: BigDecimal}
 
-        'read-only
         +getStateAbbreviation(): String
         +getStateName(): String
         +getTaxRate(): BigDecimal
+
+        +setStateAbbreviation(): void {stateAbbreviation: String}
+        +setStateName(): void {stateName: String}
+        +setTaxRate(): void {taxRate: BigDecimal}
     }
     
     class Order{
@@ -279,17 +316,17 @@ package model {
         -tax: BigDecimal
         -total: BigDecimal
 
-        'ctor for dao
+        'ctor for view to service
+        +Order() {orderDate: LocalDate, customerName: String, state: State, productType: Product, area: BigDecimal}
+        'ctor for service down
         +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, productType: Product, area: BigDecimal, laborCostPerSqFt: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
 
         +getOrderDate(): LocalDate
         +getOrderNumber(): int
         +getCustomerName(): String
         +getState(): State
-        +getTaxRate(): BigDecimal
         +getProductType(): ProductTypes
         +getArea(): BigDecimal
-        +getCostPerSqFt(): BigDecimal
         +getLaborCostPerSqFt(): BigDecimal
         +getMaterialCost(): BigDecimal
         +getLaborCost(): BigDecimal
@@ -303,7 +340,6 @@ package model {
         +setArea(): void {area: BigDecimal}
 
         'service layer will have to calculate and set these
-        +setCostPerSqFt(): void {costPerSqFt: BigDecimal}
         +setLaborCostPerSqFt(): void {laborCostPerSqFt: BigDecimal}
         +setMaterialCost(): void {materialCost: BigDecimal}
         +setLaborCost(): void {laborCost: BigDecimal}
@@ -320,6 +356,7 @@ package advice{
 
         +createAuditEntry(): void {jp: JoinPoint}
         +createExceptionEntry(): void {ex: Exception}
+        +createExceptionAtJoinpointEntry(): void {jp: JoinPoint, ex: Exception}
     }
 }
 
