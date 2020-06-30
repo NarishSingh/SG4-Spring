@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.view;
 
 import com.sg.flooringmastery.model.Order;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -53,8 +54,50 @@ public class FlView {
         io.print("===ADD NEW ORDER===");
     }
 
-    public Order getNewOrderInfo() {
-        
+    /**
+     * Get date from user in MM-DD-YYYY format
+     *
+     * @return {LocalDate} a future date
+     */
+    public LocalDate inputOrderDate() {
+
+    }
+
+    /**
+     * Get a customer or company name from user, supports A-Z chars, 0-9, commas
+     * and periods
+     *
+     * @return {String} the customer's name
+     */
+    public String inputCustomerName() {
+
+    }
+
+    /**
+     * Get a state from user
+     *
+     * @return {String} the state's full name or abbreviation
+     */
+    public String inputState() {
+
+    }
+
+    /**
+     * Get a product type from user
+     *
+     * @return {String} the product type being ordered
+     */
+    public String inputProductType() {
+
+    }
+
+    /**
+     * Get an area from user
+     *
+     * @return {BigDecimal} an area at or over 100 sq.ft.
+     */
+    public BigDecimal inputArea() {
+
     }
 
     /**
@@ -63,7 +106,7 @@ public class FlView {
      * @param newOrder {Order} a newly constructed Order obj from service
      */
     public void displayOrder(Order newOrder) {
-        //TODO add logic
+
     }
 
     /**
@@ -142,28 +185,85 @@ public class FlView {
         io.print("===EDIT ORDER===");
     }
 
-    public String[] getEditedOrderInfo(Order orderToEdit) {
-        
+    /**
+     * Edit the date of an order
+     *
+     * @param orderToEdit {Order} the original order obj, used to fill in
+     *                    original value if user elects not to edit by inputting
+     *                    \n
+     * @return {LocalDate} the new date field for the order
+     */
+    public LocalDate inputEditedOrderDate(Order orderToEdit) {
+
     }
-    
+
+    /**
+     * Edit the name on an order
+     *
+     * @param orderToEdit {Order} the original order obj, used to fill in
+     *                    original value if user elects not to edit by inputting
+     *                    \n
+     * @return {String} the new customer name field for the order
+     */
+    public String inputEditedCustomerName(Order orderToEdit) {
+
+    }
+
+    /**
+     * Edit the state name of an order
+     *
+     * @param orderToEdit {Order} the original order obj, used to fill in
+     *                    original value if user elects not to edit by inputting
+     *                    \n
+     * @return {String} the new State name or abbreviation for the respective
+     *         field of the order
+     */
+    public String inputEditedState(Order orderToEdit) {
+
+    }
+
+    /**
+     * Edit the product type of an order
+     *
+     * @param orderToEdit {Order} the original order obj, used to fill in
+     *                    original value if user elects not to edit by inputting
+     *                    \n
+     * @return {String} the new product name for the respective field for the
+     *         order
+     */
+    public String inputEditedProductType(Order orderToEdit) {
+
+    }
+
+    /**
+     * Edit the date of an order
+     *
+     * @param orderToEdit {Order} the original order obj, used to fill in
+     *                    original value if user elects not to edit by inputting
+     *                    \n
+     * @return {}
+     */
+    public BigDecimal inputEditedArea(Order orderToEdit) {
+
+    }
+
     //recycles displayOrder()
-    
     /**
      * Display closing Edit Order banner for a successful edit
      */
-    public void displayEditOrderSuccessBanner(){
+    public void displayEditOrderSuccessBanner() {
         io.print("***Order Edit Not Persisted***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /**
      * Display closing Edit Order banner for a failed edit
      */
-    public void displayEditOrderFailBanner(){
+    public void displayEditOrderFailBanner() {
         io.print("***Order Sucessfully Edited***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /*REMOVE ORDER*/
     /**
      * Display opening Remove Order banner to UI
@@ -171,46 +271,71 @@ public class FlView {
     public void displayRemoveOrderBanner() {
         io.print("===REMOVE ORDER===");
     }
-    
+
     //recycles getOrdersDate()
-    
     /**
      * Get ID of order to be removed
+     *
      * @return {int} an existing order ID
      */
-    public int getOrderRemovalNumber(){
+    public int getOrderRemovalNumber() {
         boolean hasErrors;
         int orderID = 0;
-        
-        do {            
+
+        do {
             try {
                 orderID = io.readInt("Enter Order ID: ");
-                hasErrors=false;
+                hasErrors = false;
             } catch (NumberFormatException e) {
-                hasErrors=true;
+                hasErrors = true;
                 displayErrorMessage(e.getMessage());
             }
         } while (hasErrors);
-        
+
         return orderID;
     }
-    
+
     /**
      * Display closing Remove Order banner for a successful edit
      */
-    public void displayRemoveOrderSuccessBanner(){
+    public void displayRemoveOrderSuccessBanner() {
         io.print("***Order Not Removed***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /**
      * Display closing Remove Order banner for a failed edit
      */
-    public void displayRemoveOrderFailBanner(){
+    public void displayRemoveOrderFailBanner() {
         io.print("***Order Sucessfully Removed***");
         io.readString("Press ENTER to continue");
     }
 
+    /*EXPORT ORDER*/
+    /**
+     * Display opening Export Order banner to UI
+     */
+    public void displayExportOrderBanner(){
+        io.print("===EXPORT ORDERS===");
+    }
+    
+    /**
+     * Display closing Export Order banner for a successful persistence
+     */
+    public void displayExportOrderSuccessBanner(){
+        io.print("***Orders Sucessfully Persisted***");
+        io.print("Check DataExport.txt of BackUp Folder for all active orders");
+        io.readString("Press ENTER to continue");
+    }
+    
+    /**
+     * Display closing Export Order banner for a failed persistence
+     */
+    public void displayExportOrderFailBanner(){
+        io.print("***Orders Unsucessfully Persisted***");
+        io.readString("Press ENTER to continue");
+    }
+    
     /*EXIT*/
     /**
      * Display Exit banner in UI
