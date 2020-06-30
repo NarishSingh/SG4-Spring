@@ -61,13 +61,11 @@ package view {
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
-
         +inputEditOrderDate(): LocalDate {orderToEdit: Order}
         +inputEditCustomerName(): String {orderToEdit: Order}
         +inputEditState(): String {orderToEdit: Order}
         +inputEditProductType(): String {orderToEdit: Order}
         +inputEditArea(): BigDecimal {orderToEdit: Order}
-
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
@@ -310,7 +308,6 @@ package model {
         -state: State
         -productType: Product
         -area: BigDecimal
-        -laborCostPerSqFt: BigDecimal
         -materialCost: BigDecimal
         -laborCost: BigDecimal
         -tax: BigDecimal
@@ -319,7 +316,7 @@ package model {
         'ctor for view to service
         +Order() {orderDate: LocalDate, customerName: String, state: State, productType: Product, area: BigDecimal}
         'ctor for service down
-        +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, productType: Product, area: BigDecimal, laborCostPerSqFt: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
+        +Order() {orderDate: LocalDate, orderNumber: int, customerName: String, state: State, productType: Product, area: BigDecimal, materialCost: BigDecimal, laborCost: BigDecimal, tax: BigDecimal, total: BigDecimal}
 
         +getOrderDate(): LocalDate
         +getOrderNumber(): int
@@ -327,7 +324,6 @@ package model {
         +getState(): State
         +getProductType(): ProductTypes
         +getArea(): BigDecimal
-        +getLaborCostPerSqFt(): BigDecimal
         +getMaterialCost(): BigDecimal
         +getLaborCost(): BigDecimal
         +getTax(): BigDecimal
@@ -340,7 +336,6 @@ package model {
         +setArea(): void {area: BigDecimal}
 
         'service layer will have to calculate and set these
-        +setLaborCostPerSqFt(): void {laborCostPerSqFt: BigDecimal}
         +setMaterialCost(): void {materialCost: BigDecimal}
         +setLaborCost(): void {laborCost: BigDecimal}
         +setTax(): void {tax: BigDecimal}
