@@ -48,4 +48,21 @@ public class LoggingAdvice {
             System.err.println("ERROR: could not write audit entry in LoggingAdvice.");
         }
     }
+
+    /**
+     * Create and audit entry that logs the exceptions thrown and its joinpoint
+     * at any point in the program - used in Spring AOP
+     *
+     * @param jp {JoinPoint} the method at which the exception it thrown
+     * @param ex {Exception} the exception thrown by any method in the program
+     */
+    public void createExceptionWithJPEntry(JoinPoint jp, Exception ex) {
+        String auditEntry = "Exception Thrown in: " + jp.getSignature().getName() + ":: Message: " + ex.getMessage();
+
+        try {
+            auditDAO.writeAuditEntry(auditEntry);
+        } catch (VendingPersistenceException e) {
+            System.err.println("ERROR: could not write audit entry in LoggingAdvice.");
+        }
+    }
 }

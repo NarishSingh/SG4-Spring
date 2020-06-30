@@ -53,7 +53,7 @@
                 pointcut="execution(* com.sg.m4vmv2.service.VMService.sellItem(..))"
             />
             <aop:after-throwing
-                method="createExceptionEntry"
+                method="createExceptionWithJPEntry"
                 pointcut="execution(* *(..))"
                 throwing="ex"
             />
