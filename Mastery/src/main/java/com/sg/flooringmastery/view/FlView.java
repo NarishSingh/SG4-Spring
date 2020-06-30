@@ -53,21 +53,8 @@ public class FlView {
         io.print("===ADD NEW ORDER===");
     }
 
-    /**
-     * Create a new order request to send to service
-     *
-     * @return {String[]} user inputs all as strings - service layer will handle
-     *         proper typing and obj construction
-     */
-    public String[] getNewOrderInfo() {
-        String[] orderRequest = new String[5];
-        orderRequest[0] = io.readString("Please enter order date in MM-DD-YYYY format:");
-        orderRequest[1] = io.readString("Please enter customer name: ");
-        orderRequest[2] = io.readString("Please enter state - TX, WA, KY, CA: ");
-        orderRequest[3] = io.readString("Please choose your desired product type - CARPET, LAMINATE, TILE, WOOD: ");
-        orderRequest[4] = io.readString("Please enter area - min. 100 sq. ft: ");
-
-        return orderRequest;
+    public Order getNewOrderInfo() {
+        
     }
 
     /**
@@ -133,7 +120,6 @@ public class FlView {
      */
     public void displayOrdersByDate(Map<Integer, Order> ordersOnDate) {
         ordersOnDate.forEach((orderNum, Order) -> {
-            //FIXME idk why the param buggin like that
             //TODO print out all the fields
         });
 
@@ -155,17 +141,75 @@ public class FlView {
     public void displayEditOrderBanner() {
         io.print("===EDIT ORDER===");
     }
-    
-    public String[] getEditedOrderInfo(Order orderToEdit){
-        String[] editRequest = new String[5];
+
+    public String[] getEditedOrderInfo(Order orderToEdit) {
         
-        //TODO get new request array, on \n write in the original order's field
-        
-        return editRequest;
     }
     
+    //recycles displayOrder()
     
-    //TODO continue here
+    /**
+     * Display closing Edit Order banner for a successful edit
+     */
+    public void displayEditOrderSuccessBanner(){
+        io.print("***Order Edit Not Persisted***");
+        io.readString("Press ENTER to continue");
+    }
+    
+    /**
+     * Display closing Edit Order banner for a failed edit
+     */
+    public void displayEditOrderFailBanner(){
+        io.print("***Order Sucessfully Edited***");
+        io.readString("Press ENTER to continue");
+    }
+    
+    /*REMOVE ORDER*/
+    /**
+     * Display opening Remove Order banner to UI
+     */
+    public void displayRemoveOrderBanner() {
+        io.print("===REMOVE ORDER===");
+    }
+    
+    //recycles getOrdersDate()
+    
+    /**
+     * Get ID of order to be removed
+     * @return {int} an existing order ID
+     */
+    public int getOrderRemovalNumber(){
+        boolean hasErrors;
+        int orderID = 0;
+        
+        do {            
+            try {
+                orderID = io.readInt("Enter Order ID: ");
+                hasErrors=false;
+            } catch (NumberFormatException e) {
+                hasErrors=true;
+                displayErrorMessage(e.getMessage());
+            }
+        } while (hasErrors);
+        
+        return orderID;
+    }
+    
+    /**
+     * Display closing Remove Order banner for a successful edit
+     */
+    public void displayRemoveOrderSuccessBanner(){
+        io.print("***Order Not Removed***");
+        io.readString("Press ENTER to continue");
+    }
+    
+    /**
+     * Display closing Remove Order banner for a failed edit
+     */
+    public void displayRemoveOrderFailBanner(){
+        io.print("***Order Sucessfully Removed***");
+        io.readString("Press ENTER to continue");
+    }
 
     /*EXIT*/
     /**

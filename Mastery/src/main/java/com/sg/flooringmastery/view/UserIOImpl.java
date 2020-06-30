@@ -31,9 +31,7 @@ public class UserIOImpl implements UserIO {
     @Override
     public String readString(String prompt) {
         System.out.print(prompt);
-        String userInput = input.nextLine();
-
-        return userInput;
+        return input.nextLine();
     }
 
     /**
@@ -45,9 +43,7 @@ public class UserIOImpl implements UserIO {
     @Override
     public int readInt(String prompt) {
         System.out.print(prompt);
-        int userInput = Integer.parseInt(input.nextLine());
-
-        return userInput;
+        return Integer.parseInt(input.nextLine());
     }
 
     /**
@@ -83,9 +79,7 @@ public class UserIOImpl implements UserIO {
     @Override
     public double readDouble(String prompt) {
         System.out.print(prompt);
-        double userInput = Double.parseDouble(input.nextLine());
-
-        return userInput;
+        return Double.parseDouble(input.nextLine());
     }
 
     /**
@@ -121,9 +115,7 @@ public class UserIOImpl implements UserIO {
     @Override
     public float readFloat(String prompt) {
         System.out.print(prompt);
-        float userInput = Float.parseFloat(input.nextLine());
-
-        return userInput;
+        return Float.parseFloat(input.nextLine());
     }
 
     /**
@@ -159,9 +151,7 @@ public class UserIOImpl implements UserIO {
     @Override
     public long readLong(String prompt) {
         System.out.print(prompt);
-        long userInput = Long.parseLong(input.nextLine());
-
-        return userInput;
+        return Long.parseLong(input.nextLine());
     }
 
     /**
