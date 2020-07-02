@@ -44,9 +44,6 @@ View <- Controller : inputArea()
 View --> Controller : BigDecimal
 Controller --> Controller : Order(LocalDate, String, State, Product, BigDecimal)
 
-Controller -> View : confirmNewOrder()
-View --> Controller : boolean
-
 Controller -> Service: addOrder(Order)
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
@@ -54,6 +51,10 @@ Service --> Service : calcTax()
 Service --> Service : calcTotal()
 Service --> Service : getHighestOrderNumber()
 Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)
+
+Controller -> View : confirmNewOrder()
+View --> Controller : boolean
+
 OrderDao --> OrderDao : loadAllOrders()
 Service -> OrderDao : addOrder(Order)
 OrderDao --> Service : Order
@@ -125,11 +126,6 @@ Service -> OrderDao : getOrder(LocalDate, int)
 OrderDao --> Service : Order
 Service --> Controller : Order
 
-View <- Controller : inputEditOrderDate(Order)
-View --> Controller : LocalDate
-Controller -> Service : validateOrderDate(LocalDate)
-Service --> Controller : LocalDate
-
 View <- Controller : inputEditCustomerName(Order)
 View --> Controller : String
 
@@ -155,9 +151,6 @@ View <- Controller : inputEditArea(Order)
 View --> Controller : BigDecimal
 Controller --> Controller : Order(LocalDate, String, State, Product, BigDecimal)
 
-Controller -> View : confirmOrderEdit()
-View --> Controller : boolean
-
 Controller -> Service: editOrder(Order, Order)
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
@@ -165,6 +158,10 @@ Service --> Service : calcTax()
 Service --> Service : calcTotal()
 Service --> Service : getHighestOrderNumber()
 Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)
+
+Controller -> View : confirmOrderEdit()
+View --> Controller : boolean
+
 OrderDao --> OrderDao : loadAllOrders()
 Service -> OrderDao : editOrder(Order, Order)
 OrderDao --> Service : Order
