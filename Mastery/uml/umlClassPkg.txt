@@ -48,29 +48,33 @@ package view {
         +displayAddOrderBanner(): void
         +inputOrderDate(): LocalDate
         +inputCustomerName(): String
-        +inputState(): String
-        +inputProductType(): String
+        +inputState(): String {validStates: List<State>}
+        +inputProductType(): String {validProducts: List<State>}
         +inputArea(): BigDecimal
+        +confirmNewOrder(): boolean
         +displayOrderInfo(): void {anOrder: Order}
         +displayAddOrderSuccessBanner(): void
         +displayAddOrderFailBanner(): void
 
         +displayDisplayOrdersBanner(): void
         +getOrdersDate(): LocalDate
-        +displayOrdersByDateInfo(): void {ordersOnDate: Map<Integer, Order>}
+        +displayOrdersByDateInfo(): void {ordersOnDate: List<Order>}
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
         +inputEditOrderDate(): LocalDate {orderToEdit: Order}
         +inputEditCustomerName(): String {orderToEdit: Order}
         +inputEditState(): String {orderToEdit: Order}
-        +inputEditProductType(): String {orderToEdit: Order}
+        +inputEditProductType(): String {orderToEdit: Order, List<String>}
         +inputEditArea(): BigDecimal {orderToEdit: Order}
+        +confirmOrderEdit(): boolean
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
         +displayRemoveOrderBanner(): void
-        +getOrderRemovalNum(): int
+        +getSingleOrderDate(): LocalDate
+        +getOrderNum(): int
+        +confirmOrderRemoval(): boolean
         +displayRemoveOrderSuccessBanner(): void
         +displayRemoveOrderFailBanner(): void
 
@@ -108,12 +112,13 @@ package service {
     interface FlService{
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +editOrder(): Order {newOrder: Order}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +getOrdersByDate(): List<Order> {date: LocalDate}
         +exportOrders(): void
         +getAllOrders(): List<Order>
-        +getHighestOrderNumber(): int 
-        'get highest value of the order number after using getAllOrders()
+        +getValidStatesList(): List<String>
+        +getValidProductsList(): List<String>
     }
 
     class FlServiceImpl{
@@ -127,13 +132,15 @@ package service {
 
         +addOrder(): Order {orderRequest: String[]}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +editOrder(): Order {newOrder: Order, orderToReplace: Order}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +getOrdersByDate(): List<Order> {date: LocalDate}
         +exportOrders(): void
         +getAllOrders(): List<Order>
+        +getValidStatesList(): List<String>
+        +getValidProductsList(): List<String>
 
         -validateOrderDate(): LocalDate {userDate: LocalDate}
-        -validateCustomerName(): String {userName: String}
         -validateState(): State {userState: String}
         -validateProductType(): Product {userProduct: String}
         -calcMaterialCost(): BigDecimal {newOrder: Order}
@@ -156,20 +163,9 @@ package service {
         +InvalidStateException() {message: String, cause: Throwable}
     }
 
-    class InvalidAreaException <<Exception>>{
-        +InvalidAreaException() {message: String}
-        +InvalidAreaException() {message: String, cause: Throwable}
-    }
-
     class InvalidOrderNumberException <<Exception>>{
         +InvalidOrderNumberException() {message: String}
         +InvalidOrderNumberException() {message: String, cause: Throwable}
-    }
-
-    'might not need this one
-    class BadOrderRequestException <<Exception>>{
-        +BadOrderRequestException() {message: String}
-        +BadOrderRequestException() {message: String, cause: Throwable}
     }
 
     class NoOrdersOnDateException <<Exception>>{
@@ -181,6 +177,7 @@ package service {
 
 package dao {
     'all will have a production and testing ctor
+    'delimiters must be commas ,
     
     class StateDao{
         -states: Map<String, State>
@@ -192,7 +189,8 @@ package dao {
 
         -unmarshallState() : State {stateAsText: String}
         -loadStates(): void
-        -readStateByID(): State {userState: State}
+        +readStateByID(): State {userState: String}
+        +getValidStates(): List<String>
     }
     
     class ProductDao{
@@ -205,21 +203,24 @@ package dao {
 
         -unmarshallProduct() : Product {productAsText: String}
         -loadProducts(): void
-        -readProductByID(): Product {userProduct: Product}
+        +readProductByID(): Product {userProduct: String}
+        +getValidProducts(): List<String>
     }
 
     interface OrderDao{
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +editOrder(): Order {newOrder: Order, orderToReplace: Order}
+        +getOrdersByDate(): List<Order> {date: LocalDate}
         +getAllOrders(): List<Order>
     }
 
     class OrderDaoImpl{
         'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
         -orders: Map<LocalDate, Map<Integer, Order>>
-        +ORDER_DIRECTORY: String
+        +BACKUP_FILE
+        'this will be DataExport.txt
         +DELIMITER: String
 
         +FlDaoImpl()
@@ -228,13 +229,14 @@ package dao {
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +getOrdersByDate(): Map<Integer, Order> {date: LocalDate}
+        +editOrder(): Order {newOrder: Order, orderToReplace: Order}
+        +getOrdersByDate(): List<Order> {date: LocalDate}
         +getAllOrders(): List<Order>
 
         -marshallOrder(): String {anOrder: Order}
         -unmarshallOrder(): Order {orderAsText: String}
         -loadAllOrders(): void
-        -writeAllOrders(): void 
+        -writeAllOrders(): void
     }
 
     OrderDao <|-down- OrderDaoImpl: implements
@@ -244,7 +246,7 @@ package dao {
     }
 
     class FlAuditDaoImpl{
-        -AUDIT_FILE: String
+        +AUDIT_FILE: String
 
         +writeAuditEntry(): void {entry: String}
     }
@@ -252,13 +254,14 @@ package dao {
     FlAuditDao <|-down- FlAuditDaoImpl: implements
 
     class ExportFileDao{
-        +EXPORT_FILE: String
+        +ORDER_DIRECTORY: String
+        'this is going to be the "orders" FOLDER NOT a file
         +DELIMITER: String
 
         +ExportFileDao()
         +ExportFileDao() {exportFileText: String}
 
-        -exportOrders(): void {activeOrders: List<Order>}
+        +exportOrders(): void {activeOrders: List<Order>}
         -marshallOrder(): String {anOrder: Order}
     }
 
