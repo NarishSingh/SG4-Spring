@@ -42,6 +42,7 @@ Service --> Controller : Product
 
 View <- Controller : inputArea()
 View --> Controller : BigDecimal
+
 Controller --> Controller : Order(LocalDate, String, State, Product, BigDecimal)
 
 Controller -> Service: addOrder(Order)
