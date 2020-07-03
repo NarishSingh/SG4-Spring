@@ -1,30 +1,19 @@
 package com.sg.scratchpad.multifile;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class Employee {
 
-    private LocalDate hireDate;
     private int id;
     private String name;
     private String job;
     private BigDecimal salary;
 
-    public Employee(LocalDate hireDate, int id, String name, String job, BigDecimal salary) {
-        this.hireDate = hireDate;
+    public Employee(int id, String name, String job, BigDecimal salary) {
         this.id = id;
         this.name = name;
         this.job = job;
         this.salary = salary;
-    }
-
-    public LocalDate getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(LocalDate hireDate) {
-        this.hireDate = hireDate;
     }
 
     public int getId() {
