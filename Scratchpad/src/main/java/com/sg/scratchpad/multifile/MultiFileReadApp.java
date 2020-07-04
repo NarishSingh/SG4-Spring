@@ -7,7 +7,10 @@ https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html
  */
 package com.sg.scratchpad.multifile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +22,8 @@ import java.util.TreeMap;
 
 public class MultiFileReadApp {
 
-    static public final String DELIMITER = "::";
+    public static final String DELIMITER = "::";
+    public static TreeMap<LocalDate, TreeMap<Integer, Employee>> hired = new TreeMap<>();
 
     /**
      * Marshall an employee to text
@@ -28,7 +32,8 @@ public class MultiFileReadApp {
      * @return {String} a delimited String with the new hiree's information
      */
     static public String marshallEmpl(Employee empl) {
-        String emplAsText = empl.getId() + DELIMITER;
+        String emplAsText = empl.getHireDate() + DELIMITER;
+        emplAsText += empl.getId() + DELIMITER;
         emplAsText += empl.getName() + DELIMITER;
         emplAsText += empl.getJob() + DELIMITER;
         emplAsText += empl.getSalary().toString();
@@ -46,12 +51,13 @@ public class MultiFileReadApp {
     static public Employee unmarshallEmpl(String emplAsText) {
         String[] emplTokens = emplAsText.split(DELIMITER);
 
-        int emplID = Integer.parseInt(emplTokens[0]);
-        String emplName = emplTokens[1];
-        String emplJob = emplTokens[2];
-        BigDecimal emplSalary = new BigDecimal(emplTokens[3]);
+        LocalDate emplHireDate = LocalDate.parse(emplTokens[0]);
+        int emplID = Integer.parseInt(emplTokens[1]);
+        String emplName = emplTokens[2];
+        String emplJob = emplTokens[3];
+        BigDecimal emplSalary = new BigDecimal(emplTokens[4]);
 
-        Employee emplFromFile = new Employee(emplID, emplName, emplJob, emplSalary);
+        Employee emplFromFile = new Employee(emplHireDate, emplID, emplName, emplJob, emplSalary);
 
         return emplFromFile;
     }
@@ -69,6 +75,7 @@ public class MultiFileReadApp {
             //to create the files in a specific directory, next a new file creation in a new FileWriter
             out = new PrintWriter(new FileWriter(new File("test_docs", fileName)));
 
+            //try to always encapsulate this in a function such that it feels as if the vars are all effectively final
             employeesByDate.values().stream()
                     .forEach((empl) -> {
                         String emplAsText = marshallEmpl(empl);
@@ -82,13 +89,54 @@ public class MultiFileReadApp {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    /**
+     * Read in files from the directory and construct the main TreeMap with hire
+     * record
+     */
+    public static void loadHireRecords() {
+        File dir = new File("test_docs");
+        String currentLine;
+        Employee currentEmpl;
+        
+        TreeMap<Integer, Employee> emplHiredByDate = new TreeMap<>(); //temp inner Map
+
+        hired.clear();
+
+        //for every file in directory
+        for (File file : dir.listFiles()) {
+            Scanner sc;
+            try {
+                sc = new Scanner(new BufferedReader(new FileReader(file)));
+            } catch (FileNotFoundException e) {
+                System.out.println("Can't load in file from directory");
+                break;
+            }
+
+            emplHiredByDate.clear();
+            
+            LocalDate hiredMapDate = LocalDate.now(); //just for initialization purposes
+            
+            while (sc.hasNextLine()) {
+                currentLine = sc.nextLine();
+                currentEmpl = unmarshallEmpl(currentLine);
+
+                emplHiredByDate.put(currentEmpl.getId(), currentEmpl);
+
+                hiredMapDate = currentEmpl.getHireDate();
+            }
+
+            hired.put(hiredMapDate, emplHiredByDate); //FIXME for some reason its populating the outer map with seperate inner maps, but each inner map will have all of the employees instead of only the ones it needs...
+            
+            sc.close();
+        }
+    }
+
+    public static void main(String[] args) {
         Scanner input1 = new Scanner(System.in); //string
         Scanner input2 = new Scanner(System.in); //numerical
         boolean hiringDay;
 
-        //create outer and inner map one after another
-        TreeMap<LocalDate, TreeMap<Integer, Employee>> hiredEmployees = new TreeMap<>(); //outer
+        loadHireRecords();
 
         System.out.println("---Hiring Log---");
         do {
@@ -109,12 +157,12 @@ public class MultiFileReadApp {
                 System.out.print("Enter salary: ");
                 BigDecimal emplSalary = new BigDecimal(input1.nextLine());
 
-                Employee newEmpl = new Employee(emplID, emplName, emplJob, emplSalary);
+                Employee newEmpl = new Employee(userDate, emplID, emplName, emplJob, emplSalary);
 
                 System.out.println("newEmpl = " + newEmpl); //test
 
                 employeesByDate.put(newEmpl.getId(), newEmpl); //add to inner first
-                hiredEmployees.put(userDate, employeesByDate); //add to outer second
+                hired.put(userDate, employeesByDate); //add to outer second
 
                 System.out.print("Hire another? (y/n): ");
                 hiring = input1.nextLine().equals("y");
@@ -131,7 +179,7 @@ public class MultiFileReadApp {
         } while (hiringDay);
 
         //print the maps, for each entry of outer, print all of inner
-        hiredEmployees.forEach((date, emplMap) -> {
+        hired.forEach((date, emplMap) -> {
             System.out.println(date.toString());
 
             emplMap.forEach((id, empl) -> {
