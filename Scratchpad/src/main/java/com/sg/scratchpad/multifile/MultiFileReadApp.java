@@ -145,10 +145,14 @@ public class MultiFileReadApp {
             System.out.print("Enter a date in MM-DD-YYYY format: ");
             LocalDate userDate = LocalDate.parse(input1.nextLine(), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 
-            //we want a new inner map every hiring day, so we scope locally
-            TreeMap<Integer, Employee> employeesByDate = new TreeMap<>(); //inner
-            
             do {
+                //we want a new inner map every hiring day, so we scope locally
+                //since the outer map was loaded, we need to catch the old data or else we will re-write it
+                TreeMap<Integer, Employee> employeesByDate = hired.get(userDate); //inner
+                if (employeesByDate == null) {
+                    employeesByDate = new TreeMap<>(); //to ensure not null for a new date
+                }
+
                 System.out.print("Enter ID: ");
                 int emplID = input2.nextInt();
                 System.out.print("Enter name: ");
