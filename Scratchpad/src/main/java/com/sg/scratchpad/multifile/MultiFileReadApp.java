@@ -66,13 +66,13 @@ public class MultiFileReadApp {
      * Create new files per date recording new hires from that day
      *
      * @param fileName        {String} the name of the .txt file, formatted as
-     *                        "record_" with the date in ISO format
+     *                        "record_" with date
      * @param employeesByDate {TreeMap} all new hires that day
      */
     public static void createHiredByDateFile(String fileName, TreeMap<Integer, Employee> employeesByDate) {
         PrintWriter out;
         try {
-            //to create the files in a specific directory, next a new file creation in a new FileWriter
+            //to create the files in a specific directory, nest a new file obj ctor in a new FileWriter
             out = new PrintWriter(new FileWriter(new File("test_docs", fileName)));
 
             //try to always encapsulate this in a function such that it feels as if the vars are all effectively final
@@ -95,15 +95,14 @@ public class MultiFileReadApp {
      */
     public static void loadHireRecords() {
         File dir = new File("test_docs");
-        String currentLine;
-        Employee currentEmpl;
-        
-        TreeMap<Integer, Employee> emplHiredByDate = new TreeMap<>(); //temp inner Map
-
-        hired.clear();
 
         //for every file in directory
         for (File file : dir.listFiles()) {
+            TreeMap<Integer, Employee> emplHiredByDate = new TreeMap<>(); //temp inner Map
+            String currentLine;
+            Employee currentEmpl;
+
+            //load file
             Scanner sc;
             try {
                 sc = new Scanner(new BufferedReader(new FileReader(file)));
@@ -113,9 +112,10 @@ public class MultiFileReadApp {
             }
 
             emplHiredByDate.clear();
-            
+
             LocalDate hiredMapDate = LocalDate.now(); //just for initialization purposes
-            
+
+            //unmarshall
             while (sc.hasNextLine()) {
                 currentLine = sc.nextLine();
                 currentEmpl = unmarshallEmpl(currentLine);
@@ -125,8 +125,8 @@ public class MultiFileReadApp {
                 hiredMapDate = currentEmpl.getHireDate();
             }
 
-            hired.put(hiredMapDate, emplHiredByDate); //FIXME for some reason its populating the outer map with seperate inner maps, but each inner map will have all of the employees instead of only the ones it needs...
-            
+            hired.put(hiredMapDate, emplHiredByDate);
+
             sc.close();
         }
     }
@@ -135,18 +135,19 @@ public class MultiFileReadApp {
         Scanner input1 = new Scanner(System.in); //string
         Scanner input2 = new Scanner(System.in); //numerical
         boolean hiringDay;
-
-        loadHireRecords();
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
         System.out.println("---Hiring Log---");
         do {
             boolean hiring;
+            loadHireRecords();
 
             System.out.print("Enter a date in MM-DD-YYYY format: ");
             LocalDate userDate = LocalDate.parse(input1.nextLine(), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 
-            //we want a new inner map every day, so we scope locally
+            //we want a new inner map every hiring day, so we scope locally
             TreeMap<Integer, Employee> employeesByDate = new TreeMap<>(); //inner
+            
             do {
                 System.out.print("Enter ID: ");
                 int emplID = input2.nextInt();
@@ -161,15 +162,16 @@ public class MultiFileReadApp {
 
                 System.out.println("newEmpl = " + newEmpl); //test
 
-                employeesByDate.put(newEmpl.getId(), newEmpl); //add to inner first
-                hired.put(userDate, employeesByDate); //add to outer second
+                employeesByDate.put(newEmpl.getId(), newEmpl); //put to inner first
+                hired.put(userDate, employeesByDate); //put to outer second
 
                 System.out.print("Hire another? (y/n): ");
                 hiring = input1.nextLine().equals("y");
                 System.out.println("-------");
 
                 //data marshalling, write to file
-                String fileName = "record_" + userDate.toString() + ".txt";
+                String userDateFormatted = userDate.format(mmddyyyy);
+                String fileName = "record_" + userDateFormatted + ".txt";
                 createHiredByDateFile(fileName, employeesByDate);
             } while (hiring);
 
@@ -180,7 +182,7 @@ public class MultiFileReadApp {
 
         //print the maps, for each entry of outer, print all of inner
         hired.forEach((date, emplMap) -> {
-            System.out.println(date.toString());
+            System.out.println(date.format(mmddyyyy));
 
             emplMap.forEach((id, empl) -> {
                 System.out.println(id + " " + empl.toString());
