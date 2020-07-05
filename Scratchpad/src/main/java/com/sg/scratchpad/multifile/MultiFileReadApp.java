@@ -140,6 +140,7 @@ public class MultiFileReadApp {
         System.out.println("---Hiring Log---");
         do {
             boolean hiring;
+            
             loadHireRecords();
 
             System.out.print("Enter a date in MM-DD-YYYY format: ");
@@ -150,9 +151,10 @@ public class MultiFileReadApp {
                 //since the outer map was loaded, we need to catch the old data or else we will re-write it
                 TreeMap<Integer, Employee> employeesByDate = hired.get(userDate); //inner
                 if (employeesByDate == null) {
-                    employeesByDate = new TreeMap<>(); //to ensure not null for a new date
+                    employeesByDate = new TreeMap<>(); //to ensure not null for a new date, which will have no map to .get
                 }
 
+                //new empl info
                 System.out.print("Enter ID: ");
                 int emplID = input2.nextInt();
                 System.out.print("Enter name: ");
@@ -166,9 +168,10 @@ public class MultiFileReadApp {
 
                 System.out.println("newEmpl = " + newEmpl); //test
 
-                employeesByDate.put(newEmpl.getId(), newEmpl); //put to inner first
-                hired.put(userDate, employeesByDate); //put to outer second
+                employeesByDate.put(newEmpl.getId(), newEmpl); //put to inner, first
+                hired.put(userDate, employeesByDate); //put loaded inner to outer second
 
+                //new hire that day
                 System.out.print("Hire another? (y/n): ");
                 hiring = input1.nextLine().equals("y");
                 System.out.println("-------");
@@ -179,12 +182,13 @@ public class MultiFileReadApp {
                 createHiredByDateFile(fileName, employeesByDate);
             } while (hiring);
 
+            //new day of hiring
             System.out.print("Start a new day of interviews? (y/n): ");
             hiringDay = input1.nextLine().equals("y");
             System.out.println("*******");
         } while (hiringDay);
 
-        //print the maps, for each entry of outer, print all of inner
+        //print the maps, for each entry of outer -> print all of inner
         hired.forEach((date, emplMap) -> {
             System.out.println(date.format(mmddyyyy));
 
