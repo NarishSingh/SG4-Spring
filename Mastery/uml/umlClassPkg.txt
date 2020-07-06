@@ -17,6 +17,8 @@ package view {
         +readLong(): long {prompt: String, min: long, max: long}
         +readBigDecimal(): BigDecimal {prompt: String}
         +readBigDecimal(): BigDecimal {prompt: String, min: BigDecimal, max: BigDecimal}
+        +readLocalDate(): LocalDate {prompt: String}
+        +readLocalDate(): LocalDate {prompt: String, min: LocalDate, max: LocalDate}
     }
 
     class UserIOImpl{
@@ -110,6 +112,7 @@ package controller {
 
 package service {
     interface FlService{
+        +validateOrder(): Order {orderRequest: Order}
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +editOrder(): Order {newOrder: Order}
@@ -130,7 +133,8 @@ package service {
 
         +FlServiceImpl() {state: StateDao, product: ProductDao, dao: OrderDao, auditDao: FlAuditDao, export: ExportFileDao}
 
-        +addOrder(): Order {orderRequest: String[]}
+        +validateOrder(): Order {orderRequest: Order}
+        +addOrder(): Order {orderRequest: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
         +editOrder(): Order {newOrder: Order, orderToReplace: Order}
         +getOrder(): Order {date: LocalDate, orderNum: int}

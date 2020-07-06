@@ -45,8 +45,7 @@ View --> Controller : BigDecimal
 
 Controller --> Controller : Order(LocalDate, String, State, Product, BigDecimal)
 
-Controller --> Service : Order
-Controller -> Service: addOrder(Order)
+Controller -> Service: validateOrder(Order)
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
 Service --> Service : calcTax()
@@ -57,11 +56,11 @@ Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, 
 Controller -> View : confirmNewOrder()
 View --> Controller : boolean
 
-Controller --> Service : void
-OrderDao --> OrderDao : loadAllOrders()
+Controller --> Service : Order
 Service -> OrderDao : addOrder(Order)
-OrderDao --> Service : Order
+OrderDao --> OrderDao : loadAllOrders()
 OrderDao --> OrderDao : writeAllOrders()
+OrderDao --> Service : Order
 'write to backup file
 Service --> Controller : Order
 
@@ -92,15 +91,15 @@ Service -> OrderDao : getOrder(LocalDate, int)
 OrderDao --> Service : Order
 Service --> Controller : Order
 
-Controller -> View : confirmOrderRemoval()
+Controller -> View : confirmOrderRemoval(Order)
 View --> Controller : boolean
 
 Controller -> Service : removeOrder(date: LocalDate, orderNum: int)
-OrderDao --> OrderDao : loadAllOrders()
 Service -> OrderDao : removeOrder(LocalDate, int)
+OrderDao --> OrderDao : loadAllOrders()
 OrderDao --> OrderDao : writeAllOrders()
 OrderDao --> Service : Order
-Service --> Controller : Order
+Service --> Controller : void
 
 'OrderDao -[#blue]-> AuditDao : writeAuditEntry()
 
@@ -154,23 +153,22 @@ View <- Controller : inputEditArea(Order)
 View --> Controller : BigDecimal
 Controller --> Controller : Order(LocalDate, String, State, Product, BigDecimal)
 
-Controller --> Service : Order
+Controller --> Service : validateOrder(Order)
 Controller -> Service: editOrder(Order, Order)
 Service --> Service : calcMaterialCost()
 Service --> Service : calcLaborCost()
 Service --> Service : calcTax()
 Service --> Service : calcTotal()
-Service --> Service : getHighestOrderNumber()
 Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)
 
 Controller -> View : confirmOrderEdit()
 View --> Controller : boolean
 
-Controller --> Service : void
-OrderDao --> OrderDao : loadAllOrders()
+Controller --> Service : Order
 Service -> OrderDao : editOrder(Order, Order)
-OrderDao --> Service : Order
+OrderDao --> OrderDao : loadAllOrders()
 OrderDao --> OrderDao : writeAllOrders()
+OrderDao --> Service : Order
 Service --> Controller : Order
 
 'OrderDao -[#blue]-> AuditDao : writeAuditEntry()
@@ -214,7 +212,6 @@ View <- Controller : displayExportOrderBanner()
 View --> Controller : void
 
 Controller -> Service : exportOrders()
-Service -> Service : getAllOrders()
 Service -> OrderDao : getAllOrders()
 OrderDao --> Service : List<Order>
 Service -> ExportFileDao : exportOrders(List<Order>)
