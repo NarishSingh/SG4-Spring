@@ -53,29 +53,29 @@ package view {
         +inputState(): String {validStates: List<State>}
         +inputProductType(): String {validProducts: List<State>}
         +inputArea(): BigDecimal
-        +confirmNewOrder(): boolean
-        +displayOrderInfo(): void {anOrder: Order}
+        +confirmNewOrder(): boolean {userOrder: Order}
+        +displayOrderInfo(): void {userOrder: Order}
         +displayAddOrderSuccessBanner(): void
         +displayAddOrderFailBanner(): void
 
         +displayDisplayOrdersBanner(): void
         +getOrdersDate(): LocalDate
-        +displayOrdersByDateInfo(): void {ordersOnDate: List<Order>}
+        +displayOrdersByDate(): void {ordersOnDate: List<Order>}
         +displayDisplayOrdersFailBanner(): void
 
         +displayEditOrderBanner(): void
-        +inputEditOrderDate(): LocalDate {orderToEdit: Order}
-        +inputEditCustomerName(): String {orderToEdit: Order}
-        +inputEditState(): String {orderToEdit: Order, validStates: List<String>}
-        +inputEditProductType(): String {orderToEdit: Order, validProducts: List<String>}
-        +inputEditArea(): BigDecimal {orderToEdit: Order}
-        +confirmOrderEdit(): boolean
+        +inputEditedOrderDate(): LocalDate {orderToEdit: Order}
+        +inputEditedCustomerName(): String {orderToEdit: Order}
+        +inputEditedState(): String {orderToEdit: Order, validStates: List<String>}
+        +inputEditedProductType(): String {orderToEdit: Order, validProducts: List<String>}
+        +inputEditedArea(): BigDecimal {orderToEdit: Order}
+        +confirmOrderEdit(): boolean {orderEdits: Order}
         +displayEditOrderSuccessBanner(): void
         +displayEditOrderFailBanner(): void
 
         +displayRemoveOrderBanner(): void
-        +getSingleOrderDate(): LocalDate
-        +getOrderNum(): int
+        'recycles getOrdersDate()
+        +getOrderRemovalNumber(): int
         +confirmOrderRemoval(): boolean
         +displayRemoveOrderSuccessBanner(): void
         +displayRemoveOrderFailBanner(): void
