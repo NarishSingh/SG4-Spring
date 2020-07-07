@@ -360,7 +360,6 @@ package advice{
         +LoggingAdvice() {auditDao: FlAuditDao}
 
         +createAuditEntry(): void {jp: JoinPoint}
-        +createExceptionEntry(): void {ex: Exception}
         +createExceptionAtJoinpointEntry(): void {jp: JoinPoint, ex: Exception}
     }
 }
