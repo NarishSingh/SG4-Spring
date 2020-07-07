@@ -10,10 +10,9 @@ public class Order {
     private int orderNum;
     private String customerName;
     private State state;
-    private Product productType;
+    private Product product;
     private BigDecimal area;
     private BigDecimal materialCost;
-    private BigDecimal laborCost;
     private BigDecimal tax;
     private BigDecimal total;
 
@@ -23,20 +22,19 @@ public class Order {
         this.orderDate = orderDate;
         this.customerName = customerName;
         this.state = state;
-        this.productType = productType;
+        this.product = productType;
         this.area = area;
     }
 
     //service down
-    public Order(LocalDate orderDate, int orderNum, String customerName, State state, Product productType, BigDecimal area, BigDecimal materialCost, BigDecimal laborCost, BigDecimal tax, BigDecimal total) {
+    public Order(LocalDate orderDate, int orderNum, String customerName, State state, Product productType, BigDecimal area, BigDecimal materialCost, BigDecimal tax, BigDecimal total) {
         this.orderDate = orderDate;
         this.orderNum = orderNum;
         this.customerName = customerName;
         this.state = state;
-        this.productType = productType;
+        this.product = productType;
         this.area = area;
         this.materialCost = materialCost;
-        this.laborCost = laborCost;
         this.tax = tax;
         this.total = total;
     }
@@ -58,12 +56,12 @@ public class Order {
         this.state = state;
     }
 
-    public Product getProductType() {
-        return productType;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductType(Product productType) {
-        this.productType = productType;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public BigDecimal getArea() {
@@ -80,14 +78,6 @@ public class Order {
 
     public void setMaterialCost(BigDecimal materialCost) {
         this.materialCost = materialCost;
-    }
-
-    public BigDecimal getLaborCost() {
-        return laborCost;
-    }
-
-    public void setLaborCost(BigDecimal laborCost) {
-        this.laborCost = laborCost;
     }
 
     public BigDecimal getTax() {
