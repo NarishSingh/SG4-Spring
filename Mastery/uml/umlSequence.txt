@@ -23,7 +23,9 @@ StateDao --> Service : List<State>
 Service --> Controller : List<State>
 View <- Controller : inputState(List<State>)
 View --> Controller : String
-Controller -> Service : validateState(String, List<State>)
+Controller -> Service : validateState(String)
+Service -> StateDao : readStateByID(String)
+StateDao --> Service : State
 Service --> Controller : State
 
 Controller -> Service : getValidProductsList()
@@ -33,7 +35,9 @@ ProductDao --> Service : List<Product>
 Service --> Controller : List<Product>
 View <- Controller : inputProductType(List<Product>)
 View --> Controller : String
-Controller -> Service : validateProductType(String, List<Product>)
+Controller -> Service : validateProductType(String)
+Service -> ProductDao : readProductByID(String)
+ProductDao --> Service : Product
 Service --> Controller : Product
 
 View <- Controller : inputArea()
@@ -47,7 +51,7 @@ Service --> Service : getHighestOrderNumber()
 Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)
 Service --> Controller : Order
 
-Controller -> View : confirmNewOrder()
+Controller -> View : confirmNewOrder(Order)
 View --> Controller : boolean
 
 Controller --> Service : Order
@@ -130,9 +134,11 @@ Service -> StateDao : getValidStates()
 StateDao --> StateDao : loadStates()
 StateDao --> Service : List<State>
 Service --> Controller : List<State>
-View <- Controller : inputEditState(List<State>)
+View <- Controller : inputEditState(Order, List<State>)
 View --> Controller : String
-Controller -> Service : validateState(String, List<State>)
+Controller -> Service : validateState(String)
+Service -> StateDao : readStateByID(String)
+StateDao --> Service : State
 Service --> Controller : State
 
 Controller -> Service : getValidProductsList()
@@ -143,6 +149,8 @@ Service --> Controller : List<Product>
 View <- Controller : inputEditProductType(Order, List<Product>)
 View --> Controller : String
 Controller -> Service : validateProductType(String, List<Product>)
+Service -> ProductDao : readProductByID(String)
+ProductDao --> Service : Product
 Service --> Controller : Product
 
 View <- Controller : inputEditArea(Order)
@@ -154,7 +162,7 @@ Service --> Service : calcOrderCosts(Order)
 Service --> Service : Order(LocalDate, int, String, State, Product, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)
 Service --> Controller : Order
 
-Controller -> View : confirmOrderEdit()
+Controller -> View : confirmOrderEdit(Order)
 View --> Controller : boolean
 
 Controller --> Service : Order

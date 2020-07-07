@@ -66,8 +66,8 @@ package view {
         +displayEditOrderBanner(): void
         +inputEditOrderDate(): LocalDate {orderToEdit: Order}
         +inputEditCustomerName(): String {orderToEdit: Order}
-        +inputEditState(): String {orderToEdit: Order}
-        +inputEditProductType(): String {orderToEdit: Order, List<String>}
+        +inputEditState(): String {orderToEdit: Order, validStates: List<String>}
+        +inputEditProductType(): String {orderToEdit: Order, validProducts: List<String>}
         +inputEditArea(): BigDecimal {orderToEdit: Order}
         +confirmOrderEdit(): boolean
         +displayEditOrderSuccessBanner(): void
@@ -145,8 +145,8 @@ package service {
         +getValidProductsList(): List<Product>
 
         -validateOrderDate(): LocalDate {userDate: LocalDate}
-        -validateState(): State {userState: String, validStateList: List<State>}
-        -validateProductType(): Product {userProduct: String, validProductList: List<Product>}
+        -validateState(): State {userState: String}
+        -validateProductType(): Product {userProduct: String}
         -calcOrderCosts(): void {newOrder: Order}
         
         '-calcMaterialCost(): BigDecimal {newOrder: Order}
