@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.view;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -212,4 +213,17 @@ public class UserIOImpl implements UserIO {
         return userInput;
     }
 
+    @Override
+    public LocalDate readLocalDate(String prompt) {
+        //TODO impl here
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public LocalDate readLocalDate(String prompt, LocalDate earliest, LocalDate latest) {
+        //TODO impl here
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }

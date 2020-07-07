@@ -1,10 +1,11 @@
 package com.sg.flooringmastery.view;
 
 import com.sg.flooringmastery.model.Order;
+import com.sg.flooringmastery.model.Product;
+import com.sg.flooringmastery.model.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Map;
 
 public class FlView {
@@ -76,18 +77,20 @@ public class FlView {
     /**
      * Get a state from user
      *
+     * @param validStates {List} all valid states read in from file
      * @return {String} the state's full name or abbreviation
      */
-    public String inputState() {
+    public String inputState(List<State> validStates) {
 
     }
 
     /**
      * Get a product type from user
      *
+     * @param validProducts {List} all valid products read in from file
      * @return {String} the product type being ordered
      */
-    public String inputProductType() {
+    public String inputProductType(List<Product> validProducts) {
 
     }
 
@@ -99,13 +102,22 @@ public class FlView {
     public BigDecimal inputArea() {
 
     }
+    
+    /**
+     * Display the order and get confirmation before writing it to the record
+     * @param userOrder {Order} the user's newly create, valid order
+     * @return {boolean} confirmation to persist order to file
+     */
+    public boolean confirmNewOrder(Order userOrder){
+        
+    }
 
     /**
      * Display all fields of an order object for user
      *
-     * @param newOrder {Order} a newly constructed Order obj from service
+     * @param userOrder {Order} a newly constructed Order obj from service
      */
-    public void displayOrder(Order newOrder) {
+    public void displayOrderInfo(Order userOrder) {
 
     }
 
@@ -139,6 +151,8 @@ public class FlView {
      * @return date {LocalDate} a future date to retrieve order data from
      */
     public LocalDate getOrdersDate() {
+        //TODO move this to the userIO new method to read LocalDate
+        /*
         boolean hasErrors;
         LocalDate date = LocalDate.now(); //just for initialization
 
@@ -153,6 +167,7 @@ public class FlView {
         } while (hasErrors);
 
         return date;
+        */
     }
 
     /**
@@ -215,10 +230,11 @@ public class FlView {
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
      *                    \n
+     * @param validStates {List} all valid states for business, read in from file
      * @return {String} the new State name or abbreviation for the respective
      *         field of the order
      */
-    public String inputEditedState(Order orderToEdit) {
+    public String inputEditedState(Order orderToEdit, List<String> validStates) {
 
     }
 
@@ -228,10 +244,11 @@ public class FlView {
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
      *                    \n
+     * @param validProducts {List} all valid products for purchase, read in from file
      * @return {String} the new product name for the respective field for the
      *         order
      */
-    public String inputEditedProductType(Order orderToEdit) {
+    public String inputEditedProductType(Order orderToEdit, List<Product> validProducts) {
 
     }
 
@@ -241,10 +258,19 @@ public class FlView {
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
      *                    \n
-     * @return {}
+     * @return {BigDecimal}
      */
     public BigDecimal inputEditedArea(Order orderToEdit) {
 
+    }
+    
+    /**
+     * Display the edited order and get confirmation before writing to file
+     * @param orderEdits {Order} the edited Order
+     * @return {boolean} confirmation to persist order edits to file
+     */
+    public boolean confirmOrderEdit(Order orderEdits){
+        
     }
 
     //recycles displayOrder()
@@ -273,6 +299,7 @@ public class FlView {
     }
 
     //recycles getOrdersDate()
+    
     /**
      * Get ID of order to be removed
      *
@@ -294,6 +321,15 @@ public class FlView {
 
         return orderID;
     }
+    
+    /**
+     * Get confirmation for removing an active order
+     * @return {boolean} confirmation to persist the removal
+     */
+    public boolean confirmOrderRemoval(){
+        
+    }
+    
 
     /**
      * Display closing Remove Order banner for a successful edit

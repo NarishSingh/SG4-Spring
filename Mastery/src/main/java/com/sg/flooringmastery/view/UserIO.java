@@ -5,6 +5,7 @@ will be used for the menu system
 package com.sg.flooringmastery.view;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Handles I/O, taking prompts as arguments with overloads to take within a
@@ -37,4 +38,8 @@ public interface UserIO {
     BigDecimal readBigDecimal(String prompt);
 
     BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max);
+    
+    LocalDate readLocalDate(String prompt);
+    
+    LocalDate readLocalDate(String prompt, LocalDate earliest, LocalDate latest);
 }
