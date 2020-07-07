@@ -1,0 +1,74 @@
+package com.sg.flooringmastery.dao;
+
+import com.sg.flooringmastery.model.Order;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface OrderDao {
+
+    /**
+     * Add an active order to treemap and persist to file
+     *
+     * @param newOrder {Order} a valid order obj
+     * @return {Order} the successfully added and persisted Order obj
+     * @throws OrderPersistenceException if cannot persist addition
+     */
+    Order addOrder(Order newOrder) throws OrderPersistenceException;
+
+    /**
+     * Remove an active order to treemap and persist to file
+     *
+     * @param removalDate {LocalDate} a future date which contains at least one
+     *                    active order
+     * @param removalID   {int} the id of an active order
+     * @return {Order} the successfully removed and persisted Order obj
+     * @throws OrderPersistenceException if cannot persist removal
+     */
+    Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException;
+
+    /**
+     * Retrive an active order
+     *
+     * @param Date {LocalDate} a future date which contains at least one active
+     *             order
+     * @param id   {int} the id of an active order
+     * @return {Order} an active order
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   and/or files
+     */
+    Order getOrder(LocalDate Date, int id) throws OrderPersistenceException;
+
+    /**
+     * Edit an active order in the treemap and persist to file
+     *
+     * @param orderToReplace {Order} a valid order obj to be replaced
+     * @param orderEdit      {Order} an order obj with matching date and id
+     *                       fields as the other parameter, but at least one
+     *                       field is distinct
+     * @return {Order} the replaced order
+     * @throws OrderPersistenceException if cannot persist replacement
+     */
+    Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException;
+
+    /**
+     * Retrieve the value, the inner orders treemap, for the argument and return
+     * as list
+     *
+     * @param date {LocalDate} a future date that corresponds to an existing key
+     *             in the treemap
+     * @return {List} list of all active orders for that date
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   and/or files
+     */
+    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
+
+    /**
+     * Retrieve all active orders
+     *
+     * @return {List} list of all active orders
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   and/or files
+     */
+    List<Order> getAllOrders() throws OrderPersistenceException;
+
+}

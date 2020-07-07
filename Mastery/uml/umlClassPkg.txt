@@ -115,13 +115,13 @@ package service {
         +validateOrder(): Order {orderRequest: Order}
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
-        +editOrder(): Order {newOrder: Order}
+        +editOrder(): Order {editedOrder: Order}
         +getOrder(): Order {date: LocalDate, orderNum: int}
         +getOrdersByDate(): List<Order> {date: LocalDate}
         +exportOrders(): void
         +getAllOrders(): List<Order>
-        +getValidStatesList(): List<String>
-        +getValidProductsList(): List<String>
+        +getValidStatesList(): List<State>
+        +getValidProductsList(): List<Product>
     }
 
     class FlServiceImpl{
@@ -147,7 +147,7 @@ package service {
         -validateOrderDate(): LocalDate {userDate: LocalDate}
         -validateState(): State {userState: String}
         -validateProductType(): Product {userProduct: String}
-        -calcOrderCosts(): void {newOrder: Order}
+        -calcOrderCosts(): void {orderRequest: Order}
         
         '-calcMaterialCost(): BigDecimal {newOrder: Order}
         '-calcLaborCost(): BigDecimal {newOrder: Order}
@@ -197,7 +197,7 @@ package dao {
         -unmarshallState() : State {stateAsText: String}
         -loadStates(): void
         +readStateByID(): State {userState: String}
-        +getValidStates(): List<String>
+        +getValidStates(): List<State>
     }
     
     class ProductDao{
@@ -211,14 +211,14 @@ package dao {
         -unmarshallProduct() : Product {productAsText: String}
         -loadProducts(): void
         +readProductByID(): Product {userProduct: String}
-        +getValidProducts(): List<String>
+        +getValidProducts(): List<Product>
     }
 
     interface OrderDao{
         +addOrder(): Order {newOrder: Order}
-        +removeOrder(): Order {date: LocalDate, orderNum: int}
+        +removeOrder(): Order {removalDate: LocalDate, removalID: int}
         +getOrder(): Order {date: LocalDate, orderNum: int}
-        +editOrder(): Order {newOrder: Order, orderToReplace: Order}
+        +editOrder(): Order {orderEdit: Order, orderToReplace: Order}
         +getOrdersByDate(): List<Order> {date: LocalDate}
         +getAllOrders(): List<Order>
     }
@@ -226,12 +226,12 @@ package dao {
     class OrderDaoImpl{
         'https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html
         -orders: Map<LocalDate, Map<Integer, Order>>
-        +BACKUP_FILE
-        'this will be DataExport.txt
+        +ORDER_DIRECTORY: String
+        'this is going to be the "orders" FOLDER NOT a file
         +DELIMITER: String
 
-        +FlDaoImpl()
-        +FlDaoImpl() {ordersTextFile: String}
+        +OrderDaoImpl()
+        +OrderDaoImpl() {ordersTextFile: String}
 
         +addOrder(): Order {newOrder: Order}
         +removeOrder(): Order {date: LocalDate, orderNum: int}
@@ -261,8 +261,8 @@ package dao {
     FlAuditDao <|-down- FlAuditDaoImpl: implements
 
     class ExportFileDao{
-        +ORDER_DIRECTORY: String
-        'this is going to be the "orders" FOLDER NOT a file
+        +BACKUP_FILE
+        'this will be DataExport.txt
         +DELIMITER: String
 
         +ExportFileDao()
