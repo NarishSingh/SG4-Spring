@@ -46,4 +46,34 @@
     </bean>
     
     <!--AOP beans-->
+    <bean id="loggingAdvice" class="com.sg.flooringmastery.advice.LoggingAdvice">
+        <constructor-arg ref="auditDao" />
+    </bean>
+    
+    <aop:config>
+        <aop:aspect ref="loggingAdvice">
+            <aop:after-returning 
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.flooringmastery.service.Service.addOrder(..) )"
+            />
+            <aop:after-returning 
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.flooringmastery.service.Service.removeOrder(..) )"
+            />
+            <aop:after-returning 
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.flooringmastery.service.Service.editOrder(..) )"
+            />
+            <aop:after-returning 
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.flooringmastery.service.Service.exportOrder(..) )"
+            />
+            <aop:after-throwing
+                method="createExceptionWithJPEntry"
+                pointcut="execution(* *(..))"
+                throwing="ex"
+            />
+        </aop:aspect>
+    </aop:config>
+    
 </beans>
