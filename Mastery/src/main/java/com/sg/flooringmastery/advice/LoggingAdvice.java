@@ -1,14 +1,14 @@
 package com.sg.flooringmastery.advice;
 
-import com.sg.flooringmastery.dao.FlAuditDao;
 import com.sg.flooringmastery.dao.OrderPersistenceException;
 import org.aspectj.lang.JoinPoint;
+import com.sg.flooringmastery.dao.AuditDao;
 
 public class LoggingAdvice {
 
-    FlAuditDao auditDao;
+    AuditDao auditDao;
 
-    public LoggingAdvice(FlAuditDao auditDao) {
+    public LoggingAdvice(AuditDao auditDao) {
         this.auditDao = auditDao;
     }
 

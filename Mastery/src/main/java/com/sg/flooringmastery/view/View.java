@@ -8,11 +8,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class FlView {
+public class View {
 
     private UserIO io;
 
-    public FlView(UserIO io) {
+    public View(UserIO io) {
         this.io = io;
     }
 

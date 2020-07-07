@@ -1,7 +1,6 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.ExportFileDao;
-import com.sg.flooringmastery.dao.FlAuditDao;
 import com.sg.flooringmastery.dao.OrderDao;
 import com.sg.flooringmastery.dao.OrderPersistenceException;
 import com.sg.flooringmastery.dao.ProductDao;
@@ -11,16 +10,17 @@ import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
+import com.sg.flooringmastery.dao.AuditDao;
 
-public class FlServiceImpl implements FlService {
+public class ServiceImpl implements Service {
 
     StateDao state;
     ProductDao product;
     OrderDao dao;
-    FlAuditDao auditDao;
+    AuditDao auditDao;
     ExportFileDao export;
 
-    public FlServiceImpl(StateDao state, ProductDao product, OrderDao dao, FlAuditDao auditDao, ExportFileDao export) {
+    public ServiceImpl(StateDao state, ProductDao product, OrderDao dao, AuditDao auditDao, ExportFileDao export) {
         this.state = state;
         this.product = product;
         this.dao = dao;

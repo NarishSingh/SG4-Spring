@@ -7,7 +7,7 @@ import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface FlService {
+public interface Service {
 
     /**
      * Validate an Order before proceeding with persisting an add or edit

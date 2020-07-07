@@ -1,14 +1,14 @@
 package com.sg.flooringmastery.controller;
 
-import com.sg.flooringmastery.service.FlService;
-import com.sg.flooringmastery.view.FlView;
+import com.sg.flooringmastery.view.View;
+import com.sg.flooringmastery.service.Service;
 
-public class FlController {
+public class Controller {
 
-    FlService serv;
-    FlView view;
+    Service serv;
+    View view;
 
-    public FlController(FlService serv, FlView view) {
+    public Controller(Service serv, View view) {
         this.serv = serv;
         this.view = view;
     }

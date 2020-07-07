@@ -1,6 +1,6 @@
 package com.sg.flooringmastery.dao;
 
-public interface FlAuditDao {
+public interface AuditDao {
 
     /**
      * Create a timestamped entry logging the argumentized String to file
