@@ -148,12 +148,12 @@ package service {
         -validateState(): State {userState: String, validStateList: List<State>}
         -validateProductType(): Product {userProduct: String, validProductList: List<Product>}
         -calcOrderCosts(): void {newOrder: Order}
-        /'
-        -calcMaterialCost(): BigDecimal {newOrder: Order}
-        -calcLaborCost(): BigDecimal {newOrder: Order}
-        -calcTax(): BigDecimal {newOrder: Order}
-        -calcTotal(): BigDecimal {newOrder: Order}
-        /'
+        
+        '-calcMaterialCost(): BigDecimal {newOrder: Order}
+        '-calcLaborCost(): BigDecimal {newOrder: Order}
+        '-calcTax(): BigDecimal {newOrder: Order}
+        '-calcTotal(): BigDecimal {newOrder: Order}
+        
         -getHighestOrderNumber(): int 
         'get highest value of the order number after getting all orders, will call get all orders
     }
