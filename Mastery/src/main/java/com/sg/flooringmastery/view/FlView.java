@@ -102,14 +102,15 @@ public class FlView {
     public BigDecimal inputArea() {
 
     }
-    
+
     /**
      * Display the order and get confirmation before writing it to the record
+     *
      * @param userOrder {Order} the user's newly create, valid order
      * @return {boolean} confirmation to persist order to file
      */
-    public boolean confirmNewOrder(Order userOrder){
-        
+    public boolean confirmNewOrder(Order userOrder) {
+
     }
 
     /**
@@ -167,7 +168,7 @@ public class FlView {
         } while (hasErrors);
 
         return date;
-        */
+         */
     }
 
     /**
@@ -230,7 +231,8 @@ public class FlView {
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
      *                    \n
-     * @param validStates {List} all valid states for business, read in from file
+     * @param validStates {List} all valid states for business, read in from
+     *                    file
      * @return {String} the new State name or abbreviation for the respective
      *         field of the order
      */
@@ -241,10 +243,11 @@ public class FlView {
     /**
      * Edit the product type of an order
      *
-     * @param orderToEdit {Order} the original order obj, used to fill in
-     *                    original value if user elects not to edit by inputting
-     *                    \n
-     * @param validProducts {List} all valid products for purchase, read in from file
+     * @param orderToEdit   {Order} the original order obj, used to fill in
+     *                      original value if user elects not to edit by
+     *                      inputting \n
+     * @param validProducts {List} all valid products for purchase, read in from
+     *                      file
      * @return {String} the new product name for the respective field for the
      *         order
      */
@@ -263,14 +266,15 @@ public class FlView {
     public BigDecimal inputEditedArea(Order orderToEdit) {
 
     }
-    
+
     /**
      * Display the edited order and get confirmation before writing to file
+     *
      * @param orderEdits {Order} the edited Order
      * @return {boolean} confirmation to persist order edits to file
      */
-    public boolean confirmOrderEdit(Order orderEdits){
-        
+    public boolean confirmOrderEdit(Order orderEdits) {
+
     }
 
     //recycles displayOrder()
@@ -299,7 +303,6 @@ public class FlView {
     }
 
     //recycles getOrdersDate()
-    
     /**
      * Get ID of order to be removed
      *
@@ -321,15 +324,15 @@ public class FlView {
 
         return orderID;
     }
-    
+
     /**
      * Get confirmation for removing an active order
+     *
      * @return {boolean} confirmation to persist the removal
      */
-    public boolean confirmOrderRemoval(){
-        
+    public boolean confirmOrderRemoval() {
+
     }
-    
 
     /**
      * Display closing Remove Order banner for a successful edit
@@ -351,27 +354,27 @@ public class FlView {
     /**
      * Display opening Export Order banner to UI
      */
-    public void displayExportOrderBanner(){
+    public void displayExportOrderBanner() {
         io.print("===EXPORT ORDERS===");
     }
-    
+
     /**
      * Display closing Export Order banner for a successful persistence
      */
-    public void displayExportOrderSuccessBanner(){
+    public void displayExportOrderSuccessBanner() {
         io.print("***Orders Sucessfully Persisted***");
         io.print("Check DataExport.txt of BackUp Folder for all active orders");
         io.readString("Press ENTER to continue");
     }
-    
+
     /**
      * Display closing Export Order banner for a failed persistence
      */
-    public void displayExportOrderFailBanner(){
+    public void displayExportOrderFailBanner() {
         io.print("***Orders Unsucessfully Persisted***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /*EXIT*/
     /**
      * Display Exit banner in UI
