@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class StateDaoTest {
 
@@ -20,8 +22,8 @@ public class StateDaoTest {
         String testFile = ".//TestingFileData//testTaxes.txt";
         new FileWriter(testFile);
 
-        //TODO appcontext stuff
-        //TODO set testDao = to get bean thing
+        ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        testDao = actx.getBean("testStateDao", StateDao.class);
     }
 
     /**

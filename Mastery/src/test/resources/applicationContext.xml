@@ -29,6 +29,22 @@
     </bean>
     
     <!--stateful testing needs stubs-->
+    <bean id="stateDaoStub" class="com.sg.flooringmastery.service.StateDaoStub"/>
     
+    <bean id="productDaoStub" class="com.sg.flooringmastery.service.ProductDaoStub"/>
+    
+    <bean id="orderDaoStub" class="com.sg.flooringmastery.service.OrderDaoImplStub"/>
+    
+    <bean id="auditDaoStub" class="com.sg.flooringmastery.service.AuditDaoImplStub"/>
+    
+    <bean id="exportDaoStub" class="com.sg.flooringmastery.service.ExportFileDaoStub"/>
+    
+    <bean id="testService" class="com.sg.flooringmastery.service.ServiceImpl">
+        <constructor-arg ref="stateDaoStub"/>
+        <constructor-arg ref="productDaoStub"/>
+        <constructor-arg ref="orderDaoStub"/>
+        <constructor-arg ref="auditDaoStub"/>
+        <constructor-arg ref="exportDaoStub"/>
+    </bean>
     
 </beans>
