@@ -10,12 +10,7 @@ public class State {
     private BigDecimal taxRate;
 
     /*ctor*/
-    public State(String stateAbbreviation, String stateName, BigDecimal taxRate) {
-        this.stateAbbreviation = stateAbbreviation;
-        this.stateName = stateName;
-        this.taxRate = taxRate;
-    }
-
+    
     /*read/write*/
     public String getStateAbbreviation() {
         return stateAbbreviation;
