@@ -17,7 +17,7 @@ public class ProductDaoTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testFile = "testProducts.txt";
+        String testFile = ".//TestingFileData//testProducts.txt";
         new FileWriter(testFile);
 
         //TODO appcontext stuff

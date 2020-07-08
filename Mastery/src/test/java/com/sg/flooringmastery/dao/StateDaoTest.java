@@ -17,7 +17,7 @@ public class StateDaoTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testFile = "testTaxes.txt";
+        String testFile = ".//TestingFileData//testTaxes.txt";
         new FileWriter(testFile);
 
         //TODO appcontext stuff

@@ -18,8 +18,7 @@ public class OrderDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        //TODO be careful, these methods will be setup to go to a directory and work for multiple files and stuff
-        String testFile = "testOrders.txt";
+        String testFile = ".//TestingFileData//Orders";
         new FileWriter(testFile);
 
         //TODO appcontext stuff
