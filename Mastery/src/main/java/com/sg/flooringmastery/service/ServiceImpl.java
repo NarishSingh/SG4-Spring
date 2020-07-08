@@ -119,12 +119,12 @@ public class ServiceImpl implements Service {
     }
 
     /**
-     * Find the highest order number so far, used to set the next order
+     * Find the highest order number so far, and add 1 to set the next order
      * request's number
      *
      * @return {int} a number > 0
      */
-    private int getHighestOrderNumber() {
+    private int generateOrderNumber() {
 
     }
 }
