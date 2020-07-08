@@ -13,6 +13,7 @@ public class Order {
     private Product product;
     private BigDecimal area;
     private BigDecimal materialCost;
+    private BigDecimal laborCost;
     private BigDecimal tax;
     private BigDecimal total;
 
@@ -27,14 +28,15 @@ public class Order {
     }
 
     //service down
-    public Order(LocalDate orderDate, int orderNum, String customerName, State state, Product productType, BigDecimal area, BigDecimal materialCost, BigDecimal tax, BigDecimal total) {
+    public Order(LocalDate orderDate, int orderNum, String customerName, State state, Product product, BigDecimal area, BigDecimal materialCost, BigDecimal laborCost, BigDecimal tax, BigDecimal total) {
         this.orderDate = orderDate;
         this.orderNum = orderNum;
         this.customerName = customerName;
         this.state = state;
-        this.product = productType;
+        this.product = product;
         this.area = area;
         this.materialCost = materialCost;
+        this.laborCost = laborCost;
         this.tax = tax;
         this.total = total;
     }
@@ -80,6 +82,14 @@ public class Order {
         this.materialCost = materialCost;
     }
 
+    public BigDecimal getLaborCost() {
+        return laborCost;
+    }
+
+    public void setLaborCost(BigDecimal laborCost) {
+        this.laborCost = laborCost;
+    }
+    
     public BigDecimal getTax() {
         return tax;
     }
