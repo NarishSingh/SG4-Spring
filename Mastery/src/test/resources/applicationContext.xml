@@ -17,15 +17,15 @@
 
     <!--stateless test only need dao ctors-->
     <bean id="testStateDao" class="com.sg.flooringmastery.dao.StateDao">
-        <constructor-arg value="testTaxes.txt"/>
+        <constructor-arg value=".//TestingFileData//testTaxes.txt"/>
     </bean>
     
     <bean id="testProductDao" class="com.sg.flooringmastery.dao.ProductDao">
-        <constructor-arg value="testProducts.txt"/>
+        <constructor-arg value=".//TestingFileData//testProducts.txt"/>
     </bean>
     
     <bean id="testOrderDao" class="com.sg.flooringmastery.dao.OrderDaoImpl">
-        <constructor-arg value="testOrders.txt"/>
+        <constructor-arg value=".//TestingFileData//Orders"/>
     </bean>
     
     <!--stateful testing needs stubs-->
