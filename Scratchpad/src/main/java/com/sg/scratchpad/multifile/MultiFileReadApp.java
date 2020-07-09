@@ -144,7 +144,7 @@ public class MultiFileReadApp {
             loadHireRecords();
 
             System.out.print("Enter a date in MM-DD-YYYY format: ");
-            LocalDate userDate = LocalDate.parse(input1.nextLine(), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+            LocalDate userDate = LocalDate.parse(input1.nextLine(), mmddyyyy);
 
             do {
                 //we want a new inner map every hiring day, so we scope locally
