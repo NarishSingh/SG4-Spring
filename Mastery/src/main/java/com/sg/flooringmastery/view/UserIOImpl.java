@@ -2,6 +2,8 @@ package com.sg.flooringmastery.view;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -193,9 +195,10 @@ public class UserIOImpl implements UserIO {
 
     /**
      * Get a BigDecimal value from user input between a specified range
+     *
      * @param prompt {String} the prompt to print to the user
-     * @param min {BigDecimal} the minimum input
-     * @param max {BigDecimal} the maximum input
+     * @param min    {BigDecimal} the minimum input
+     * @param max    {BigDecimal} the maximum input
      * @return {BigDecimal} the user's BigDecimal value in range
      */
     @Override
@@ -215,15 +218,39 @@ public class UserIOImpl implements UserIO {
 
     @Override
     public LocalDate readLocalDate(String prompt) {
-        //TODO impl here
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean hasErrors;
+        LocalDate date = LocalDate.now(); //just for initialization
+
+        do {
+            try {
+                date = LocalDate.parse(readString("Enter date in MM-dd-yyyy format: "), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+                hasErrors = false;
+            } catch (DateTimeParseException e) {
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        return date;
     }
 
     @Override
     public LocalDate readLocalDate(String prompt, LocalDate earliest, LocalDate latest) {
-        //TODO impl here
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean hasErrors;
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        LocalDate date = LocalDate.now(); //just for initialization
+
+        do {
+            try {
+                date = LocalDate.parse(readString("Enter date in MM-dd-yyyy format between " + earliest.format(mmddyyyy)
+                        + " and " + latest.format(mmddyyyy) + ": "), mmddyyyy);
+
+                hasErrors = date.isBefore(earliest) || date.isAfter(latest);
+            } catch (DateTimeParseException e) {
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        return date;
     }
 
-    
 }
