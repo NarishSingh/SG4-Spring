@@ -1,5 +1,7 @@
 package com.sg.flooringmastery.controller;
 
+import com.sg.flooringmastery.dao.InvalidOrderNumberException;
+import com.sg.flooringmastery.dao.NoOrdersOnDateException;
 import com.sg.flooringmastery.dao.OrderPersistenceException;
 import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.dao.StateReadException;
@@ -160,18 +162,32 @@ public class Controller {
      * keeping old ones by hitting ENTER, and re-calculating data for the order.
      * A successful edit will be displayed in full for user
      *
-     * @throws OrderPersistenceException if cannot read from or write to data
-     *                                   files
+     * @throws OrderPersistenceException   if cannot read from or write to data
+     *                                     files
+     * @throws NoOrdersOnDateException     if user inputs invalid date
+     * @throws InvalidOrderNumberException if user inputs invalid order number
      */
-    private void editOrder() throws OrderPersistenceException {
+    private void editOrder() throws OrderPersistenceException, NoOrdersOnDateException, InvalidOrderNumberException {
         boolean hasErrors;
-        
+        Order orderToEdit;
+
         view.displayEditOrderBanner();
-        
+
         //retrieve order
-        LocalDate orderDate = view.inputOrderDate();
-        int orderNum = view.inputOrderNumber();
-        Order orderToEdit = serv.getOrder(orderDate, orderNum);
+        do {
+            try {
+                LocalDate orderDate = view.inputOrderDate();
+                int orderNum = view.inputOrderNumber();
+                orderToEdit = serv.getOrder(orderDate, orderNum);
+                hasErrors = false;
+            } catch (NoOrdersOnDateException
+                    | InvalidOrderNumberException e) {
+                view.displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+        
+        //TODO continue here
     }
 
     /**
