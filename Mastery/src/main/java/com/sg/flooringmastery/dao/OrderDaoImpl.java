@@ -3,25 +3,15 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.model.Order;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class OrderDaoImpl implements OrderDao {
 
-    private Map<LocalDate, Map<Integer, Order>> orders = new TreeMap<>();
+    private TreeMap<LocalDate, TreeMap<Integer, Order>> orders = new TreeMap<>();
     private String ORDER_DIRECTORY;
     private final String DELIMITER = ",";
     private final String DELIMITER_REPLACEMENT = "::";
@@ -39,7 +29,7 @@ public class OrderDaoImpl implements OrderDao {
         loadAllOrders();
 
         //retrieve inner map or create new one, then add order
-        Map<Integer, Order> incomingOrders = orders.get(newOrder.getOrderDate());
+        TreeMap<Integer, Order> incomingOrders = orders.get(newOrder.getOrderDate());
         if (incomingOrders == null) {
             incomingOrders = new TreeMap<>();
         }
@@ -93,8 +83,20 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllOrders() throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getHighestOrderNumber() throws OrderPersistenceException {
+        loadAllOrders();
+
+        //dump all orders to a simple TreeMap and get highest key
+        TreeMap<Integer, Order> allOrders = new TreeMap<>();
+        orders.forEach((date, orderTreeMap) -> {
+            allOrders.putAll(orderTreeMap);
+        });
+        
+        if (allOrders.isEmpty()) {
+            return 0;
+        } else {
+            return allOrders.lastKey();
+        }
     }
 
     /*DATA (UN)MARSHALLING*/

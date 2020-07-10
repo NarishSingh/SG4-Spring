@@ -34,9 +34,15 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Order validateOrder(Order orderRequest) {
+    public Order validateOrder(Order orderRequest) throws OrderPersistenceException {
         calculateOrderCosts(orderRequest);
-        int newOrderNum = generateOrderNumber();
+
+        int newOrderNum;
+        if (orderRequest.getOrderNum() == 0) {
+            newOrderNum = generateOrderNumber(); //new order
+        } else {
+            newOrderNum = orderRequest.getOrderNum(); //edit order
+        }
 
         return new Order(orderRequest.getOrderDate(), newOrderNum, orderRequest.getCustomerName(),
                 orderRequest.getState(), orderRequest.getProduct(), orderRequest.getArea(),
@@ -116,7 +122,6 @@ public class ServiceImpl implements Service {
     }
 
     /*HELPER METHODS*/
-
     /**
      * Calculate and set the costs for the remaining fields of a order obj
      *
@@ -140,7 +145,7 @@ public class ServiceImpl implements Service {
      *
      * @return {int} a number > 0
      */
-    private int generateOrderNumber() {
-        //FIXME impl, using getAllOrders
+    private int generateOrderNumber() throws OrderPersistenceException {
+        return dao.getHighestOrderNumber() + 1;
     }
 }

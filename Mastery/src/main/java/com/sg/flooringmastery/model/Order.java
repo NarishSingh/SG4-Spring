@@ -89,7 +89,7 @@ public class Order {
     public void setLaborCost(BigDecimal laborCost) {
         this.laborCost = laborCost;
     }
-    
+
     public BigDecimal getTax() {
         return tax;
     }
@@ -106,13 +106,17 @@ public class Order {
         this.total = total;
     }
 
+    public int getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(int orderNum) {
+        this.orderNum = orderNum;
+    }
+
     /*read-only*/
     public LocalDate getOrderDate() {
         return orderDate;
-    }
-
-    public int getOrderNum() {
-        return orderNum;
     }
 
 }

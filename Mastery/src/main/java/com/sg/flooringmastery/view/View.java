@@ -104,16 +104,16 @@ public class View {
      * @return {String} the product type being ordered
      */
     public String inputProductType(List<Product> validProducts) {
-        io.print("Our currently available products include:");
+        io.print("Our currently available products include (all costs per sq.ft.:");
         validProducts.stream()
                 .forEach((product) -> io.print(product.getProductType()
-                + " | Material Cost: $" + product.getCostPerSqFt()
-                + " | Labor Cost: $" + product.getLaborCostPerSqFt()));
+                + " | Material: $" + product.getCostPerSqFt()
+                + " | Labor: $" + product.getLaborCostPerSqFt()));
 
         String rawProduct = io.readString("Please input your desired product type:").trim();
 
-        //format to match map key
-        String productSelection = rawProduct.substring(0, 1).toUpperCase() + rawProduct.substring(1).toLowerCase();
+        String productSelection = rawProduct.substring(0, 1).toUpperCase()
+                + rawProduct.substring(1).toLowerCase(); //format to match map key
 
         return productSelection;
     }
@@ -146,7 +146,7 @@ public class View {
         io.print("Tax: $" + userOrder.getTax());
         io.print("Total Cost: $" + userOrder.getTotal());
     }
-    
+
     /**
      * Display the order and get confirmation before writing it to the record
      *
@@ -157,7 +157,7 @@ public class View {
         displayOrderInfo(userOrder);
 
         int userConfirmation = io.readInt("Confirm order placement? (1 - yes/2 - no): ", 1, 2);
-        
+
         switch (userConfirmation) {
             case 1: {
                 return true;
@@ -231,7 +231,7 @@ public class View {
                     io.print("Order Total: $" + order.getTotal().toString());
                     io.print("***");
                 });
-        
+
         io.readString("Press ENTER to continue");
     }
 
@@ -252,18 +252,6 @@ public class View {
     }
 
     /**
-     * Edit the date of an order
-     *
-     * @param orderToEdit {Order} the original order obj, used to fill in
-     *                    original value if user elects not to edit by inputting
-     *                    \n
-     * @return {LocalDate} the new date field for the order
-     */
-    public LocalDate inputEditedOrderDate(Order orderToEdit) {
-
-    }
-
-    /**
      * Edit the name on an order
      *
      * @param orderToEdit {Order} the original order obj, used to fill in
@@ -272,7 +260,19 @@ public class View {
      * @return {String} the new customer name field for the order
      */
     public String inputEditedCustomerName(Order orderToEdit) {
+        String newCustName;
 
+        io.print("Current name on order: " + orderToEdit.getCustomerName());
+
+        do {
+            newCustName = io.readString("Enter new customer or company name, or press ENTER to keep: ").trim();
+
+            if (newCustName.matches("[\\n]")) {
+                newCustName = orderToEdit.getCustomerName();
+            }
+        } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\\n]*"));
+
+        return newCustName;
     }
 
     /**
@@ -286,8 +286,20 @@ public class View {
      * @return {String} the new State name or abbreviation for the respective
      *         field of the order
      */
-    public String inputEditedState(Order orderToEdit, List<String> validStates) {
+    public String inputEditedState(Order orderToEdit, List<State> validStates) {
+        io.print("Current state on order: " + orderToEdit.getState().getStateName());
 
+        io.print("You may change state of transaction to:");
+        validStates.stream()
+                .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
+
+        String newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep:").trim().toUpperCase();
+
+        if (newState.matches("[\\n]")) {
+            return orderToEdit.getState().getStateAbbreviation();
+        } else {
+            return newState;
+        }
     }
 
     /**
@@ -302,19 +314,58 @@ public class View {
      *         order
      */
     public String inputEditedProductType(Order orderToEdit, List<Product> validProducts) {
+        io.print("Current product on order: " + orderToEdit.getProduct().getProductType());
 
+        io.print("You may choose from this product selection (all costs per sq.ft.):");
+        validProducts.stream()
+                .forEach((product) -> io.print(product.getProductType()
+                + " | Material: $" + product.getCostPerSqFt()
+                + " | Labor: $" + product.getLaborCostPerSqFt()));
+
+        String rawProduct = io.readString("Please input new product type, or press ENTER to keep:").trim();
+
+        if (rawProduct.matches("[\\n]")) {
+            return orderToEdit.getProduct().getProductType();
+        } else {
+            String productSelection = rawProduct.substring(0, 1).toUpperCase()
+                    + rawProduct.substring(1).toLowerCase(); //format to match map key
+            return productSelection;
+        }
     }
 
     /**
-     * Edit the date of an order
+     * Edit the area of an order
      *
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
      *                    \n
-     * @return {BigDecimal}
+     * @return {BigDecimal} new area of at least 100 sq.ft. of the order
      */
     public BigDecimal inputEditedArea(Order orderToEdit) {
+        io.print("Current area on order: " + orderToEdit.getArea().toString() + " sq.ft.");
 
+        String newAreaString;
+        BigDecimal newArea = null;
+        boolean hasErrors;
+
+        do {
+            do {
+                newAreaString = io.readString("Please input new area of floor in sq.ft. (minimum 100),"
+                        + " or press ENTER to keep: ");
+            } while (!newAreaString.matches("[0-9\\n]*"));
+
+            if (newAreaString.matches("[\\n]")) {
+                newArea = orderToEdit.getArea();
+                hasErrors = false;
+            } else if (new BigDecimal(newAreaString).compareTo(new BigDecimal("100")) > 0) {
+                hasErrors = true;
+            } else {
+                newArea = new BigDecimal(newAreaString);
+                hasErrors = false;
+            }
+        } while (hasErrors);
+
+        return newArea;
     }
 
     /**
@@ -367,8 +418,8 @@ public class View {
                 orderID = io.readInt("Enter Order ID: ");
                 hasErrors = false;
             } catch (NumberFormatException e) {
-                hasErrors = true;
                 displayErrorMessage(e.getMessage());
+                hasErrors = true;
             }
         } while (hasErrors);
 

@@ -61,17 +61,15 @@ public interface OrderDao {
      *             in the treemap
      * @return {List} list of all active orders for that date
      * @throws OrderPersistenceException if cannot read from orders directory
-     *                                   and/or files
      */
     List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
 
     /**
-     * Retrieve all active orders
+     * Find highest key value of internal order maps
      *
-     * @return {List} list of all active orders
+     * @return {int} highest order number thus far
      * @throws OrderPersistenceException if cannot read from orders directory
-     *                                   and/or files
      */
-    List<Order> getAllOrders() throws OrderPersistenceException;
+    int getHighestOrderNumber() throws OrderPersistenceException;
 
 }

@@ -169,9 +169,10 @@ public class Controller {
      * @throws NoOrdersOnDateException     if user inputs invalid date
      * @throws InvalidOrderNumberException if user inputs invalid order number
      */
-    private void editOrder() throws OrderPersistenceException, NoOrdersOnDateException, InvalidOrderNumberException {
+    private void editOrder() throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException, StateReadException, ProductReadException {
         boolean hasErrors;
-        Order orderToEdit;
+        Order orderToEdit = null;
 
         view.displayEditOrderBanner();
 
@@ -188,7 +189,48 @@ public class Controller {
                 hasErrors = true;
             }
         } while (hasErrors);
+
+        //get editted info
+        //name
+        String editName = view.inputEditedCustomerName(orderToEdit);
         
+        //state
+        List<State> validStates = serv.getValidStateList();
+        State newStateSelection = null;
+        do {
+            try {
+                String stateSelectionString = view.inputEditedState(orderToEdit, validStates);
+                newStateSelection = serv.validateState(stateSelectionString);
+                hasErrors = false;
+            } catch (InvalidStateException e) {
+                view.displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+        
+        //product
+        List<Product> validProducts = serv.getValidProductList();
+        Product newProductSelection = null;
+        do {
+            try {
+                String productSelectionString = view.inputEditedProductType(orderToEdit, validProducts);
+                newProductSelection = serv.validateProduct(productSelectionString);
+                hasErrors = false;
+            } catch (InvalidProductException e) {
+                view.displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+        
+        //area
+        BigDecimal newArea = view.inputEditedArea(orderToEdit);
+        
+        //validation
+        Order newEditRequest = new Order(orderToEdit.getOrderDate(), editName, newStateSelection, newProductSelection, newArea);
+        newEditRequest.setOrderNum(orderToEdit.getOrderNum());
+        Order editedOrder = serv.validateOrder(newEditRequest);
+        
+        //confirmation and edit
         //TODO continue here
     }
 

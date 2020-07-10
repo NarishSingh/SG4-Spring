@@ -17,9 +17,10 @@ public interface Service {
      * Validate an Order before proceeding with persisting an add or edit
      *
      * @param orderRequest {Order} a queued order
-     * @return {Order} a valid Order obj for persistance
+     * @return {Order} a valid Order obj for persistence
+     * @throws OrderPersistenceException if cannot read from orders directory
      */
-    Order validateOrder(Order orderRequest);
+    Order validateOrder(Order orderRequest) throws OrderPersistenceException;
 
     /**
      * Add an active order to treemap and persist to file
