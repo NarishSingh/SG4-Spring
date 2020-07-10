@@ -13,8 +13,6 @@ import com.sg.flooringmastery.service.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Controller {
 
@@ -67,7 +65,8 @@ public class Controller {
                 }
             }
         } catch (OrderPersistenceException
-                | StateReadException e) {
+                | StateReadException
+                | ProductReadException e) {
             view.displayErrorMessage(e.getMessage());
         }
     }
@@ -100,7 +99,7 @@ public class Controller {
      */
     private void addOrder() throws StateReadException, ProductReadException, OrderPersistenceException {
         boolean hasErrors;
-        
+
         view.displayAddOrderBanner();
 
         //future date
@@ -136,18 +135,18 @@ public class Controller {
                 hasErrors = true;
             }
         } while (hasErrors);
-        
+
         //area
         BigDecimal userArea = view.inputArea();
-        
+
         //order request validation
         Order orderRequest = new Order(validOrderDate, customerName, stateSelection, productSelection, userArea);
         Order newOrder = serv.validateOrder(orderRequest);
-        
+
         //confirmation and add new order
         if (view.confirmNewOrder(newOrder)) {
             serv.addOrder(newOrder);
-            //TODO continue from here
+            view.displayAddOrderBanner();
         } else {
             view.displayAddOrderFailBanner();
         }

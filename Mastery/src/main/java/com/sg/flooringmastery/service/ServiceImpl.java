@@ -43,7 +43,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public Order addOrder(Order newOrder) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return dao.addOrder(newOrder);
     }
 
     @Override

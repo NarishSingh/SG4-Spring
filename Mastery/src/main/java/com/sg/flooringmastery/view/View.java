@@ -129,12 +129,11 @@ public class View {
     }
 
     /**
-     * Display the order and get confirmation before writing it to the record
+     * Display all fields of an order object for user
      *
-     * @param userOrder {Order} the user's newly create, valid order
-     * @return {boolean} confirmation to persist order to file
+     * @param userOrder {Order} a newly constructed Order obj from service
      */
-    public boolean confirmNewOrder(Order userOrder) {
+    public void displayOrderInfo(Order userOrder) {
         io.print("Your order request:");
         io.print("Date: " + userOrder.getOrderDate());
         io.print("ID: " + userOrder.getOrderNum());
@@ -146,6 +145,16 @@ public class View {
         io.print("Labor Cost: $" + userOrder.getLaborCost());
         io.print("Tax: $" + userOrder.getTax());
         io.print("Total Cost: $" + userOrder.getTotal());
+    }
+    
+    /**
+     * Display the order and get confirmation before writing it to the record
+     *
+     * @param userOrder {Order} the user's newly create, valid order
+     * @return {boolean} confirmation to persist order to file
+     */
+    public boolean confirmNewOrder(Order userOrder) {
+        displayOrderInfo(userOrder);
 
         int userConfirmation = io.readInt("Confirm order placement? (1 - yes/2 - no): ", 1, 2);
         
@@ -161,15 +170,6 @@ public class View {
                 return false;
             }
         }
-    }
-
-    /**
-     * Display all fields of an order object for user
-     *
-     * @param userOrder {Order} a newly constructed Order obj from service
-     */
-    public void displayOrderInfo(Order userOrder) {
-
     }
 
     /**

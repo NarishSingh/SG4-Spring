@@ -1,9 +1,21 @@
 package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.Order;
+import com.sg.flooringmastery.model.Product;
+import com.sg.flooringmastery.model.State;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 public class OrderDaoImpl implements OrderDao {
@@ -19,10 +31,29 @@ public class OrderDaoImpl implements OrderDao {
     public OrderDaoImpl(String orderDirAsText) {
         this.ORDER_DIRECTORY = orderDirAsText;
     }
-    
+
     @Override
     public Order addOrder(Order newOrder) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        loadAllOrders();
+
+        //retrieve inner map or create new one, then add order
+        Map<Integer, Order> incomingOrders = orders.get(newOrder.getOrderDate());
+        if (incomingOrders == null) {
+            incomingOrders = new TreeMap<>();
+        }
+
+        incomingOrders.put(newOrder.getOrderNum(), newOrder);
+
+        //add to outer map field and write
+        orders.put(newOrder.getOrderDate(), incomingOrders);
+
+        writeAllOrders();
+
+        if (orders.containsValue(incomingOrders) && incomingOrders.containsValue(newOrder)) {
+            return newOrder;
+        } else {
+            throw new OrderPersistenceException("Could not add new order");
+        }
     }
 
     @Override
@@ -52,34 +83,133 @@ public class OrderDaoImpl implements OrderDao {
 
     /*DATA (UN)MARSHALLING*/
     /**
+     * Retrieve the date from the orders dir filenames and
+     *
+     * @param filename {String} the filename of the orders file for that day
+     * @return new LocalDate obj formatted as MMddyyyy
+     */
+    private LocalDate parseDateFromFilename(String filename) {
+        String dateString = filename.substring(7, 14); //filename format is Orders_MMddyyyy.txt
+        LocalDate orderDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("MMddyyyy"));
+
+        return orderDate;
+    }
+
+    /**
      * Marshall an Order obj to text
+     *
      * @param anOrder {Order} an active order
      * @return {String} a delimited string of text with all obj information
      */
-    private String marshallOrder(Order anOrder){
-        
+    private String marshallOrder(Order anOrder) {
+//        OrderNumber,CustomerName,StateAbbrev,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+        String orderAsText = anOrder.getOrderNum() + DELIMITER;
+
+        String convertedName = anOrder.getCustomerName().replace(DELIMITER, "::");
+        orderAsText += convertedName + DELIMITER;
+
+        orderAsText += anOrder.getState().getStateAbbreviation();
+        orderAsText += anOrder.getState().getTaxRate().toString();
+        orderAsText += anOrder.getProduct().getProductType();
+        orderAsText += anOrder.getArea().toString();
+        orderAsText += anOrder.getProduct().getCostPerSqFt().toString();
+        orderAsText += anOrder.getProduct().getLaborCostPerSqFt().toString();
+        orderAsText += anOrder.getMaterialCost().toString();
+        orderAsText += anOrder.getLaborCost().toString();
+        orderAsText += anOrder.getTax().toString();
+        orderAsText += anOrder.getTotal().toString();
+
+        return orderAsText;
     }
-    
+
     /**
      * Unmarshall delimited text into Order obj's
-     * @param orderAsText {String} delimited lines of text in the order directory's files
+     *
+     * @param orderAsText {String} delimited lines of text in the order
+     *                    directory's files
      * @return {Order} a fully constructed Order obj
      */
-    private Order unmarshallOrder(String orderAsText){
-        
+    private Order unmarshallOrder(String orderAsText, String filename) {
+        String[] orderTokens = orderAsText.split(DELIMITER);
+
+        LocalDate orderDate = parseDateFromFilename(filename);
+
+        int orderNum = Integer.parseInt(orderTokens[0]);
+        String orderCustName = orderTokens[1];
+        State orderState = new State(orderTokens[2], new BigDecimal(orderTokens[3]));
+        Product orderProduct = new Product(orderTokens[4], new BigDecimal(orderTokens[6]), new BigDecimal(orderTokens[7]));
+        BigDecimal orderArea = new BigDecimal(orderTokens[5]);
+        BigDecimal orderMatCost = new BigDecimal(orderTokens[8]);
+        BigDecimal orderLaborCost = new BigDecimal(orderTokens[9]);
+        BigDecimal orderTax = new BigDecimal(orderTokens[10]);
+        BigDecimal orderTotal = new BigDecimal(orderTokens[11]);
+
+        return new Order(orderDate, orderNum, orderCustName, orderState, orderProduct, orderArea, orderMatCost, orderLaborCost, orderTax, orderTotal);
     }
-    
+
     /**
      * Load all persisted orders to treemap
      */
-    private void loadAllOrders(){
-        
+    private void loadAllOrders() throws OrderPersistenceException {
+        File dir = new File(ORDER_DIRECTORY);
+
+        for (File file : dir.listFiles()) {
+            TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
+            String currentLine;
+            Order currentOrder;
+            LocalDate ordersDate = null;
+
+            Scanner sc;
+            try {
+                sc = new Scanner(new BufferedReader(new FileReader(file)));
+            } catch (FileNotFoundException e) {
+                throw new OrderPersistenceException("Could not load from Order directory", e);
+            }
+
+            ordersOnDate.clear();
+            sc.nextLine(); //skip header
+
+            while (sc.hasNextLine()) {
+                currentLine = sc.nextLine();
+                currentOrder = unmarshallOrder(currentLine, file.getName());
+
+                ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
+
+                ordersDate = parseDateFromFilename(file.getName());
+            }
+
+            orders.put(ordersDate, ordersOnDate);
+
+            sc.close();
+        }
     }
-    
+
     /**
      * Persist all active orders to order's directory
      */
-    private void writeAllOrders(){
-        
+    private void writeAllOrders() {
+        orders.forEach((date, ordersOnDate) -> {
+            //create new file
+            String filename = "Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) + ".txt";
+
+            PrintWriter out;
+            try {
+                out = new PrintWriter(new FileWriter(new File(ORDER_DIRECTORY, filename)));
+
+                //marshall the orders on date to file
+                ordersOnDate.values().stream()
+                        .forEach((order) -> {
+                            String orderAsText = marshallOrder(order);
+                            out.println(orderAsText);
+                            out.flush();
+                        });
+
+                out.close();
+            } catch (IOException e) {
+                //FIXME I have no idea why but it wants a try catch to catch itself...
+//              throw new OrderPersistenceException("Could not create order file");
+            }
+        });
     }
+
 }
