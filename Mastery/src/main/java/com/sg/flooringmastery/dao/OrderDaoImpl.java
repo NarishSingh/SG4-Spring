@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,6 +24,7 @@ public class OrderDaoImpl implements OrderDao {
     private Map<LocalDate, Map<Integer, Order>> orders = new TreeMap<>();
     private String ORDER_DIRECTORY;
     private final String DELIMITER = ",";
+    private final String DELIMITER_REPLACEMENT = "::";
 
     public OrderDaoImpl() {
         this.ORDER_DIRECTORY = ".\\MasteryFileData\\Orders";
@@ -62,8 +64,21 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order getOrder(LocalDate Date, int id) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Order getOrder(LocalDate date, int id) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
+        loadAllOrders();
+
+        Map<Integer, Order> orderByDate = orders.get(date);
+        if (orderByDate == null) {
+            throw new NoOrdersOnDateException("No orders on this date to retrieve");
+        }
+
+        Order retrievedOrder = orderByDate.get(id);
+        if (retrievedOrder == null) {
+            throw new InvalidOrderNumberException("No such order exists");
+        }
+
+        return retrievedOrder;
     }
 
     @Override
@@ -73,7 +88,8 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        loadAllOrders();
+        return new ArrayList<>(orders.get(date).values());
     }
 
     @Override
@@ -105,7 +121,7 @@ public class OrderDaoImpl implements OrderDao {
 //        OrderNumber,CustomerName,StateAbbrev,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
         String orderAsText = anOrder.getOrderNum() + DELIMITER;
 
-        String convertedName = anOrder.getCustomerName().replace(DELIMITER, "::");
+        String convertedName = anOrder.getCustomerName().replace(DELIMITER, DELIMITER_REPLACEMENT);
         orderAsText += convertedName + DELIMITER;
 
         orderAsText += anOrder.getState().getStateAbbreviation();
@@ -135,7 +151,8 @@ public class OrderDaoImpl implements OrderDao {
         LocalDate orderDate = parseDateFromFilename(filename);
 
         int orderNum = Integer.parseInt(orderTokens[0]);
-        String orderCustName = orderTokens[1];
+        String orderCustName = orderTokens[1].replace(DELIMITER_REPLACEMENT, DELIMITER);
+
         State orderState = new State(orderTokens[2], new BigDecimal(orderTokens[3]));
         Product orderProduct = new Product(orderTokens[4], new BigDecimal(orderTokens[6]), new BigDecimal(orderTokens[7]));
         BigDecimal orderArea = new BigDecimal(orderTokens[5]);

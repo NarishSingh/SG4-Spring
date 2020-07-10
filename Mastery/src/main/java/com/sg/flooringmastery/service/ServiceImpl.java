@@ -1,29 +1,31 @@
 package com.sg.flooringmastery.service;
 
-import com.sg.flooringmastery.dao.ExportFileDao;
+import com.sg.flooringmastery.dao.ExportFileDaoImpl;
 import com.sg.flooringmastery.dao.OrderDao;
 import com.sg.flooringmastery.dao.OrderPersistenceException;
-import com.sg.flooringmastery.dao.ProductDao;
-import com.sg.flooringmastery.dao.StateDao;
+import com.sg.flooringmastery.dao.ProductDaoImpl;
+import com.sg.flooringmastery.dao.StateDaoImpl;
 import com.sg.flooringmastery.model.Order;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
 import com.sg.flooringmastery.dao.AuditDao;
+import com.sg.flooringmastery.dao.InvalidOrderNumberException;
+import com.sg.flooringmastery.dao.NoOrdersOnDateException;
 import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.dao.StateReadException;
 import java.math.BigDecimal;
 
 public class ServiceImpl implements Service {
 
-    StateDao state;
-    ProductDao product;
+    StateDaoImpl state;
+    ProductDaoImpl product;
     OrderDao dao;
     AuditDao auditDao;
-    ExportFileDao export;
+    ExportFileDaoImpl export;
 
-    public ServiceImpl(StateDao state, ProductDao product, OrderDao dao, AuditDao auditDao, ExportFileDao export) {
+    public ServiceImpl(StateDaoImpl state, ProductDaoImpl product, OrderDao dao, AuditDao auditDao, ExportFileDaoImpl export) {
         this.state = state;
         this.product = product;
         this.dao = dao;
@@ -57,13 +59,14 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Order getOrder(LocalDate date, int orderNum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Order getOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
+        return dao.getOrder(date, orderNum);
     }
 
     @Override
-    public List<Order> getOrdersByDate(LocalDate date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException {
+        return dao.getOrdersByDate(date);
     }
 
     @Override
@@ -113,10 +116,6 @@ public class ServiceImpl implements Service {
     }
 
     /*HELPER METHODS*/
-    //TODO may not need this
-    public LocalDate validateOrderDate(LocalDate userDate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     /**
      * Calculate and set the costs for the remaining fields of a order obj

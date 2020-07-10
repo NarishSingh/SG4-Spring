@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StateDaoStub extends StateDao {
+public class StateDaoStub implements StateDao {
 
     private Map<String, State> testStates = new TreeMap<>();
     private final String TEST_STATES_FILE;

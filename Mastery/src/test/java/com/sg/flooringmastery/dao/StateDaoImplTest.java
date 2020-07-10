@@ -1,6 +1,6 @@
 package com.sg.flooringmastery.dao;
 
-import com.sg.flooringmastery.model.Product;
+import com.sg.flooringmastery.model.State;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -10,46 +10,46 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ProductDaoTest {
+public class StateDaoImplTest {
 
-    ProductDao testDao;
+    StateDaoImpl testDao;
 
-    public ProductDaoTest() {
+    public StateDaoImplTest() {
     }
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testFile = ".//TestingFileData//testProducts.txt";
+        String testFile = ".//TestingFileData//testTaxes.txt";
         new FileWriter(testFile);
 
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        testDao = actx.getBean("testProductDao", ProductDao.class);
+        testDao = actx.getBean("testStateDao", StateDaoImpl.class);
     }
 
     /**
-     * Test of readProductByID method, of class ProductDao.
+     * Test of readStateByID method, of class StateDaoImpl.
      */
     @Test
-    public void testReadProductByID() {
-        System.out.println("readProductByID");
-        String productAsText = "";
-        ProductDao instance = new ProductDao();
-        Product expResult = null;
-        Product result = instance.readProductByID(productAsText);
+    public void testReadStateByID() {
+        System.out.println("readStateByID");
+        String stateAsText = "";
+        StateDaoImpl instance = new StateDaoImpl();
+        State expResult = null;
+        State result = instance.readStateByID(stateAsText);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getValidProducts method, of class ProductDao.
+     * Test of getValidStates method, of class StateDaoImpl.
      */
     @Test
-    public void testGetValidProducts() {
-        System.out.println("getValidProducts");
-        ProductDao instance = new ProductDao();
-        List<Product> expResult = null;
-        List<Product> result = instance.getValidProducts();
+    public void testGetValidStates() {
+        System.out.println("getValidStates");
+        StateDaoImpl instance = new StateDaoImpl();
+        List<State> expResult = null;
+        List<State> result = instance.getValidStates();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

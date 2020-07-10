@@ -4,11 +4,11 @@ import com.sg.flooringmastery.dao.ExportFileDao;
 import com.sg.flooringmastery.model.Order;
 import java.util.List;
 
-public class ExportFileDaoStub extends ExportFileDao{
+public class ExportFileDaoStub implements ExportFileDao {
 
     @Override
     public void exportOrders(List<Order> activeOrders) {
         //do nothing
     }
-    
+
 }

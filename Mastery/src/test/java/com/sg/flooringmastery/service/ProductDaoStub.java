@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ProductDaoStub extends ProductDao {
+public class ProductDaoStub implements ProductDao {
 
     private Map<String, Product> testProducts = new TreeMap<>();
     private final String TEST_PRODUCTS_FILE;

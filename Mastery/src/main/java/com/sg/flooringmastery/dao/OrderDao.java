@@ -33,10 +33,13 @@ public interface OrderDao {
      *             order
      * @param id   {int} the id of an active order
      * @return {Order} an active order
-     * @throws OrderPersistenceException if cannot read from orders directory
-     *                                   and/or files
+     * @throws OrderPersistenceException   if cannot read from orders directory
+     *                                     and/or files
+     * @throws NoOrdersOnDateException     if no orders exist on this date
+     * @throws InvalidOrderNumberException if order does not exist
      */
-    Order getOrder(LocalDate Date, int id) throws OrderPersistenceException;
+    Order getOrder(LocalDate Date, int id) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Edit an active order in the treemap and persist to file

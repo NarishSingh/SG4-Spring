@@ -1,5 +1,7 @@
 package com.sg.flooringmastery.service;
 
+import com.sg.flooringmastery.dao.InvalidOrderNumberException;
+import com.sg.flooringmastery.dao.NoOrdersOnDateException;
 import com.sg.flooringmastery.dao.OrderPersistenceException;
 import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.dao.StateReadException;
@@ -53,16 +55,22 @@ public interface Service {
      * @param date     {LocalDate} a valid date for an order
      * @param orderNum {int} a valid number for an order
      * @return {Order} the order retrieved
+     * @throws OrderPersistenceException   if cannot read from order directory
+     * @throws NoOrdersOnDateException     if inputted date is invalid
+     * @throws InvalidOrderNumberException if inputted order number is invalid
      */
-    Order getOrder(LocalDate date, int orderNum);
+    Order getOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Retrieve the info for all active orders on a given date
      *
      * @param date {LocalDate}a valid date for orders
      * @return {List} all active orders on a given date
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   files
      */
-    List<Order> getOrdersByDate(LocalDate date);
+    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
 
     /**
      * Export and persist all active orders to a single file
@@ -100,7 +108,7 @@ public interface Service {
      * @throws InvalidStateException if user enters an invalid state
      */
     State validateState(String userState) throws InvalidStateException;
-    
+
     /**
      * Validate user's product selection and construct a new Product obj from
      * file

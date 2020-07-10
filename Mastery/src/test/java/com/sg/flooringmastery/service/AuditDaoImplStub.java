@@ -9,5 +9,5 @@ public class AuditDaoImplStub implements AuditDao {
     public void writeAuditEntry(String entry) throws OrderPersistenceException {
         //do nothing
     }
-    
+
 }

@@ -86,7 +86,10 @@ public class Controller {
      * @throws OrderPersistenceException if cannot read from data files
      */
     public void displayOrders() throws OrderPersistenceException {
-
+        view.displayDisplayOrderBanner();
+        LocalDate ordersDate = view.inputOrderDate();
+        List<Order> ordersOnDate = serv.getOrdersByDate(ordersDate);
+        view.displayOrdersByDate(ordersOnDate);
     }
 
     /**
@@ -161,7 +164,14 @@ public class Controller {
      *                                   files
      */
     private void editOrder() throws OrderPersistenceException {
-
+        boolean hasErrors;
+        
+        view.displayEditOrderBanner();
+        
+        //retrieve order
+        LocalDate orderDate = view.inputOrderDate();
+        int orderNum = view.inputOrderNumber();
+        Order orderToEdit = serv.getOrder(orderDate, orderNum);
     }
 
     /**

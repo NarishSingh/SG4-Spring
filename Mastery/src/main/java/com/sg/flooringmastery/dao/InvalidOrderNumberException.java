@@ -1,4 +1,4 @@
-package com.sg.flooringmastery.service;
+package com.sg.flooringmastery.dao;
 
 public class InvalidOrderNumberException extends Exception {
 

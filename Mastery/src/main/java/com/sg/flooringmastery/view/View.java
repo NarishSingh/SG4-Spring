@@ -208,14 +208,30 @@ public class View {
     /**
      * Display all orders for a given date
      *
-     * @param ordersOnDate {Map} all orders on a given date, sorted by order
+     * @param ordersOnDate {List} all orders on a given date, sorted by order
      *                     number
      */
-    public void displayOrdersByDate(Map<Integer, Order> ordersOnDate) {
-        ordersOnDate.forEach((orderNum, Order) -> {
-            //TODO print out all the fields
-        });
-
+    public void displayOrdersByDate(List<Order> ordersOnDate) {
+        io.print("-------");
+        io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        io.print("-------");
+        ordersOnDate.stream()
+                .forEach((order) -> {
+                    io.print("Order Number:" + order.getOrderNum());
+                    io.print("Customer Name: " + order.getCustomerName());
+                    io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
+                    io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
+                    io.print("Product: " + order.getProduct().getProductType());
+                    io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
+                    io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
+                    io.print("Area: " + order.getArea().toString() + " sq. ft.");
+                    io.print("Total Material Cost: $" + order.getMaterialCost().toString());
+                    io.print("Total Labor Cost: $" + order.getLaborCost().toString());
+                    io.print("Total Tax: $" + order.getTax());
+                    io.print("Order Total: $" + order.getTotal().toString());
+                    io.print("***");
+                });
+        
         io.readString("Press ENTER to continue");
     }
 
@@ -336,13 +352,13 @@ public class View {
         io.print("===REMOVE ORDER===");
     }
 
-    //recycles inputOrdersDateForDisplay()
+    //recycles inputOrdersDate()
     /**
-     * Get ID of order to be removed
+     * Get order number for retrieval or removal
      *
      * @return {int} an existing order ID
      */
-    public int getOrderRemovalNumber() {
+    public int inputOrderNumber() {
         boolean hasErrors;
         int orderID = 0;
 
