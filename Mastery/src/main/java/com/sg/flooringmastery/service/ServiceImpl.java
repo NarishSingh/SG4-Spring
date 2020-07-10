@@ -11,6 +11,9 @@ import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
 import com.sg.flooringmastery.dao.AuditDao;
+import com.sg.flooringmastery.dao.ProductReadException;
+import com.sg.flooringmastery.dao.StateReadException;
+import java.math.BigDecimal;
 
 public class ServiceImpl implements Service {
 
@@ -29,8 +32,13 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Order validateOrder(Order orderRequest) throws InvalidProductException, InvalidStateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Order validateOrder(Order orderRequest) {
+        calculateOrderCosts(orderRequest);
+        int newOrderNum = generateOrderNumber();
+
+        return new Order(orderRequest.getOrderDate(), newOrderNum, orderRequest.getCustomerName(),
+                orderRequest.getState(), orderRequest.getProduct(), orderRequest.getArea(),
+                orderRequest.getMaterialCost(), orderRequest.getLaborCost(), orderRequest.getTax(), orderRequest.getTotal());
     }
 
     @Override
@@ -69,53 +77,62 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public List<State> getValidStateList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<State> getValidStateList() throws StateReadException {
+        try {
+            return state.getValidStates();
+        } catch (StateReadException e) {
+            throw new StateReadException("Could not load State tax data roster", e);
+        }
     }
 
     @Override
-    public List<Product> getValidProductList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Product> getValidProductList() throws ProductReadException {
+        try {
+            return product.getValidProducts();
+        } catch (ProductReadException e) {
+            throw new ProductReadException("Could not load Product data roster", e);
+        }
+    }
+
+    @Override
+    public State validateState(String userState) throws InvalidStateException {
+        try {
+            return state.readStateByID(userState);
+        } catch (InvalidStateException e) {
+            throw new InvalidStateException("We are unavailable for business in this state for now", e);
+        }
+    }
+
+    @Override
+    public Product validateProduct(String userProduct) throws InvalidProductException {
+        try {
+            return product.readProductByID(userProduct);
+        } catch (InvalidProductException e) {
+            throw new InvalidProductException("We do not floor with this type of material at this time", e);
+        }
     }
 
     /*HELPER METHODS*/
-    /**
-     * Validate a date passed from view to ensure that it is a future date
-     *
-     * @return {LocalDate} a future date
-     */
-    private LocalDate validateOrderDate() {
-
-    }
-
-    /**
-     * Validate user's state selection and construct a new State obj from file
-     *
-     * @param userState {String} user's inputted state
-     * @return {State} a valid State object
-     */
-    private State validateState(String userState) {
-
-    }
-
-    /**
-     * Validate user's product selection and construct a new Product obj from
-     * file
-     *
-     * @param userProduct {String} user's inputted product type
-     * @return {Product} a valid Product object
-     */
-    private Product validateProduct(String userProduct) {
-
+    //TODO may not need this
+    public LocalDate validateOrderDate(LocalDate userDate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
      * Calculate and set the costs for the remaining fields of a order obj
      *
-     * @param orderRequest {Order} a valid but incomplete order obj request
+     * @param newOrder {Order} a valid but incomplete order obj request
      */
-    private void calculateOrderCosts(Order orderRequest) {
+    private void calculateOrderCosts(Order newOrder) {
+        BigDecimal matCosts = newOrder.getProduct().getCostPerSqFt().multiply(newOrder.getArea());
+        BigDecimal laborCosts = newOrder.getArea().multiply(newOrder.getProduct().getLaborCostPerSqFt());
+        BigDecimal taxCosts = matCosts.add(laborCosts).multiply(newOrder.getState().getTaxRate().divide(new BigDecimal("100")));
+        BigDecimal totalCosts = matCosts.add(laborCosts).add(taxCosts);
 
+        newOrder.setMaterialCost(matCosts);
+        newOrder.setLaborCost(laborCosts);
+        newOrder.setTax(taxCosts);
+        newOrder.setTotal(totalCosts);
     }
 
     /**
@@ -125,6 +142,6 @@ public class ServiceImpl implements Service {
      * @return {int} a number > 0
      */
     private int generateOrderNumber() {
-
+        //FIXME impl, using getAllOrders
     }
 }

@@ -189,8 +189,21 @@ public class UserIOImpl implements UserIO {
      */
     @Override
     public BigDecimal readBigDecimal(String prompt) {
+        boolean hasErrors;
+        BigDecimal userInput = null;
+
         System.out.println(prompt);
-        return new BigDecimal(input.nextLine());
+
+        do {
+            try {
+                userInput = new BigDecimal(input.nextLine());
+                hasErrors = false;
+            } catch (NumberFormatException e) {
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        return userInput;
     }
 
     /**
@@ -203,19 +216,31 @@ public class UserIOImpl implements UserIO {
      */
     @Override
     public BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) {
-        BigDecimal userInput;
+        boolean hasErrors;
+        BigDecimal userInput = null;
 
         System.out.println(prompt);
         System.out.println("min = " + min);
         System.out.println("max = " + max);
         do {
-            System.out.print("Enter long: ");
-            userInput = new BigDecimal(input.nextLine());
-        } while (userInput.compareTo(min) < 0 || userInput.compareTo(max) > 0);
+            System.out.print("Enter number: ");
+            try {
+                userInput = new BigDecimal(input.nextLine());
+                hasErrors = false;
+            } catch (NumberFormatException e) {
+                hasErrors = true;
+            }
+        } while (hasErrors || userInput.compareTo(min) < 0 || userInput.compareTo(max) > 0);
 
         return userInput;
     }
 
+    /**
+     * Get a LocalDate value from the user
+     *
+     * @param prompt {String} prompt to print to the user
+     * @return {LocalDate} the user's inputted date as a LocalDate obj
+     */
     @Override
     public LocalDate readLocalDate(String prompt) {
         boolean hasErrors;
@@ -233,6 +258,14 @@ public class UserIOImpl implements UserIO {
         return date;
     }
 
+    /**
+     * Get a LocalDate value from the user between a set period of time
+     *
+     * @param prompt   {String} prompt to print to the user
+     * @param earliest {LocalDate} the earliest date the user may enter
+     * @param latest   {LocalDate} the latest date the user may enter
+     * @return the user's inputted date in range, as a LocalDate obj
+     */
     @Override
     public LocalDate readLocalDate(String prompt, LocalDate earliest, LocalDate latest) {
         boolean hasErrors;

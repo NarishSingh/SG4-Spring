@@ -5,8 +5,12 @@ import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,6 +21,22 @@ public class ServiceImplTest {
     public ServiceImplTest() {
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testServ = actx.getBean("testService", Service.class);
+    }
+
+    @BeforeAll
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterAll
+    public static void tearDownClass() throws Exception {
+    }
+
+    @BeforeEach
+    public void setUp() throws Exception {
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
     }
     
     /**
@@ -160,6 +180,51 @@ public class ServiceImplTest {
         ServiceImpl instance = null;
         List<Product> expResult = null;
         List<Product> result = instance.getValidProductList();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of validateState method, of class ServiceImpl.
+     */
+    @Test
+    public void testValidateState() throws Exception {
+        System.out.println("validateState");
+        String userState = "";
+        ServiceImpl instance = null;
+        State expResult = null;
+        State result = instance.validateState(userState);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of validateOrderDate method, of class ServiceImpl.
+     */
+    @Test
+    public void testValidateOrderDate() {
+        System.out.println("validateOrderDate");
+        LocalDate userDate = null;
+        ServiceImpl instance = null;
+        LocalDate expResult = null;
+        LocalDate result = instance.validateOrderDate(userDate);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of validateProduct method, of class ServiceImpl.
+     */
+    @Test
+    public void testValidateProduct() {
+        System.out.println("validateProduct");
+        String userProduct = "";
+        ServiceImpl instance = null;
+        Product expResult = null;
+        Product result = instance.validateProduct(userProduct);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

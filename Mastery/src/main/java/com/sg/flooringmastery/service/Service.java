@@ -1,6 +1,8 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.OrderPersistenceException;
+import com.sg.flooringmastery.dao.ProductReadException;
+import com.sg.flooringmastery.dao.StateReadException;
 import com.sg.flooringmastery.model.Order;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
@@ -14,11 +16,8 @@ public interface Service {
      *
      * @param orderRequest {Order} a queued order
      * @return {Order} a valid Order obj for persistance
-     * @throws InvalidProductException if an invalid product type is request
-     * @throws InvalidStateException   if an invalid state is requested
      */
-    Order validateOrder(Order orderRequest) throws InvalidProductException,
-            InvalidStateException;
+    Order validateOrder(Order orderRequest);
 
     /**
      * Add an active order to treemap and persist to file
@@ -81,14 +80,34 @@ public interface Service {
      * Retrieve all valid states for business from file
      *
      * @return {List} a list of all state obj's
+     * @throws StateReadException if cannot load in state tax data roster
      */
-    List<State> getValidStateList();
+    List<State> getValidStateList() throws StateReadException;
 
     /**
      * Retrieve all valid products for purchase from file
      *
      * @return {List} a list of all product obj's
+     * @throws ProductReadException if cannot load in product data roster
      */
-    List<Product> getValidProductList();
+    List<Product> getValidProductList() throws ProductReadException;
 
+    /**
+     * Validate user's state selection and construct a new State obj from file
+     *
+     * @param userState {String} user's inputted state
+     * @return {State} a valid State object
+     * @throws InvalidStateException if user enters an invalid state
+     */
+    State validateState(String userState) throws InvalidStateException;
+    
+    /**
+     * Validate user's product selection and construct a new Product obj from
+     * file
+     *
+     * @param userProduct {String} user's inputted product type
+     * @return {Product} a valid Product object
+     * @throws InvalidProductException if user enters an invalid product
+     */
+    Product validateProduct(String userProduct) throws InvalidProductException;
 }

@@ -144,7 +144,6 @@ package service {
         +getValidStatesList(): List<State>
         +getValidProductsList(): List<Product>
 
-        -validateOrderDate(): LocalDate {userDate: LocalDate}
         -validateState(): State {userState: String}
         -validateProductType(): Product {userProduct: String}
         -calcOrderCosts(): void {orderRequest: Order}

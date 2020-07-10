@@ -5,6 +5,7 @@ import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -56,12 +57,14 @@ public class View {
     }
 
     /**
-     * Get date from user in MM-DD-YYYY format
+     * Get date from user in MM-dd-yyyy format
      *
      * @return {LocalDate} a future date
      */
     public LocalDate inputOrderDate() {
-
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        return io.readLocalDate("Enter the order's date (must be later than today, "
+                + LocalDate.now().format(mmddyyyy) + ")", LocalDate.now(), LocalDate.MAX);
     }
 
     /**
@@ -71,17 +74,27 @@ public class View {
      * @return {String} the customer's name
      */
     public String inputCustomerName() {
+        String custName;
 
+        do {
+            custName = io.readString("Enter customer or company name: ").trim();
+        } while (!custName.matches("[a-zA-Z0-9\\,\\.\\s]*"));
+
+        return custName;
     }
 
     /**
      * Get a state from user
      *
      * @param validStates {List} all valid states read in from file
-     * @return {String} the state's full name or abbreviation
+     * @return {String} the state's abbreviation, formatted to be capitalized
      */
     public String inputState(List<State> validStates) {
+        io.print("We are available for business in:");
+        validStates.stream()
+                .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
 
+        return io.readString("Please input your state's abbreviation:").trim().toUpperCase();
     }
 
     /**
@@ -91,7 +104,18 @@ public class View {
      * @return {String} the product type being ordered
      */
     public String inputProductType(List<Product> validProducts) {
+        io.print("Our currently available products include:");
+        validProducts.stream()
+                .forEach((product) -> io.print(product.getProductType()
+                + " | Material Cost: $" + product.getCostPerSqFt()
+                + " | Labor Cost: $" + product.getLaborCostPerSqFt()));
 
+        String rawProduct = io.readString("Please input your desired product type:").trim();
+
+        //format to match map key
+        String productSelection = rawProduct.substring(0, 1).toUpperCase() + rawProduct.substring(1).toLowerCase();
+
+        return productSelection;
     }
 
     /**
@@ -100,7 +124,8 @@ public class View {
      * @return {BigDecimal} an area at or over 100 sq.ft.
      */
     public BigDecimal inputArea() {
-
+        return io.readBigDecimal("Please input the area of floor in sq.ft. (minimum 100): ",
+                new BigDecimal("100"), BigDecimal.valueOf(Double.MAX_VALUE));
     }
 
     /**
@@ -110,7 +135,32 @@ public class View {
      * @return {boolean} confirmation to persist order to file
      */
     public boolean confirmNewOrder(Order userOrder) {
+        io.print("Your order request:");
+        io.print("Date: " + userOrder.getOrderDate());
+        io.print("ID: " + userOrder.getOrderNum());
+        io.print("Customer Name: " + userOrder.getCustomerName());
+        io.print("State: " + userOrder.getState().getStateName());
+        io.print("Product: " + userOrder.getProduct().getProductType());
+        io.print("Area in sq.ft.: " + userOrder.getArea());
+        io.print("Material Cost: $" + userOrder.getMaterialCost());
+        io.print("Labor Cost: $" + userOrder.getLaborCost());
+        io.print("Tax: $" + userOrder.getTax());
+        io.print("Total Cost: $" + userOrder.getTotal());
 
+        int userConfirmation = io.readInt("Confirm order placement? (1 - yes/2 - no): ", 1, 2);
+        
+        switch (userConfirmation) {
+            case 1: {
+                return true;
+            }
+            case 2: {
+                return false;
+            }
+            default: {
+                io.print("Unknown command.");
+                return false;
+            }
+        }
     }
 
     /**
@@ -149,26 +199,10 @@ public class View {
     /**
      * Get a date from customer
      *
-     * @return date {LocalDate} a future date to retrieve order data from
+     * @return date {LocalDate} a valid date to retrieve order data from
      */
-    public LocalDate getOrdersDate() {
-        //TODO move this to the userIO new method to read LocalDate
-        /*
-        boolean hasErrors;
-        LocalDate date = LocalDate.now(); //just for initialization
+    public LocalDate inputOrdersDateForDisplay() {
 
-        do {
-            try {
-                date = LocalDate.parse(io.readString("Enter order date in MM-DD-YYYY format: "), DateTimeFormatter.ofPattern("MM-DD-YYYY"));
-                hasErrors = false;
-            } catch (DateTimeParseException e) {
-                displayErrorMessage(e.getMessage());
-                hasErrors = true;
-            }
-        } while (hasErrors);
-
-        return date;
-         */
     }
 
     /**
@@ -302,7 +336,7 @@ public class View {
         io.print("===REMOVE ORDER===");
     }
 
-    //recycles getOrdersDate()
+    //recycles inputOrdersDateForDisplay()
     /**
      * Get ID of order to be removed
      *

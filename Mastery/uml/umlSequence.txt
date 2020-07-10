@@ -8,9 +8,7 @@ View --> Controller : void
 
 View <- Controller : inputOrderDate()
 View --> Controller : LocalDate
-Controller -> Service : validateOrderDate(LocalDate)
-'to ensure this is a future date
-Service --> Controller : LocalDate
+'ensure this is a future date
 
 View <- Controller : inputCustomerName()
 'validation done w regex
@@ -63,9 +61,6 @@ OrderDao --> Service : Order
 Service --> Controller : Order
 
 'OrderDao -[#blue]-> AuditDao : writeAuditEntry()
-
-Controller -> View : displayOrderInfo(Order)
-View --> Controller : void
 
 Controller -> View : displayAddOrderSuccessBanner()
 View --> Controller : void
