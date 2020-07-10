@@ -68,7 +68,9 @@ public class Controller {
             }
         } catch (OrderPersistenceException
                 | StateReadException
-                | ProductReadException e) {
+                | ProductReadException
+                | NoOrdersOnDateException
+                | InvalidOrderNumberException e) {
             view.displayErrorMessage(e.getMessage());
         }
     }
