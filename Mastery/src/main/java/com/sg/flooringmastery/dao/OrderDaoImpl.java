@@ -41,10 +41,10 @@ public class OrderDaoImpl implements OrderDao {
 
         writeAllOrders();
 
-        if (orders.containsValue(incomingOrders) && incomingOrders.containsValue(newOrder)) {
+        if (orders.containsValue(incomingOrders)) {
             return newOrder;
         } else {
-            throw new OrderPersistenceException("Could not add new order");
+            throw new OrderPersistenceException("Could not persist order");
         }
     }
 
@@ -73,7 +73,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //validate and add since both use .put()
+        if (orderEdit.getOrderDate() == orderToReplace.getOrderDate() && orderEdit.getOrderNum() == orderToReplace.getOrderNum()) {
+            return addOrder(orderEdit);
+        } else {
+            throw new OrderPersistenceException("Could not edit order.");
+        }
+
     }
 
     @Override
@@ -91,7 +97,7 @@ public class OrderDaoImpl implements OrderDao {
         orders.forEach((date, orderTreeMap) -> {
             allOrders.putAll(orderTreeMap);
         });
-        
+
         if (allOrders.isEmpty()) {
             return 0;
         } else {

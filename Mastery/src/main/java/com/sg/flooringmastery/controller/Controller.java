@@ -172,7 +172,7 @@ public class Controller {
     private void editOrder() throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException, StateReadException, ProductReadException {
         boolean hasErrors;
-        Order orderToEdit = null;
+        Order originalOrder = null;
 
         view.displayEditOrderBanner();
 
@@ -181,7 +181,7 @@ public class Controller {
             try {
                 LocalDate orderDate = view.inputOrderDate();
                 int orderNum = view.inputOrderNumber();
-                orderToEdit = serv.getOrder(orderDate, orderNum);
+                originalOrder = serv.getOrder(orderDate, orderNum);
                 hasErrors = false;
             } catch (NoOrdersOnDateException
                     | InvalidOrderNumberException e) {
@@ -190,16 +190,16 @@ public class Controller {
             }
         } while (hasErrors);
 
-        //get editted info
+        //get edited info
         //name
-        String editName = view.inputEditedCustomerName(orderToEdit);
+        String editName = view.inputEditedCustomerName(originalOrder);
         
         //state
         List<State> validStates = serv.getValidStateList();
         State newStateSelection = null;
         do {
             try {
-                String stateSelectionString = view.inputEditedState(orderToEdit, validStates);
+                String stateSelectionString = view.inputEditedState(originalOrder, validStates);
                 newStateSelection = serv.validateState(stateSelectionString);
                 hasErrors = false;
             } catch (InvalidStateException e) {
@@ -213,7 +213,7 @@ public class Controller {
         Product newProductSelection = null;
         do {
             try {
-                String productSelectionString = view.inputEditedProductType(orderToEdit, validProducts);
+                String productSelectionString = view.inputEditedProductType(originalOrder, validProducts);
                 newProductSelection = serv.validateProduct(productSelectionString);
                 hasErrors = false;
             } catch (InvalidProductException e) {
@@ -223,15 +223,20 @@ public class Controller {
         } while (hasErrors);
         
         //area
-        BigDecimal newArea = view.inputEditedArea(orderToEdit);
+        BigDecimal newArea = view.inputEditedArea(originalOrder);
         
         //validation
-        Order newEditRequest = new Order(orderToEdit.getOrderDate(), editName, newStateSelection, newProductSelection, newArea);
-        newEditRequest.setOrderNum(orderToEdit.getOrderNum());
+        Order newEditRequest = new Order(originalOrder.getOrderDate(), editName, newStateSelection, newProductSelection, newArea);
+        newEditRequest.setOrderNum(originalOrder.getOrderNum());
         Order editedOrder = serv.validateOrder(newEditRequest);
         
         //confirmation and edit
-        //TODO continue here
+        if (view.confirmOrderEdit(originalOrder)) {
+            serv.editOrder(editedOrder, originalOrder);
+            view.displayEditOrderBanner();
+        } else {
+            view.displayEditOrderFailBanner();
+        }
     }
 
     /**

@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public class View {
 
@@ -156,17 +155,23 @@ public class View {
     public boolean confirmNewOrder(Order userOrder) {
         displayOrderInfo(userOrder);
 
-        int userConfirmation = io.readInt("Confirm order placement? (1 - yes/2 - no): ", 1, 2);
+        String userChoice = io.readString("Confirm order placement? (Y - yes/N - no): ").trim();
 
-        switch (userConfirmation) {
-            case 1: {
+        switch (userChoice) {
+            case "y": {
                 return true;
             }
-            case 2: {
+            case "Y": {
+                return true;
+            }
+            case "n": {
+                return false;
+            }
+            case "N": {
                 return false;
             }
             default: {
-                io.print("Unknown command.");
+                io.print("Unknown command. Order placement terminated.");
                 return false;
             }
         }
@@ -375,7 +380,28 @@ public class View {
      * @return {boolean} confirmation to persist order edits to file
      */
     public boolean confirmOrderEdit(Order orderEdits) {
+        displayOrderInfo(orderEdits);
 
+        String userChoice = io.readString("Confirm order edit? (Y - yes/N - no): ").trim();
+
+        switch (userChoice) {
+            case "y": {
+                return true;
+            }
+            case "Y": {
+                return true;
+            }
+            case "n": {
+                return false;
+            }
+            case "N": {
+                return false;
+            }
+            default: {
+                io.print("Unknown command. Order edit terminated.");
+                return false;
+            }
+        }
     }
 
     //recycles displayOrder()
@@ -383,7 +409,7 @@ public class View {
      * Display closing Edit Order banner for a successful edit
      */
     public void displayEditOrderSuccessBanner() {
-        io.print("***Order Edit Not Persisted***");
+        io.print("***Order Sucessfully Edited***");
         io.readString("Press ENTER to continue");
     }
 
@@ -391,7 +417,7 @@ public class View {
      * Display closing Edit Order banner for a failed edit
      */
     public void displayEditOrderFailBanner() {
-        io.print("***Order Sucessfully Edited***");
+        io.print("***Order Edit Cancelled***");
         io.readString("Press ENTER to continue");
     }
 

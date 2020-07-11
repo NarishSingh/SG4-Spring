@@ -45,10 +45,11 @@ public interface Service {
      * Edit an active order in treemap and persist to file
      *
      * @param editedOrder {Order} a validated, edited Order obj
+     * @param originalOrder {Order} the original order in memory and file
      * @return {Order} the successfully edited order
      * @throws OrderPersistenceException if cannot persist edit to file
      */
-    Order editOrder(Order editedOrder) throws OrderPersistenceException;
+    Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException;
 
     /**
      * Retrieve the info from a single active order
