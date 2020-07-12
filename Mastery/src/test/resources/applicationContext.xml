@@ -16,28 +16,28 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!--stateless test only need dao ctors-->
-    <bean id="testStateDao" class="com.sg.flooringmastery.dao.StateDao">
-        <constructor-arg value=".//TestingFileData//testTaxes.txt"/>
+    <bean id="testStateDao" class="com.sg.flooringmastery.dao.StateDaoImpl">
+        <constructor-arg value=".\\TestingFileData\\Data\\testStates.txt"/>
     </bean>
     
-    <bean id="testProductDao" class="com.sg.flooringmastery.dao.ProductDao">
-        <constructor-arg value=".//TestingFileData//testProducts.txt"/>
+    <bean id="testProductDao" class="com.sg.flooringmastery.dao.ProductDaoImpl">
+        <constructor-arg value=".\\TestingFileData\\Data\\testProducts.txt"/>
     </bean>
     
     <bean id="testOrderDao" class="com.sg.flooringmastery.dao.OrderDaoImpl">
-        <constructor-arg value=".//TestingFileData//Orders"/>
+        <constructor-arg value=".\\TestingFileData\\Orders"/>
     </bean>
     
     <!--stateful testing needs stubs-->
-    <bean id="stateDaoStub" class="com.sg.flooringmastery.service.StateDaoStub"/>
+    <bean id="stateDaoStub" class="com.sg.flooringmastery.service.StateDaoImplStub"/>
     
-    <bean id="productDaoStub" class="com.sg.flooringmastery.service.ProductDaoStub"/>
+    <bean id="productDaoStub" class="com.sg.flooringmastery.service.ProductDaoImplStub"/>
     
     <bean id="orderDaoStub" class="com.sg.flooringmastery.service.OrderDaoImplStub"/>
     
     <bean id="auditDaoStub" class="com.sg.flooringmastery.service.AuditDaoImplStub"/>
     
-    <bean id="exportDaoStub" class="com.sg.flooringmastery.service.ExportFileDaoStub"/>
+    <bean id="exportDaoStub" class="com.sg.flooringmastery.service.ExportFileDaoImplStub"/>
     
     <bean id="testService" class="com.sg.flooringmastery.service.ServiceImpl">
         <constructor-arg ref="stateDaoStub"/>

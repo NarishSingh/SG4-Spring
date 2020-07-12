@@ -26,13 +26,6 @@ public class ServiceImplTest {
     @Test
     public void testValidateOrder() throws Exception {
         System.out.println("validateOrder");
-        Order orderRequest = null;
-        ServiceImpl instance = null;
-        Order expResult = null;
-        Order result = instance.validateOrder(orderRequest);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -41,13 +34,6 @@ public class ServiceImplTest {
     @Test
     public void testAddOrder() throws Exception {
         System.out.println("addOrder");
-        Order newOrder = null;
-        ServiceImpl instance = null;
-        Order expResult = null;
-        Order result = instance.addOrder(newOrder);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -56,14 +42,6 @@ public class ServiceImplTest {
     @Test
     public void testRemoveOrder() throws Exception {
         System.out.println("removeOrder");
-        LocalDate date = null;
-        int orderNum = 0;
-        ServiceImpl instance = null;
-        Order expResult = null;
-        Order result = instance.removeOrder(date, orderNum);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -72,14 +50,6 @@ public class ServiceImplTest {
     @Test
     public void testEditOrder() throws Exception {
         System.out.println("editOrder");
-        Order editedOrder = null;
-        Order originalOrder = null;
-        ServiceImpl instance = null;
-        Order expResult = null;
-        Order result = instance.editOrder(editedOrder, originalOrder);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -88,14 +58,6 @@ public class ServiceImplTest {
     @Test
     public void testGetOrder() throws Exception {
         System.out.println("getOrder");
-        LocalDate date = null;
-        int orderNum = 0;
-        ServiceImpl instance = null;
-        Order expResult = null;
-        Order result = instance.getOrder(date, orderNum);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -104,13 +66,6 @@ public class ServiceImplTest {
     @Test
     public void testGetOrdersByDate() throws Exception {
         System.out.println("getOrdersByDate");
-        LocalDate date = null;
-        ServiceImpl instance = null;
-        List<Order> expResult = null;
-        List<Order> result = instance.getOrdersByDate(date);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -119,10 +74,6 @@ public class ServiceImplTest {
     @Test
     public void testExportOrder() throws Exception {
         System.out.println("exportOrder");
-        ServiceImpl instance = null;
-        instance.exportOrder();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -131,12 +82,6 @@ public class ServiceImplTest {
     @Test
     public void testGetAllOrders() throws Exception {
         System.out.println("getAllOrders");
-        ServiceImpl instance = null;
-        List<Order> expResult = null;
-        List<Order> result = instance.getAllOrders();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -145,12 +90,6 @@ public class ServiceImplTest {
     @Test
     public void testGetValidStateList() throws Exception {
         System.out.println("getValidStateList");
-        ServiceImpl instance = null;
-        List<State> expResult = null;
-        List<State> result = instance.getValidStateList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -159,12 +98,6 @@ public class ServiceImplTest {
     @Test
     public void testGetValidProductList() throws Exception {
         System.out.println("getValidProductList");
-        ServiceImpl instance = null;
-        List<Product> expResult = null;
-        List<Product> result = instance.getValidProductList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -173,13 +106,6 @@ public class ServiceImplTest {
     @Test
     public void testValidateState() throws Exception {
         System.out.println("validateState");
-        String userState = "";
-        ServiceImpl instance = null;
-        State expResult = null;
-        State result = instance.validateState(userState);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -188,13 +114,6 @@ public class ServiceImplTest {
     @Test
     public void testValidateProduct() throws Exception {
         System.out.println("validateProduct");
-        String userProduct = "";
-        ServiceImpl instance = null;
-        Product expResult = null;
-        Product result = instance.validateProduct(userProduct);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }

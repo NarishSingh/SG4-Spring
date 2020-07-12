@@ -33,13 +33,6 @@ public class OrderDaoImplTest {
     @Test
     public void testAddOrder() throws Exception {
         System.out.println("addOrder");
-        Order newOrder = null;
-        OrderDaoImpl instance = new OrderDaoImpl();
-        Order expResult = null;
-        Order result = instance.addOrder(newOrder);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -48,14 +41,6 @@ public class OrderDaoImplTest {
     @Test
     public void testRemoveOrder() throws Exception {
         System.out.println("removeOrder");
-        LocalDate removalDate = null;
-        int removalID = 0;
-        OrderDaoImpl instance = new OrderDaoImpl();
-        Order expResult = null;
-        Order result = instance.removeOrder(removalDate, removalID);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -64,14 +49,6 @@ public class OrderDaoImplTest {
     @Test
     public void testGetOrder() throws Exception {
         System.out.println("getOrder");
-        LocalDate Date = null;
-        int id = 0;
-        OrderDaoImpl instance = new OrderDaoImpl();
-        Order expResult = null;
-        Order result = instance.getOrder(Date, id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -80,14 +57,6 @@ public class OrderDaoImplTest {
     @Test
     public void testEditOrder() throws Exception {
         System.out.println("editOrder");
-        Order orderToReplace = null;
-        Order orderEdit = null;
-        OrderDaoImpl instance = new OrderDaoImpl();
-        Order expResult = null;
-        Order result = instance.editOrder(orderToReplace, orderEdit);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -96,13 +65,6 @@ public class OrderDaoImplTest {
     @Test
     public void testGetOrdersByDate() throws Exception {
         System.out.println("getOrdersByDate");
-        LocalDate date = null;
-        OrderDaoImpl instance = new OrderDaoImpl();
-        List<Order> expResult = null;
-        List<Order> result = instance.getOrdersByDate(date);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -111,12 +73,6 @@ public class OrderDaoImplTest {
     @Test
     public void testGetAllOrders() throws Exception {
         System.out.println("getAllOrders");
-        OrderDaoImpl instance = new OrderDaoImpl();
-        List<Order> expResult = null;
-        List<Order> result = instance.getAllOrders();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }

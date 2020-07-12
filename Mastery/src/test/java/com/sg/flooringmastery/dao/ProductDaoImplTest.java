@@ -31,15 +31,8 @@ public class ProductDaoImplTest {
      * Test of readProductByID method, of class ProductDaoImpl.
      */
     @Test
-    public void testReadProductByID() throws InvalidProductException {
+    public void testReadProductByID() throws InvalidProductException, ProductReadException {
         System.out.println("readProductByID");
-        String productAsText = "";
-        ProductDaoImpl instance = new ProductDaoImpl();
-        Product expResult = null;
-        Product result = instance.readProductByID(productAsText);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -48,12 +41,6 @@ public class ProductDaoImplTest {
     @Test
     public void testGetValidProducts() throws ProductReadException {
         System.out.println("getValidProducts");
-        ProductDaoImpl instance = new ProductDaoImpl();
-        List<Product> expResult = null;
-        List<Product> result = instance.getValidProducts();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }

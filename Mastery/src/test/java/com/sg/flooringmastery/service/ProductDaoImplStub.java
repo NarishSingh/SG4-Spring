@@ -6,18 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ProductDaoStub implements ProductDao {
+public class ProductDaoImplStub implements ProductDao {
 
     private Map<String, Product> testProducts = new TreeMap<>();
-    private final String TEST_PRODUCTS_FILE;
+    private String TEST_PRODUCTS_FILE;
     private final String DELIMITER = ",";
     public Product onlyProduct;
 
-    public ProductDaoStub() {
+    public ProductDaoImplStub() {
         this.TEST_PRODUCTS_FILE = ".\\TestingFileData\\Data\\testProducts.txt";
     }
 
-    public ProductDaoStub(String TEST_PRODUCTS_FILE) {
+    public ProductDaoImplStub(String TEST_PRODUCTS_FILE) {
         this.TEST_PRODUCTS_FILE = TEST_PRODUCTS_FILE;
     }
 

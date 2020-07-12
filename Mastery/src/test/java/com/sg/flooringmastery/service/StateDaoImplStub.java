@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StateDaoStub implements StateDao {
+public class StateDaoImplStub implements StateDao {
 
     private Map<String, State> testStates = new TreeMap<>();
-    private final String TEST_STATES_FILE;
+    private String TEST_STATES_FILE;
     private final String DELIMITER = ",";
 
-    public StateDaoStub() {
+    public StateDaoImplStub() {
         this.TEST_STATES_FILE=".\\TestingFileData\\Data\\testStates.txt";
     }
 
-    public StateDaoStub(String TEST_STATES_FILE) {
+    public StateDaoImplStub(String TEST_STATES_FILE) {
         this.TEST_STATES_FILE = TEST_STATES_FILE;
     }
     

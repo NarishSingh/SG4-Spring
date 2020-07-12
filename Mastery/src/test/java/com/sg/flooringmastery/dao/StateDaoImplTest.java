@@ -20,9 +20,6 @@ public class StateDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testFile = ".//TestingFileData//testTaxes.txt";
-        new FileWriter(testFile);
-
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDao = actx.getBean("testStateDao", StateDaoImpl.class);
     }
@@ -31,29 +28,43 @@ public class StateDaoImplTest {
      * Test of readStateByID method, of class StateDaoImpl.
      */
     @Test
-    public void testReadStateByID() throws InvalidStateException {
+    public void testReadStateByID() throws InvalidStateException, StateReadException {
         System.out.println("readStateByID");
-        String stateAsText = "";
-        StateDaoImpl instance = new StateDaoImpl();
-        State expResult = null;
-        State result = instance.readStateByID(stateAsText);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        //arrange
+        final String testStateKeyTX = "TX";
+        final String testStateKeyWA = "WA";
+        
+        //act
+        State testTX = testDao.readStateByID(testStateKeyTX);
+        State testWA = testDao.readStateByID(testStateKeyWA);
+        
+        //assert
+        assertEquals(testTX.getStateAbbreviation(), testStateKeyTX, "Should've retrieved Texas");
+        assertEquals(testWA.getStateAbbreviation(), testStateKeyWA, "Should've retrieved Washington");
+        
     }
 
     /**
      * Test of getValidStates method, of class StateDaoImpl.
      */
     @Test
-    public void testGetValidStates() throws StateReadException {
+    public void testGetValidStates() throws StateReadException, InvalidStateException {
         System.out.println("getValidStates");
-        StateDaoImpl instance = new StateDaoImpl();
-        List<State> expResult = null;
-        List<State> result = instance.getValidStates();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        //arrange
+        final String testStateKeyTX = "TX";
+        final String testStateKeyWA = "WA";
+        
+        State testTX = testDao.readStateByID(testStateKeyTX);
+        State testWA = testDao.readStateByID(testStateKeyWA);
+        
+        //act
+        List<State> allStatesFromFile = testDao.getValidStates();
+        
+        //assert
+        assertTrue(allStatesFromFile.contains(testTX), "List should contain Texas");
+        assertTrue(allStatesFromFile.contains(testWA), "List should contain Washington");
     }
 
 }
