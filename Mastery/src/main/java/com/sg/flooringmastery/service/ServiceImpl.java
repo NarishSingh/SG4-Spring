@@ -111,7 +111,7 @@ public class ServiceImpl implements Service {
     public State validateState(String userState) throws InvalidStateException {
         try {
             return state.readStateByID(userState);
-        } catch (InvalidStateException e) {
+        } catch (InvalidStateException | StateReadException e) {
             throw new InvalidStateException("We are unavailable for business in this state for now", e);
         }
     }
@@ -120,7 +120,7 @@ public class ServiceImpl implements Service {
     public Product validateProduct(String userProduct) throws InvalidProductException {
         try {
             return product.readProductByID(userProduct);
-        } catch (InvalidProductException e) {
+        } catch (InvalidProductException | ProductReadException e) {
             throw new InvalidProductException("We do not floor with this type of material at this time", e);
         }
     }
