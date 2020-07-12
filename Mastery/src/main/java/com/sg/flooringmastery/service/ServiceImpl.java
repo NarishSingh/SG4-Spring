@@ -11,19 +11,22 @@ import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
 import com.sg.flooringmastery.dao.AuditDao;
+import com.sg.flooringmastery.dao.ExportFileDao;
 import com.sg.flooringmastery.dao.InvalidOrderNumberException;
 import com.sg.flooringmastery.dao.NoOrdersOnDateException;
+import com.sg.flooringmastery.dao.ProductDao;
 import com.sg.flooringmastery.dao.ProductReadException;
+import com.sg.flooringmastery.dao.StateDao;
 import com.sg.flooringmastery.dao.StateReadException;
 import java.math.BigDecimal;
 
 public class ServiceImpl implements Service {
 
-    StateDaoImpl state;
-    ProductDaoImpl product;
+    StateDao state;
+    ProductDao product;
     OrderDao dao;
     AuditDao auditDao;
-    ExportFileDaoImpl export;
+    ExportFileDao export;
 
     public ServiceImpl(StateDaoImpl state, ProductDaoImpl product, OrderDao dao, AuditDao auditDao, ExportFileDaoImpl export) {
         this.state = state;
@@ -56,7 +59,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return dao.removeOrder(date, orderNum);
     }
 
     @Override
@@ -76,13 +79,14 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public void exportOrder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void exportOrder() throws OrderPersistenceException {
+        List<Order> allActiveOrders = getAllOrders();
+        export.exportOrders(allActiveOrders);
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Order> getAllOrders() throws OrderPersistenceException {
+        return dao.getAllOrders();
     }
 
     @Override

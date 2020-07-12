@@ -47,6 +47,52 @@ public class View {
         return selection;
     }
 
+    /*DISPLAY ORDER*/
+    /**
+     * Display opening Display Order banner to UI
+     */
+    public void displayDisplayOrderBanner() {
+        io.print("===VIEW ORDERS===");
+    }
+
+    /**
+     * Display all orders for a given date
+     *
+     * @param ordersOnDate {List} all orders on a given date, sorted by order
+     *                     number
+     */
+    public void displayOrdersByDate(List<Order> ordersOnDate) {
+        io.print("-------");
+        io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        io.print("-------");
+        ordersOnDate.stream()
+                .forEach((order) -> {
+                    io.print("Order Number:" + order.getOrderNum());
+                    io.print("Customer Name: " + order.getCustomerName());
+                    io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
+                    io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
+                    io.print("Product: " + order.getProduct().getProductType());
+                    io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
+                    io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
+                    io.print("Area: " + order.getArea().toString() + " sq. ft.");
+                    io.print("Total Material Cost: $" + order.getMaterialCost().toString());
+                    io.print("Total Labor Cost: $" + order.getLaborCost().toString());
+                    io.print("Total Tax: $" + order.getTax());
+                    io.print("Order Total: $" + order.getTotal().toString());
+                    io.print("***");
+                });
+
+        io.readString("Press ENTER to continue");
+    }
+
+    /**
+     * Display closing Display Order banner for a failed date entry
+     */
+    public void displayDisplayOrdersFailBanner() {
+        io.print("***No Orders to Show***");
+        io.readString("Press ENTER to continue");
+    }
+    
     /*ADD ORDER*/
     /**
      * Display opening Add Order banner to UI
@@ -193,67 +239,34 @@ public class View {
         io.readString("Press ENTER to continue");
     }
 
-    /*DISPLAY ORDER*/
-    /**
-     * Display opening Display Order banner to UI
-     */
-    public void displayDisplayOrderBanner() {
-        io.print("===VIEW ORDERS===");
-    }
-
-    /**
-     * Get a date from customer
-     *
-     * @return date {LocalDate} a valid date to retrieve order data from
-     */
-    public LocalDate inputOrdersDateForDisplay() {
-
-    }
-
-    /**
-     * Display all orders for a given date
-     *
-     * @param ordersOnDate {List} all orders on a given date, sorted by order
-     *                     number
-     */
-    public void displayOrdersByDate(List<Order> ordersOnDate) {
-        io.print("-------");
-        io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        io.print("-------");
-        ordersOnDate.stream()
-                .forEach((order) -> {
-                    io.print("Order Number:" + order.getOrderNum());
-                    io.print("Customer Name: " + order.getCustomerName());
-                    io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
-                    io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
-                    io.print("Product: " + order.getProduct().getProductType());
-                    io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
-                    io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
-                    io.print("Area: " + order.getArea().toString() + " sq. ft.");
-                    io.print("Total Material Cost: $" + order.getMaterialCost().toString());
-                    io.print("Total Labor Cost: $" + order.getLaborCost().toString());
-                    io.print("Total Tax: $" + order.getTax());
-                    io.print("Order Total: $" + order.getTotal().toString());
-                    io.print("***");
-                });
-
-        io.readString("Press ENTER to continue");
-    }
-
-    /**
-     * Display closing Display Order banner for a failed date entry
-     */
-    public void displayDisplayOrdersFailBanner() {
-        io.print("***No Orders to Show***");
-        io.readString("Press ENTER to continue");
-    }
-
     /*EDIT ORDER*/
     /**
      * Display opening Edit Order banner to UI
      */
     public void displayEditOrderBanner() {
         io.print("===EDIT ORDER===");
+    }
+    
+    /**
+     * Get order number for retrieval or removal
+     *
+     * @return {int} an existing order ID
+     */
+    public int inputOrderNumber() {
+        boolean hasErrors;
+        int orderID = 0;
+
+        do {
+            try {
+                orderID = io.readInt("Enter Order ID: ");
+                hasErrors = false;
+            } catch (NumberFormatException e) {
+                displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        return orderID;
     }
 
     /**
@@ -404,7 +417,6 @@ public class View {
         }
     }
 
-    //recycles displayOrder()
     /**
      * Display closing Edit Order banner for a successful edit
      */
@@ -429,43 +441,42 @@ public class View {
         io.print("===REMOVE ORDER===");
     }
 
-    //recycles inputOrdersDate()
-    /**
-     * Get order number for retrieval or removal
-     *
-     * @return {int} an existing order ID
-     */
-    public int inputOrderNumber() {
-        boolean hasErrors;
-        int orderID = 0;
-
-        do {
-            try {
-                orderID = io.readInt("Enter Order ID: ");
-                hasErrors = false;
-            } catch (NumberFormatException e) {
-                displayErrorMessage(e.getMessage());
-                hasErrors = true;
-            }
-        } while (hasErrors);
-
-        return orderID;
-    }
-
     /**
      * Get confirmation for removing an active order
      *
+     * @param orderToRemove {Order} the order the user wants to remove
      * @return {boolean} confirmation to persist the removal
      */
-    public boolean confirmOrderRemoval() {
+    public boolean confirmOrderRemoval(Order orderToRemove) {
+        displayOrderInfo(orderToRemove);
 
+        String userChoice = io.readString("Confirm order cancellation? (Y - yes/N - no): ").trim();
+
+        switch (userChoice) {
+            case "y": {
+                return true;
+            }
+            case "Y": {
+                return true;
+            }
+            case "n": {
+                return false;
+            }
+            case "N": {
+                return false;
+            }
+            default: {
+                io.print("Unknown command. Order cancellation terminated.");
+                return false;
+            }
+        }
     }
 
     /**
      * Display closing Remove Order banner for a successful edit
      */
     public void displayRemoveOrderSuccessBanner() {
-        io.print("***Order Not Removed***");
+        io.print("***Order Sucessfully Removed***");
         io.readString("Press ENTER to continue");
     }
 
@@ -473,7 +484,7 @@ public class View {
      * Display closing Remove Order banner for a failed edit
      */
     public void displayRemoveOrderFailBanner() {
-        io.print("***Order Sucessfully Removed***");
+        io.print("***Order Not Removed***");
         io.readString("Press ENTER to continue");
     }
 

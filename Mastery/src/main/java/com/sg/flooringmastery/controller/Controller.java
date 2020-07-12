@@ -150,7 +150,7 @@ public class Controller {
         Order orderRequest = new Order(validOrderDate, customerName, stateSelection, productSelection, userArea);
         Order newOrder = serv.validateOrder(orderRequest);
 
-        //confirmation and add new order
+        //display, confirmation, add new order
         if (view.confirmNewOrder(newOrder)) {
             serv.addOrder(newOrder);
             view.displayAddOrderBanner();
@@ -193,7 +193,7 @@ public class Controller {
         //get edited info
         //name
         String editName = view.inputEditedCustomerName(originalOrder);
-        
+
         //state
         List<State> validStates = serv.getValidStateList();
         State newStateSelection = null;
@@ -207,7 +207,7 @@ public class Controller {
                 hasErrors = true;
             }
         } while (hasErrors);
-        
+
         //product
         List<Product> validProducts = serv.getValidProductList();
         Product newProductSelection = null;
@@ -221,19 +221,20 @@ public class Controller {
                 hasErrors = true;
             }
         } while (hasErrors);
-        
+
         //area
         BigDecimal newArea = view.inputEditedArea(originalOrder);
-        
+
         //validation
         Order newEditRequest = new Order(originalOrder.getOrderDate(), editName, newStateSelection, newProductSelection, newArea);
         newEditRequest.setOrderNum(originalOrder.getOrderNum());
         Order editedOrder = serv.validateOrder(newEditRequest);
-        
-        //confirmation and edit
+
+        //display, confirmation, and edit
         if (view.confirmOrderEdit(originalOrder)) {
             serv.editOrder(editedOrder, originalOrder);
-            view.displayEditOrderBanner();
+            view.displayOrderInfo(editedOrder);
+            view.displayEditOrderSuccessBanner();
         } else {
             view.displayEditOrderFailBanner();
         }
@@ -247,7 +248,34 @@ public class Controller {
      *                                   files
      */
     private void removeOrder() throws OrderPersistenceException {
+        boolean hasErrors;
 
+        view.displayRemoveOrderBanner();
+
+        //retrieve order
+        Order orderToRemove = null;
+        LocalDate orderDate = null;
+        int orderNum = 0;
+        do {
+            try {
+                orderDate = view.inputOrderDate();
+                orderNum = view.inputOrderNumber();
+                orderToRemove = serv.getOrder(orderDate, orderNum);
+                hasErrors = false;
+            } catch (NoOrdersOnDateException
+                    | InvalidOrderNumberException e) {
+                view.displayErrorMessage(e.getMessage());
+                hasErrors = true;
+            }
+        } while (hasErrors);
+
+        //display, confirmation, and removal
+        if (view.confirmOrderRemoval(orderToRemove)) {
+            serv.removeOrder(orderToRemove.getOrderDate(), orderToRemove.getOrderNum());
+            view.displayRemoveOrderSuccessBanner();
+        } else {
+            view.displayRemoveOrderFailBanner();
+        }
     }
 
     /**
@@ -259,6 +287,14 @@ public class Controller {
      *                                   files
      */
     private void exportOrders() throws OrderPersistenceException {
+        view.displayExportOrderBanner();
+        try {
+            serv.exportOrder();
+            view.displayExportOrderSuccessBanner();
+        } catch (OrderPersistenceException e) {
+            view.displayErrorMessage(e.getMessage());
+            view.displayExportOrderFailBanner();
+        }
 
     }
 

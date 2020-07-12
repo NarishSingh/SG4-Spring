@@ -65,6 +65,14 @@ public interface OrderDao {
     List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
 
     /**
+     * Return all active orders
+     *
+     * @return {List} all active/persisted orders
+     * @throws OrderPersistenceException if cannot load from orders directory
+     */
+    List<Order> getAllOrders() throws OrderPersistenceException;
+
+    /**
      * Find highest key value of internal order maps
      *
      * @return {int} highest order number thus far

@@ -50,7 +50,22 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        loadAllOrders();
+        
+        //retrieve inner treemap then remove order
+        TreeMap<Integer, Order> deletionMap = orders.get(removalDate);
+        Order deleted = deletionMap.remove(removalID);
+        
+        //re-enter new map to outer treemap
+        orders.put(removalDate, deletionMap);
+        
+        writeAllOrders();
+        
+        if (orders.containsValue(deletionMap) && !deletionMap.containsValue(deleted)) {
+            return deleted;
+        } else {
+            throw new OrderPersistenceException("Could not persist order deletion");
+        }
     }
 
     @Override
@@ -89,13 +104,25 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Order> getAllOrders() throws OrderPersistenceException {
+        loadAllOrders();
+        
+        List<Order> allOrdersList = new ArrayList<>();
+        orders.forEach((date, orderTree) -> {
+            allOrdersList.addAll(orderTree.values());
+        });
+        
+        return allOrdersList;
+    }
+
+    @Override
     public int getHighestOrderNumber() throws OrderPersistenceException {
         loadAllOrders();
 
         //dump all orders to a simple TreeMap and get highest key
         TreeMap<Integer, Order> allOrders = new TreeMap<>();
-        orders.forEach((date, orderTreeMap) -> {
-            allOrders.putAll(orderTreeMap);
+        orders.forEach((date, orderTree) -> {
+            allOrders.putAll(orderTree);
         });
 
         if (allOrders.isEmpty()) {
@@ -212,7 +239,7 @@ public class OrderDaoImpl implements OrderDao {
     /**
      * Persist all active orders to order's directory
      */
-    private void writeAllOrders() {
+    private void writeAllOrders() throws OrderPersistenceException {
         orders.forEach((date, ordersOnDate) -> {
             //create new file
             String filename = "Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) + ".txt";
@@ -221,6 +248,9 @@ public class OrderDaoImpl implements OrderDao {
             try {
                 out = new PrintWriter(new FileWriter(new File(ORDER_DIRECTORY, filename)));
 
+                //header
+                out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                
                 //marshall the orders on date to file
                 ordersOnDate.values().stream()
                         .forEach((order) -> {

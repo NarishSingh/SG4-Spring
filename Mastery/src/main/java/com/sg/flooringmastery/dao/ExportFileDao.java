@@ -18,7 +18,9 @@ public interface ExportFileDao {
      * Write all active orders to an export file
      *
      * @param activeOrders {List} all active orders
+     * @throws OrderPersistenceException if cannot persist active orders to
+     *                                   backup directory file
      */
-    void exportOrders(List<Order> activeOrders);
-    
+    void exportOrders(List<Order> activeOrders) throws OrderPersistenceException;
+
 }

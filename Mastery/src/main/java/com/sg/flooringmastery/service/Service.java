@@ -44,7 +44,7 @@ public interface Service {
     /**
      * Edit an active order in treemap and persist to file
      *
-     * @param editedOrder {Order} a validated, edited Order obj
+     * @param editedOrder   {Order} a validated, edited Order obj
      * @param originalOrder {Order} the original order in memory and file
      * @return {Order} the successfully edited order
      * @throws OrderPersistenceException if cannot persist edit to file
@@ -76,15 +76,20 @@ public interface Service {
 
     /**
      * Export and persist all active orders to a single file
+     *
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   files
      */
-    void exportOrder();
+    void exportOrder() throws OrderPersistenceException;
 
     /**
      * Retrieve all active Orders from file
      *
      * @return {List} a list of all orders
+     * @throws OrderPersistenceException if cannot read from orders directory
+     *                                   files
      */
-    List<Order> getAllOrders();
+    List<Order> getAllOrders() throws OrderPersistenceException;
 
     /**
      * Retrieve all valid states for business from file
