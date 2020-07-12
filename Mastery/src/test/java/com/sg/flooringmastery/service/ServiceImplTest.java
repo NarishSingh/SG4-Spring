@@ -5,40 +5,21 @@ import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ServiceImplTest {
-    
+
     private Service testServ;
-    
+
     public ServiceImplTest() {
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        testServ = actx.getBean("testService", Service.class);
+        testServ = actx.getBean("testServ", Service.class);
+
     }
 
-    @BeforeAll
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterAll
-    public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeEach
-    public void setUp() throws Exception {
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-    }
-    
     /**
      * Test of validateOrder method, of class ServiceImpl.
      */
@@ -92,9 +73,10 @@ public class ServiceImplTest {
     public void testEditOrder() throws Exception {
         System.out.println("editOrder");
         Order editedOrder = null;
+        Order originalOrder = null;
         ServiceImpl instance = null;
         Order expResult = null;
-        Order result = instance.editOrder(editedOrder);
+        Order result = instance.editOrder(editedOrder, originalOrder);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -104,7 +86,7 @@ public class ServiceImplTest {
      * Test of getOrder method, of class ServiceImpl.
      */
     @Test
-    public void testGetOrder() {
+    public void testGetOrder() throws Exception {
         System.out.println("getOrder");
         LocalDate date = null;
         int orderNum = 0;
@@ -120,7 +102,7 @@ public class ServiceImplTest {
      * Test of getOrdersByDate method, of class ServiceImpl.
      */
     @Test
-    public void testGetOrdersByDate() {
+    public void testGetOrdersByDate() throws Exception {
         System.out.println("getOrdersByDate");
         LocalDate date = null;
         ServiceImpl instance = null;
@@ -135,7 +117,7 @@ public class ServiceImplTest {
      * Test of exportOrder method, of class ServiceImpl.
      */
     @Test
-    public void testExportOrder() {
+    public void testExportOrder() throws Exception {
         System.out.println("exportOrder");
         ServiceImpl instance = null;
         instance.exportOrder();
@@ -147,7 +129,7 @@ public class ServiceImplTest {
      * Test of getAllOrders method, of class ServiceImpl.
      */
     @Test
-    public void testGetAllOrders() {
+    public void testGetAllOrders() throws Exception {
         System.out.println("getAllOrders");
         ServiceImpl instance = null;
         List<Order> expResult = null;
@@ -161,7 +143,7 @@ public class ServiceImplTest {
      * Test of getValidStateList method, of class ServiceImpl.
      */
     @Test
-    public void testGetValidStateList() {
+    public void testGetValidStateList() throws Exception {
         System.out.println("getValidStateList");
         ServiceImpl instance = null;
         List<State> expResult = null;
@@ -175,7 +157,7 @@ public class ServiceImplTest {
      * Test of getValidProductList method, of class ServiceImpl.
      */
     @Test
-    public void testGetValidProductList() {
+    public void testGetValidProductList() throws Exception {
         System.out.println("getValidProductList");
         ServiceImpl instance = null;
         List<Product> expResult = null;
@@ -201,25 +183,10 @@ public class ServiceImplTest {
     }
 
     /**
-     * Test of validateOrderDate method, of class ServiceImpl.
-     */
-    @Test
-    public void testValidateOrderDate() {
-        System.out.println("validateOrderDate");
-        LocalDate userDate = null;
-        ServiceImpl instance = null;
-        LocalDate expResult = null;
-        LocalDate result = instance.validateOrderDate(userDate);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of validateProduct method, of class ServiceImpl.
      */
     @Test
-    public void testValidateProduct() {
+    public void testValidateProduct() throws Exception {
         System.out.println("validateProduct");
         String userProduct = "";
         ServiceImpl instance = null;
@@ -229,5 +196,5 @@ public class ServiceImplTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+
 }

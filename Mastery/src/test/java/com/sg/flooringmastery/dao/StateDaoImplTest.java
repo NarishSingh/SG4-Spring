@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.State;
+import com.sg.flooringmastery.service.InvalidStateException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +31,7 @@ public class StateDaoImplTest {
      * Test of readStateByID method, of class StateDaoImpl.
      */
     @Test
-    public void testReadStateByID() {
+    public void testReadStateByID() throws InvalidStateException {
         System.out.println("readStateByID");
         String stateAsText = "";
         StateDaoImpl instance = new StateDaoImpl();
@@ -45,7 +46,7 @@ public class StateDaoImplTest {
      * Test of getValidStates method, of class StateDaoImpl.
      */
     @Test
-    public void testGetValidStates() {
+    public void testGetValidStates() throws StateReadException {
         System.out.println("getValidStates");
         StateDaoImpl instance = new StateDaoImpl();
         List<State> expResult = null;

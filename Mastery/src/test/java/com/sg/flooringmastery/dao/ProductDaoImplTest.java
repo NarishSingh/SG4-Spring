@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.Product;
+import com.sg.flooringmastery.service.InvalidProductException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ProductDaoImplTest {
      * Test of readProductByID method, of class ProductDaoImpl.
      */
     @Test
-    public void testReadProductByID() {
+    public void testReadProductByID() throws InvalidProductException {
         System.out.println("readProductByID");
         String productAsText = "";
         ProductDaoImpl instance = new ProductDaoImpl();
@@ -45,7 +46,7 @@ public class ProductDaoImplTest {
      * Test of getValidProducts method, of class ProductDaoImpl.
      */
     @Test
-    public void testGetValidProducts() {
+    public void testGetValidProducts() throws ProductReadException {
         System.out.println("getValidProducts");
         ProductDaoImpl instance = new ProductDaoImpl();
         List<Product> expResult = null;
