@@ -21,7 +21,8 @@ public interface StateDao {
      *                  to be uppercase to match with a valid key
      * @return {State} the proper state obj corresponding to user's request
      * @throws InvalidStateException if user inputs an invalid state selection
+     * @throws StateReadException if cannot read from state tax data roster
      */
-    State readStateByID(String userState) throws InvalidStateException;
+    State readStateByID(String userState) throws InvalidStateException, StateReadException;
 
 }

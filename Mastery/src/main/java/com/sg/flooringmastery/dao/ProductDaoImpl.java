@@ -73,16 +73,10 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
-    /**
-     * Validate the user's product request for a new or edited order
-     *
-     * @param userProduct {String} user's inputted product name
-     * @return {State} the proper product obj corresponding to user's request
-     * @throws InvalidProductException if user inputs an invalid product
-     *                                 selection
-     */
     @Override
-    public Product readProductByID(String userProduct) throws InvalidProductException {
+    public Product readProductByID(String userProduct) throws InvalidProductException, ProductReadException {
+        loadProducts();
+        
         if (products.containsKey(userProduct)) {
             return products.get(userProduct);
         } else {
@@ -90,12 +84,6 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
-    /**
-     * Return all valid products from map as a list
-     *
-     * @return {List} all valid products
-     * @throws ProductReadException if cannot read from product data file
-     */
     @Override
     public List<Product> getValidProducts() throws ProductReadException {
         loadProducts();

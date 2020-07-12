@@ -21,7 +21,8 @@ public interface ProductDao {
      * @return {State} the proper product obj corresponding to user's request
      * @throws InvalidProductException if user inputs an invalid product
      *                                 selection
+     * @throws ProductReadException    if cannot read from product data file
      */
-    Product readProductByID(String userProduct) throws InvalidProductException;
-    
+    Product readProductByID(String userProduct) throws InvalidProductException, ProductReadException;
+
 }
