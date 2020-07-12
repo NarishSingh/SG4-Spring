@@ -2,7 +2,6 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.State;
 import com.sg.flooringmastery.service.InvalidStateException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
