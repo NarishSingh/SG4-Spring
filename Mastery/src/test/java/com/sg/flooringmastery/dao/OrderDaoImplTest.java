@@ -34,7 +34,7 @@ public class OrderDaoImplTest {
     //TODO try to make the 3 orders @BeforeAll
     @BeforeAll
     public void setUpBeforeClass() throws Exception {
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 
         //first order
         final int testOrderNum = 1;
@@ -75,7 +75,7 @@ public class OrderDaoImplTest {
         secondOrder = new Order(testDate, nextOrderNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
 
         //third order not on same date as either
-        final LocalDate testDate2 = LocalDate.parse("2-2-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final LocalDate testDate2 = LocalDate.parse("02-02-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final int thirdOrderNum = 3;
         final String thirdName = "Anthony Third";
         final State thirdCali = new State("CA", new BigDecimal("25.00"));

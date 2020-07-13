@@ -17,7 +17,7 @@ public class OrderDaoImplStub implements OrderDao {
 
     public OrderDaoImplStub() {
         //FIXME figure out what is the problem w this parsing
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final int testNum = 1;
         final State testTexas = new State("TX", new BigDecimal("4.45"));
         final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
