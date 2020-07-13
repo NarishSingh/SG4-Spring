@@ -28,7 +28,7 @@ public class ServiceImpl implements Service {
     AuditDao auditDao;
     ExportFileDao export;
 
-    public ServiceImpl(StateDaoImpl state, ProductDaoImpl product, OrderDao dao, AuditDao auditDao, ExportFileDaoImpl export) {
+    public ServiceImpl(StateDao state, ProductDao product, OrderDao dao, AuditDao auditDao, ExportFileDao export) {
         this.state = state;
         this.product = product;
         this.dao = dao;
