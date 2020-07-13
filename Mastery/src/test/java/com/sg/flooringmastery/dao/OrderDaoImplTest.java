@@ -22,19 +22,79 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class OrderDaoImplTest {
 
-    OrderDao testDao;
+    private OrderDao testDao;
+    public Order firstOrder;
+    public Order firstOrderReplacement;
+    public Order secondOrder;
+    public Order thirdOrder;
 
     public OrderDaoImplTest() {
     }
-    
+
     //TODO try to make the 3 orders @BeforeAll
+    @BeforeAll
+    public void setUpBeforeClass() throws Exception {
+        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+
+        //first order
+        final int testOrderNum = 1;
+        final String testCustomerName = "John Doe";
+        final State testTexas = new State("TX", new BigDecimal("4.45"));
+        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
+        final BigDecimal testArea100 = new BigDecimal("100");
+        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
+        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
+        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
+        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
+
+        firstOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
+
+        //first order replacement
+        final String editName = "Juan Dos";
+        final State editCali = new State("CA", new BigDecimal("25.00"));
+        final Product editLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
+        final BigDecimal editArea200 = new BigDecimal("200");
+        final BigDecimal editMatCost = editLaminate.getCostPerSqFt().multiply(editArea200);
+        final BigDecimal editLaborCost = editArea200.multiply(editLaminate.getLaborCostPerSqFt());
+        final BigDecimal editTax = (editMatCost.add(editLaborCost)).multiply((editCali.getTaxRate().divide(new BigDecimal("100"))));
+        final BigDecimal editTotal = editMatCost.add(editLaborCost).add(editTax);
+
+        firstOrderReplacement = new Order(testDate, testOrderNum, editName, editCali, editLaminate, editArea200, editMatCost, editLaborCost, editTax, editTotal);
+
+        //second order, same date as first but distinct order
+        final int nextOrderNum = 2;
+        final String nextName = "Juan Dos";
+        final State nextCali = new State("CA", new BigDecimal("25.00"));
+        final Product nextLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
+        final BigDecimal nextArea200 = new BigDecimal("200");
+        final BigDecimal nextMatCost = nextLaminate.getCostPerSqFt().multiply(nextArea200);
+        final BigDecimal nextLaborCost = nextArea200.multiply(nextLaminate.getLaborCostPerSqFt());
+        final BigDecimal nextTax = (nextMatCost.add(nextLaborCost)).multiply((nextCali.getTaxRate().divide(new BigDecimal("100"))));
+        final BigDecimal nextTotal = nextMatCost.add(nextLaborCost).add(nextTax);
+
+        secondOrder = new Order(testDate, nextOrderNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
+
+        //third order not on same date as either
+        final LocalDate testDate2 = LocalDate.parse("2-2-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final int thirdOrderNum = 3;
+        final String thirdName = "Anthony Third";
+        final State thirdCali = new State("CA", new BigDecimal("25.00"));
+        final Product thirdLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
+        final BigDecimal thirdArea200 = new BigDecimal("300");
+        final BigDecimal thirdMatCost = thirdLaminate.getCostPerSqFt().multiply(thirdArea200);
+        final BigDecimal thirdLaborCost = thirdArea200.multiply(thirdLaminate.getLaborCostPerSqFt());
+        final BigDecimal thirdTax = (thirdMatCost.add(thirdLaborCost)).multiply((thirdCali.getTaxRate().divide(new BigDecimal("100"))));
+        final BigDecimal thirdTotal = thirdMatCost.add(thirdLaborCost).add(thirdTax);
+
+        thirdOrder = new Order(testDate2, thirdOrderNum, thirdName, thirdCali, thirdLaminate, thirdArea200, thirdMatCost, thirdLaborCost, thirdTax, thirdTotal);
+    }
 
     @BeforeEach
     public void setUp() throws IOException {
         String testDir = ".\\TestingFileData\\Orders";
 //        new FileWriter(new File(testDir, "testOrder.txt"));
         new FileWriter(new File(testDir));
-        
+
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDao = actx.getBean("testOrderDao", OrderDaoImpl.class);
     }
@@ -45,28 +105,15 @@ public class OrderDaoImplTest {
     @Test
     public void testAddGetOrder() throws Exception {
         System.out.println("addOrder");
-        
+
         //arrange
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        final int testOrderNum = 1;
-        final String testCustomerName = "John Doe";
-        final State testTexas = new State("TX", new BigDecimal("4.45"));
-        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
-        final BigDecimal testArea100 = new BigDecimal("100");
-        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
-        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
-        
-        Order newOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
-        
         //act
-        testDao.addOrder(newOrder);
-        Order added = testDao.getOrder(testDate, testOrderNum);
+        testDao.addOrder(firstOrder);
+        Order added = testDao.getOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
         List<Order> allOrders = testDao.getAllOrders();
-                
+
         //assert
-        assertEquals(added, newOrder, "Order should've been added");
+        assertEquals(added, firstOrder, "Order should've been added");
         assertTrue(allOrders.contains(added), "Order list should contain added order");
     }
 
@@ -77,26 +124,13 @@ public class OrderDaoImplTest {
     public void testRemoveOrder() throws Exception {
         System.out.println("removeOrder");
         //arrange
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        final int testOrderNum = 1;
-        final String testCustomerName = "John Doe";
-        final State testTexas = new State("TX", new BigDecimal("4.45"));
-        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
-        final BigDecimal testArea100 = new BigDecimal("100");
-        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
-        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
-        
-        Order newOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
-        
         //act
-        testDao.addOrder(newOrder);
-        Order removed = testDao.removeOrder(testDate, testOrderNum);
+        testDao.addOrder(firstOrder);
+        Order removed = testDao.removeOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
         List<Order> allOrders = testDao.getAllOrders();
-        
+
         //assert
-        assertEquals(removed, newOrder, "Order should've been removed");
+        assertEquals(removed, firstOrder, "Order should've been removed");
         assertFalse(allOrders.contains(removed), "Order list should not contain removed order");
     }
 
@@ -107,40 +141,16 @@ public class OrderDaoImplTest {
     public void testEditOrder() throws Exception {
         System.out.println("editOrder");
         //arrange
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        final int testOrderNum = 1;
-        final String testCustomerName = "John Doe";
-        final State testTexas = new State("TX", new BigDecimal("4.45"));
-        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
-        final BigDecimal testArea100 = new BigDecimal("100");
-        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
-        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
-        
-        Order originalOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
-        
         //act
-        final String editName = "Juan Dos";
-        final State editCali = new State("CA", new BigDecimal("25.00"));
-        final Product editLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
-        final BigDecimal editArea200 = new BigDecimal("200");
-        final BigDecimal editMatCost = editLaminate.getCostPerSqFt().multiply(editArea200);
-        final BigDecimal editLaborCost = editArea200.multiply(editLaminate.getLaborCostPerSqFt());
-        final BigDecimal editTax = (editMatCost.add(editLaborCost)).multiply((editCali.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal editTotal = editMatCost.add(editLaborCost).add(editTax);
-        
-        Order editOrder = new Order(testDate, testOrderNum, editName, editCali, editLaminate, editArea200, editMatCost, editLaborCost, editTax, editTotal);
-        
-        testDao.editOrder(originalOrder, editOrder);
-        Order edited = testDao.getOrder(testDate, testOrderNum);
+        testDao.editOrder(firstOrder, firstOrderReplacement);
+        Order edited = testDao.getOrder(firstOrderReplacement.getOrderDate(), firstOrderReplacement.getOrderNum());
         List<Order> allOrders = testDao.getAllOrders();
-        
+
         //assert
-        assertEquals(edited, editOrder, "Edited order should be editOrder");
-        assertNotEquals(edited, originalOrder, "Edited order should not be originalOrder");
-        assertTrue(allOrders.contains(editOrder), "List should contain editOrder");
-        assertFalse(allOrders.contains(originalOrder), "List should not contain originalOrder");
+        assertEquals(edited, firstOrderReplacement, "Edited order should be editOrder");
+        assertNotEquals(edited, firstOrder, "Edited order should not be originalOrder");
+        assertTrue(allOrders.contains(firstOrderReplacement), "List should contain editOrder");
+        assertFalse(allOrders.contains(firstOrder), "List should not contain originalOrder");
     }
 
     /**
@@ -150,56 +160,17 @@ public class OrderDaoImplTest {
     public void testGetOrdersByDate() throws Exception {
         System.out.println("getOrdersByDate");
         //arrange
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        
-        final int testOrderNum = 1;
-        final String testCustomerName = "John Doe";
-        final State testTexas = new State("TX", new BigDecimal("4.45"));
-        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
-        final BigDecimal testArea100 = new BigDecimal("100");
-        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
-        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
-        
-        Order firstOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
-        
-        final int nextOrderNum = 2;
-        final String nextName = "Juan Dos";
-        final State nextCali = new State("CA", new BigDecimal("25.00"));
-        final Product nextLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
-        final BigDecimal nextArea200 = new BigDecimal("200");
-        final BigDecimal nextMatCost = nextLaminate.getCostPerSqFt().multiply(nextArea200);
-        final BigDecimal nextLaborCost = nextArea200.multiply(nextLaminate.getLaborCostPerSqFt());
-        final BigDecimal nextTax = (nextMatCost.add(nextLaborCost)).multiply((nextCali.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal nextTotal = nextMatCost.add(nextLaborCost).add(nextTax);
-        
-        Order secondOrder = new Order(testDate, nextOrderNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
-
-        //not on same date
-        final int thirdOrderNum = 3;
-        final String thirdName = "Anthony Third";
-        final State thirdCali = new State("CA", new BigDecimal("25.00"));
-        final Product thirdLaminate = new Product("Laminate", new BigDecimal("1.75"), new BigDecimal("2.10"));
-        final BigDecimal thirdArea200 = new BigDecimal("300");
-        final BigDecimal thirdMatCost = thirdLaminate.getCostPerSqFt().multiply(thirdArea200);
-        final BigDecimal thirdLaborCost = thirdArea200.multiply(thirdLaminate.getLaborCostPerSqFt());
-        final BigDecimal thirdTax = (thirdMatCost.add(thirdLaborCost)).multiply((thirdCali.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal thirdTotal = thirdMatCost.add(thirdLaborCost).add(thirdTax);
-        
-        Order thirdOrder = new Order(testDate, thirdOrderNum, thirdName, thirdCali, thirdLaminate, thirdArea200, thirdMatCost, thirdLaborCost, thirdTax, thirdTotal);
-        
         //act
         testDao.addOrder(firstOrder);
         testDao.addOrder(secondOrder);
         testDao.addOrder(thirdOrder);
-        List<Order> ordersOnDate = testDao.getOrdersByDate(testDate);
+        List<Order> ordersOnDate = testDao.getOrdersByDate(firstOrder.getOrderDate());
 
         //assert
         assertTrue(ordersOnDate.contains(firstOrder), "List should contain first order");
         assertTrue(ordersOnDate.contains(secondOrder), "List should contain second order");
         assertFalse(ordersOnDate.contains(thirdOrder), "List should not contain third order");
-        
+
     }
 
 }
