@@ -26,11 +26,11 @@
     
     <bean id="auditDao" class="com.sg.flooringmastery.dao.AuditDaoImpl" />
     
-    <bean id="exportDao" class="com.sg.flooringmastery.dao.ExportFileDao" />
+    <bean id="exportDao" class="com.sg.flooringmastery.dao.ExportFileDaoImpl" />
     
-    <bean id="productDao" class="com.sg.flooringmastery.dao.ProductDao" />
+    <bean id="productDao" class="com.sg.flooringmastery.dao.ProductDaoImpl" />
     
-    <bean id="stateDao" class="com.sg.flooringmastery.dao.StateDao" />
+    <bean id="stateDao" class="com.sg.flooringmastery.dao.StateDaoImpl" />
     
     <bean id="service" class="com.sg.flooringmastery.service.ServiceImpl">
         <constructor-arg ref="stateDao" />
