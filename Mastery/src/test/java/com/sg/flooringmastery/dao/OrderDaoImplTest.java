@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +26,8 @@ public class OrderDaoImplTest {
 
     public OrderDaoImplTest() {
     }
+    
+    //TODO try to make the 3 orders @BeforeAll
 
     @BeforeEach
     public void setUp() throws IOException {

@@ -2,32 +2,32 @@ package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.StateDao;
 import com.sg.flooringmastery.model.State;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class StateDaoImplStub implements StateDao {
 
-    private Map<String, State> testStates = new TreeMap<>();
-    private String TEST_STATES_FILE;
-    private final String DELIMITER = ",";
+    public TreeMap<String, State> onlyState = new TreeMap<>();
 
     public StateDaoImplStub() {
-        this.TEST_STATES_FILE=".\\TestingFileData\\Data\\testStates.txt";
+        onlyState.put("TX", new State("TX", new BigDecimal("4.45")));
     }
 
-    public StateDaoImplStub(String TEST_STATES_FILE) {
-        this.TEST_STATES_FILE = TEST_STATES_FILE;
+    public StateDaoImplStub(TreeMap<String, State> onlyState){
+        this.onlyState = onlyState;
     }
     
     @Override
     public List<State> getValidStates() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ArrayList<>(onlyState.values());
     }
 
     @Override
     public State readStateByID(String stateAsText) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return onlyState.get(stateAsText);
     }
 
 }
