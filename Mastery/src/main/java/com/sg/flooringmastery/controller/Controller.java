@@ -88,12 +88,21 @@ public class Controller {
      * Get a date from user and display all orders for that date
      *
      * @throws OrderPersistenceException if cannot read from data files
+     * @throws NoOrdersOnDateException   if user provides a date with no orders
+     *                                   to display
      */
-    public void displayOrders() throws OrderPersistenceException {
+    public void displayOrders() throws OrderPersistenceException, NoOrdersOnDateException {
         view.displayDisplayOrderBanner();
-        LocalDate ordersDate = view.inputOrderDate();
-        List<Order> ordersOnDate = serv.getOrdersByDate(ordersDate);
-        view.displayOrdersByDate(ordersOnDate);
+        LocalDate ordersDate = view.inputDisplayOrderDate();
+
+        List<Order> ordersOnDate = null;
+        try {
+            ordersOnDate = serv.getOrdersByDate(ordersDate);
+            view.displayOrdersByDate(ordersOnDate);
+        } catch (OrderPersistenceException | NoOrdersOnDateException e) {
+            view.displayErrorMessage(e.getMessage());
+            view.displayDisplayOrdersFailBanner();
+        }
     }
 
     /**

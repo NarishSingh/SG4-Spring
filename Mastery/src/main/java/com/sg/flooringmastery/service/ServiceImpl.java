@@ -16,6 +16,7 @@ import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.dao.StateDao;
 import com.sg.flooringmastery.dao.StateReadException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class ServiceImpl implements Service {
 
@@ -71,8 +72,14 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException {
-        return dao.getOrdersByDate(date);
+    public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
+            NoOrdersOnDateException {
+        try {
+            return dao.getOrdersByDate(date);
+        } catch (NoOrdersOnDateException | OrderPersistenceException e) {
+            throw new NoOrdersOnDateException("No orders to display", e);
+        }
+
     }
 
     @Override

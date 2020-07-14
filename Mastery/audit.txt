@@ -1,0 +1,24 @@
+2020-07-14T12:54:05.545338700 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T12:54:05.547041500 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T12:54:05.547041500 : Thrown: run:: Message: null
+2020-07-14T12:57:38.785933 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T12:57:38.785933 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T12:57:38.785933 : Thrown: run:: Message: null
+2020-07-14T13:05:52.849425500 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T13:05:52.849425500 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T13:05:52.850420800 : Thrown: run:: Message: null
+2020-07-14T13:09:57.094107 : Thrown: getOrdersByDate:: Message: No orders in system
+2020-07-14T13:09:57.095104300 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:13:32.340547100 : Thrown: getHighestOrderNumber:: Message: No orders in system
+2020-07-14T13:13:32.341544 : Thrown: validateOrder:: Message: No orders in system
+2020-07-14T13:21:33.516607700 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T13:21:33.516607700 : Thrown: getOrdersByDate:: Message: null
+2020-07-14T13:21:33.516607700 : Thrown: run:: Message: null
+2020-07-14T13:23:17.890074300 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:23:17.890074300 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:27:02.839398600 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:27:02.839398600 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:27:42.871894900 : addOrder: Order{orderDate=2020-07-15, orderNum=1, customerName=Singh, Inc., state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=2365, materialCost=12179.75, laborCost=11233.75, tax=5853.3750, total=29266.8750}
+2020-07-14T13:27:58.463604100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
+2020-07-14T13:27:58.463604100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
+2020-07-14T13:27:58.463604100 : Thrown: run:: Message: Text '0715202' could not be parsed at index 4

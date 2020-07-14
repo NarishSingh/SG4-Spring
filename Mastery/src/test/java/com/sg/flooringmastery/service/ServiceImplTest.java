@@ -19,11 +19,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ServiceImplTest {
 
     private Service testServ;
-    public Order firstOrderUnval;
-    public Order firstOrder;
-    public Order firstOrderReplacement;
-    public List<State> onlyState;
-    public List<Product> onlyProduct;
+    public static Order firstOrderUnval;
+    public static Order firstOrder;
+    public static Order firstOrderReplacement;
+    public static List<State> onlyState;
+    public static List<Product> onlyProduct;
 
     public ServiceImplTest() {
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -31,7 +31,7 @@ public class ServiceImplTest {
     }
 
     @BeforeAll
-    public void setUpBeforeClass() {
+    public static void setUpClass() {
         //first order unvalidated
         final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final String testCustomerName = "John Doe";

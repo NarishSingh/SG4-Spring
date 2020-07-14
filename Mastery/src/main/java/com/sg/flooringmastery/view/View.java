@@ -56,31 +56,44 @@ public class View {
     }
 
     /**
+     * Get a date from user to display orders for
+     *
+     * @return {LocalDate} a LocalDate obj in MM-dd-yyyy format
+     */
+    public LocalDate inputDisplayOrderDate() {
+        return io.readLocalDate("Enter a valid order's date: ");
+    }
+
+    /**
      * Display all orders for a given date
      *
      * @param ordersOnDate {List} all orders on a given date, sorted by order
      *                     number
      */
     public void displayOrdersByDate(List<Order> ordersOnDate) {
-        io.print("-------");
-        io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        io.print("-------");
-        ordersOnDate.stream()
-                .forEach((order) -> {
-                    io.print("Order Number:" + order.getOrderNum());
-                    io.print("Customer Name: " + order.getCustomerName());
-                    io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
-                    io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
-                    io.print("Product: " + order.getProduct().getProductType());
-                    io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
-                    io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
-                    io.print("Area: " + order.getArea().toString() + " sq. ft.");
-                    io.print("Total Material Cost: $" + order.getMaterialCost().toString());
-                    io.print("Total Labor Cost: $" + order.getLaborCost().toString());
-                    io.print("Total Tax: $" + order.getTax());
-                    io.print("Order Total: $" + order.getTotal().toString());
-                    io.print("***");
-                });
+        if (ordersOnDate.isEmpty()) {
+            io.print("No orders to display");
+        } else {
+            io.print("-------");
+            io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+            io.print("-------");
+            ordersOnDate.stream()
+                    .forEach((order) -> {
+                        io.print("Order Number:" + order.getOrderNum());
+                        io.print("Customer Name: " + order.getCustomerName());
+                        io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
+                        io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
+                        io.print("Product: " + order.getProduct().getProductType());
+                        io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
+                        io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
+                        io.print("Area: " + order.getArea().toString() + " sq. ft.");
+                        io.print("Total Material Cost: $" + order.getMaterialCost().toString());
+                        io.print("Total Labor Cost: $" + order.getLaborCost().toString());
+                        io.print("Total Tax: $" + order.getTax());
+                        io.print("Order Total: $" + order.getTotal().toString());
+                        io.print("***");
+                    });
+        }
 
         io.readString("Press ENTER to continue");
     }
@@ -89,10 +102,10 @@ public class View {
      * Display closing Display Order banner for a failed date entry
      */
     public void displayDisplayOrdersFailBanner() {
-        io.print("***No Orders to Show***");
+        io.print("***Nothing to display, try again later or with a valid date***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /*ADD ORDER*/
     /**
      * Display opening Add Order banner to UI
@@ -109,7 +122,7 @@ public class View {
     public LocalDate inputOrderDate() {
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         return io.readLocalDate("Enter the order's date (must be later than today, "
-                + LocalDate.now().format(mmddyyyy) + ")", LocalDate.now(), LocalDate.MAX);
+                + LocalDate.now().format(mmddyyyy) + ")", LocalDate.now(), LocalDate.parse("12-31-9999", mmddyyyy));
     }
 
     /**
@@ -135,11 +148,12 @@ public class View {
      * @return {String} the state's abbreviation, formatted to be capitalized
      */
     public String inputState(List<State> validStates) {
+        io.print("");
         io.print("We are available for business in:");
         validStates.stream()
                 .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
 
-        return io.readString("Please input your state's abbreviation:").trim().toUpperCase();
+        return io.readString("Please input your state's abbreviation: ").trim().toUpperCase();
     }
 
     /**
@@ -149,13 +163,14 @@ public class View {
      * @return {String} the product type being ordered
      */
     public String inputProductType(List<Product> validProducts) {
-        io.print("Our currently available products include (all costs per sq.ft.:");
+        io.print("");
+        io.print("Our currently available products include (all costs per sq.ft.): ");
         validProducts.stream()
                 .forEach((product) -> io.print(product.getProductType()
                 + " | Material: $" + product.getCostPerSqFt()
                 + " | Labor: $" + product.getLaborCostPerSqFt()));
 
-        String rawProduct = io.readString("Please input your desired product type:").trim();
+        String rawProduct = io.readString("Please input your desired product type: ").trim();
 
         String productSelection = rawProduct.substring(0, 1).toUpperCase()
                 + rawProduct.substring(1).toLowerCase(); //format to match map key
@@ -169,6 +184,7 @@ public class View {
      * @return {BigDecimal} an area at or over 100 sq.ft.
      */
     public BigDecimal inputArea() {
+        io.print("");
         return io.readBigDecimal("Please input the area of floor in sq.ft. (minimum 100): ",
                 new BigDecimal("100"), BigDecimal.valueOf(Double.MAX_VALUE));
     }
@@ -246,7 +262,7 @@ public class View {
     public void displayEditOrderBanner() {
         io.print("===EDIT ORDER===");
     }
-    
+
     /**
      * Get order number for retrieval or removal
      *

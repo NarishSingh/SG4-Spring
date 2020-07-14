@@ -100,9 +100,16 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException {
+    public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
+            NoOrdersOnDateException {
         loadAllOrders();
-        return new ArrayList<>(orders.get(date).values());
+        List<Order> ordersOnDate;
+
+        try {
+            return new ArrayList<>(orders.get(date).values());
+        } catch (NullPointerException e) {
+            throw new NoOrdersOnDateException("No orders to display");
+        }
     }
 
     @Override
@@ -203,6 +210,9 @@ public class OrderDaoImpl implements OrderDao {
 
     /**
      * Load all persisted orders to treemap
+     *
+     * @throws OrderPersistenceException if cannot read from orders directory or
+     *                                   if directory is empty
      */
     private void loadAllOrders() throws OrderPersistenceException {
         File dir = new File(ORDER_DIRECTORY);
@@ -210,7 +220,7 @@ public class OrderDaoImpl implements OrderDao {
         File[] orderDirList = dir.listFiles();
 
         if (orderDirList.length == 0) {
-            //nothing to load
+            return; //nothing to load
         } else {
             for (File file : dir.listFiles()) {
 

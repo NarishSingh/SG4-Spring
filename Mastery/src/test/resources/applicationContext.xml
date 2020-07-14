@@ -25,7 +25,8 @@
     </bean>
     
     <bean id="testOrderDao" class="com.sg.flooringmastery.dao.OrderDaoImpl">
-        <constructor-arg value=".\\TestingFileData\\Orders"/>
+        <!--<constructor-arg type="java.io.File" value=".\\TestingFileData\\Orders"/>-->
+        <constructor-arg value=".\\TestingileData\\Orders"/>
     </bean>
     
     <!--stateful testing needs stubs-->

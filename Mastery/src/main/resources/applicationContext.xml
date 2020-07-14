@@ -69,7 +69,7 @@
                 pointcut="execution(* com.sg.flooringmastery.service.Service.exportOrder(..) )"
             />
             <aop:after-throwing
-                method="createExceptionWithJPEntry"
+                method="createExceptionWithJoinpointEntry"
                 pointcut="execution(* *(..))"
                 throwing="ex"
             />

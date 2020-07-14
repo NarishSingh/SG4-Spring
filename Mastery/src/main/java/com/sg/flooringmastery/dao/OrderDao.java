@@ -61,8 +61,10 @@ public interface OrderDao {
      *             in the treemap
      * @return {List} list of all active orders for that date
      * @throws OrderPersistenceException if cannot read from orders directory
+     * @throws NoOrdersOnDateException   if no orders exist on this date
      */
-    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
+    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
+            NoOrdersOnDateException;
 
     /**
      * Return all active orders

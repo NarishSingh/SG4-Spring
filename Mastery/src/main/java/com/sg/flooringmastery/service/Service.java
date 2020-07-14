@@ -71,8 +71,10 @@ public interface Service {
      * @return {List} all active orders on a given date
      * @throws OrderPersistenceException if cannot read from orders directory
      *                                   files
+     * @throws NoOrdersOnDateException   if inputted date is invalid or there
+     *                                   are no orders to display
      */
-    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException;
+    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException, NoOrdersOnDateException;
 
     /**
      * Export and persist all active orders to a single file
