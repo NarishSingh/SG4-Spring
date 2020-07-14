@@ -68,3 +68,11 @@
 2020-07-14T15:09:37.075043600 : removeOrder: 2021-01-013
 2020-07-14T15:10:29.536511700 : addOrder: Order{orderDate=2021-01-01, orderNum=3, customerName=John Cena, state=State{stateAbbreviation=TX, stateName=Texas, taxRate=4.45}, product=Product{productType=Carpet, costPerSqFt=2.25, laborCostPerSqFt=2.10}, area=110, materialCost=247.50, laborCost=231.00, tax=21.293250, total=499.793250}
 2020-07-14T15:10:44.176236800 : removeOrder: 2021-01-013
+2020-07-14T15:35:25.777997100 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T15:35:25.778995100 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T15:35:29.688863300 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T15:35:29.688863300 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T15:35:41.038829 : Thrown: inputEditedProductType:: Message: begin 0, end 1, length 0
+2020-07-14T15:35:41.038829 : Thrown: run:: Message: begin 0, end 1, length 0
+2020-07-14T16:02:48.272657 : Thrown: readInt:: Message: For input string: ""
+2020-07-14T16:03:23.603894300 : editOrder: Order{orderDate=2020-07-15, orderNum=1, customerName=, state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=101, materialCost=353.50, laborCost=419.15, tax=46.3590, total=819.0090}Order{orderDate=2020-07-15, orderNum=1, customerName=Singh, Inc., state=State{stateAbbreviation=CA, stateName=null, taxRate=25.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=254, materialCost=1308.10, laborCost=1206.50, tax=628.6500, total=3143.2500}

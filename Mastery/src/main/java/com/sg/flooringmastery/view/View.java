@@ -297,15 +297,16 @@ public class View {
     public String inputEditedCustomerName(Order orderToEdit) {
         String newCustName;
 
+        io.print("");
         io.print("Current name on order: " + orderToEdit.getCustomerName());
 
         do {
             newCustName = io.readString("Enter new customer or company name, or press ENTER to keep: ").trim();
 
-            if (newCustName.matches("[\\n]")) {
+            if (newCustName.matches("[\n]")) {
                 newCustName = orderToEdit.getCustomerName();
             }
-        } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\\n]*"));
+        } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\n]*"));
 
         return newCustName;
     }
@@ -322,15 +323,16 @@ public class View {
      *         field of the order
      */
     public String inputEditedState(Order orderToEdit, List<State> validStates) {
-        io.print("Current state on order: " + orderToEdit.getState().getStateName());
+        io.print("");
+        io.print("Current state on order: " + orderToEdit.getState().getStateAbbreviation());
 
         io.print("You may change state of transaction to:");
         validStates.stream()
                 .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
 
-        String newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep:").trim().toUpperCase();
+        String newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep: ").trim().toUpperCase();
 
-        if (newState.matches("[\\n]")) {
+        if (newState.matches("[\n]")) {
             return orderToEdit.getState().getStateAbbreviation();
         } else {
             return newState;
@@ -349,17 +351,18 @@ public class View {
      *         order
      */
     public String inputEditedProductType(Order orderToEdit, List<Product> validProducts) {
+        io.print("");
         io.print("Current product on order: " + orderToEdit.getProduct().getProductType());
 
-        io.print("You may choose from this product selection (all costs per sq.ft.):");
+        io.print("You may choose from this product selection (all costs per sq.ft.): ");
         validProducts.stream()
                 .forEach((product) -> io.print(product.getProductType()
                 + " | Material: $" + product.getCostPerSqFt()
                 + " | Labor: $" + product.getLaborCostPerSqFt()));
 
-        String rawProduct = io.readString("Please input new product type, or press ENTER to keep:").trim();
+        String rawProduct = io.readString("Please input new product type, or press ENTER to keep: ").trim();
 
-        if (rawProduct.matches("[\\n]")) {
+        if (rawProduct.matches("[\n]")) {
             return orderToEdit.getProduct().getProductType();
         } else {
             String productSelection = rawProduct.substring(0, 1).toUpperCase()
@@ -377,6 +380,7 @@ public class View {
      * @return {BigDecimal} new area of at least 100 sq.ft. of the order
      */
     public BigDecimal inputEditedArea(Order orderToEdit) {
+        io.print("");
         io.print("Current area on order: " + orderToEdit.getArea().toString() + " sq.ft.");
 
         String newAreaString;
@@ -387,12 +391,12 @@ public class View {
             do {
                 newAreaString = io.readString("Please input new area of floor in sq.ft. (minimum 100),"
                         + " or press ENTER to keep: ");
-            } while (!newAreaString.matches("[0-9\\n]*"));
+            } while (!newAreaString.matches("[0-9\n]*"));
 
-            if (newAreaString.matches("[\\n]")) {
+            if (newAreaString.matches("[\n]")) {
                 newArea = orderToEdit.getArea();
                 hasErrors = false;
-            } else if (new BigDecimal(newAreaString).compareTo(new BigDecimal("100")) > 0) {
+            } else if (new BigDecimal(newAreaString).compareTo(new BigDecimal("100")) < 0) {
                 hasErrors = true;
             } else {
                 newArea = new BigDecimal(newAreaString);
