@@ -240,9 +240,9 @@ public class Controller {
         Order editedOrder = serv.validateOrder(newEditRequest);
 
         //display, confirmation, and edit
-        if (view.confirmOrderEdit(originalOrder)) {
+        if (view.confirmOrderEdit(editedOrder)) {
             serv.editOrder(editedOrder, originalOrder);
-            view.displayOrderInfo(editedOrder);
+//            view.displayOrderInfo(editedOrder);
             view.displayEditOrderSuccessBanner();
         } else {
             view.displayEditOrderFailBanner();
