@@ -15,7 +15,7 @@ public class State {
         this.stateAbbreviation = stateAbbreviation;
         this.taxRate = taxRate;
     }
-    
+
     /*read/write*/
     public String getStateAbbreviation() {
         return stateAbbreviation;
@@ -74,5 +74,10 @@ public class State {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "State{" + "stateAbbreviation=" + stateAbbreviation + ", stateName=" + stateName + ", taxRate=" + taxRate + '}';
+    }
+
 }

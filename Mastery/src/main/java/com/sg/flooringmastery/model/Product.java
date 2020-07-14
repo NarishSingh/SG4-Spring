@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product {
-    
+
     /*fields*/
     private String productType;
     private BigDecimal costPerSqFt;
     private BigDecimal laborCostPerSqFt;
-    
+
     /*ctor*/
     public Product(String productType, BigDecimal costPerSqFt, BigDecimal laborCostPerSqFt) {
         this.productType = productType;
         this.costPerSqFt = costPerSqFt;
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
-    
+
     /*read/write*/
     public String getProductType() {
         return productType;
@@ -41,7 +41,7 @@ public class Product {
     public void setLaborCostPerSqFt(BigDecimal laborCostPerSqFt) {
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
-    
+
     /*testing methods*/
     @Override
     public int hashCode() {
@@ -75,5 +75,10 @@ public class Product {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Product{" + "productType=" + productType + ", costPerSqFt=" + costPerSqFt + ", laborCostPerSqFt=" + laborCostPerSqFt + '}';
+    }
+
 }

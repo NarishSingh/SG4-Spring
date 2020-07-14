@@ -182,5 +182,9 @@ public class Order {
         return true;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Order{" + "orderDate=" + orderDate + ", orderNum=" + orderNum + ", customerName=" + customerName + ", state=" + state + ", product=" + product + ", area=" + area + ", materialCost=" + materialCost + ", laborCost=" + laborCost + ", tax=" + tax + ", total=" + total + '}';
+    }
+
 }
