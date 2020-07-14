@@ -23,17 +23,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class OrderDaoImplTest {
 
     private OrderDao testDao;
-    public Order firstOrder;
-    public Order firstOrderReplacement;
-    public Order secondOrder;
-    public Order thirdOrder;
+    public static Order firstOrder;
+    public static Order firstOrderReplacement;
+    public static Order secondOrder;
+    public static Order thirdOrder;
 
     public OrderDaoImplTest() {
     }
 
-    //TODO try to make the 3 orders @BeforeAll
     @BeforeAll
-    public void setUpBeforeClass() throws Exception {
+    public static void setUpClass() throws Exception {
         final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 
         //first order
@@ -91,9 +90,10 @@ public class OrderDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testDir = ".\\TestingFileData\\Orders";
+        String testDirPath = ".\\TestingFileData\\Orders";
+        File testDir = new File(testDirPath);
 //        new FileWriter(new File(testDir, "testOrder.txt"));
-        new FileWriter(new File(testDir));
+        new FileWriter(testDir);
 
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDao = actx.getBean("testOrderDao", OrderDaoImpl.class);
@@ -170,7 +170,5 @@ public class OrderDaoImplTest {
         assertTrue(ordersOnDate.contains(firstOrder), "List should contain first order");
         assertTrue(ordersOnDate.contains(secondOrder), "List should contain second order");
         assertFalse(ordersOnDate.contains(thirdOrder), "List should not contain third order");
-
     }
-
 }

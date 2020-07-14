@@ -3,9 +3,9 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.service.InvalidProductException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +20,6 @@ public class ProductDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDao = actx.getBean("testProductDao", ProductDaoImpl.class);
     }
@@ -31,18 +30,46 @@ public class ProductDaoImplTest {
     @Test
     public void testReadProductByID() throws InvalidProductException, ProductReadException {
         System.out.println("readProductByID");
-        
+
         //arrange
         final String testProductKeyCarpet = "Carpet";
         final String testProductKeyLaminate = "Laminate";
-        
+        Product testCarpet = null;
+        Product testLaminate = null;
+
         //act
-        Product testCarpet = testDao.readProductByID(testProductKeyCarpet);
-        Product testLaminate = testDao.readProductByID(testProductKeyLaminate);
-        
+        try {
+            testCarpet = testDao.readProductByID(testProductKeyCarpet);
+            testLaminate = testDao.readProductByID(testProductKeyLaminate);
+        } catch (InvalidProductException | ProductReadException e) {
+            fail("Valid Products");
+        }
+
         //assert
         assertEquals(testCarpet.getProductType(), testProductKeyCarpet, "Should've retrieved Carpet");
         assertEquals(testLaminate.getProductType(), testProductKeyLaminate, "Should've retrieved Carpet");
+    }
+
+    /**
+     * Test of readProductByID method's InvalidProductException, of class
+     * ProductDaoImpl.
+     */
+    @Test
+    public void testReadProductByIDInvalidProductFail() throws InvalidProductException, ProductReadException {
+        System.out.println("readProductByID");
+
+        //arrange
+        final String testProductMarble = "Marble";
+        Product testMarble = null;
+
+        //act and assert
+        try {
+            testMarble = testDao.readProductByID(testProductMarble);
+        } catch (InvalidProductException e) {
+            return; //pass
+        } catch (Exception e) {
+            fail("Valid product data file");
+        }
     }
 
     /**
@@ -51,17 +78,28 @@ public class ProductDaoImplTest {
     @Test
     public void testGetValidProducts() throws ProductReadException, InvalidProductException {
         System.out.println("getValidProducts");
-        
+
         //arrange
         final String testProductKeyCarpet = "Carpet";
         final String testProductKeyLaminate = "Laminate";
-        
-        Product testCarpet = testDao.readProductByID(testProductKeyCarpet);
-        Product testLaminate = testDao.readProductByID(testProductKeyLaminate);
-        
+        Product testCarpet = null;
+        Product testLaminate = null;
+        List<Product> allProducts = new ArrayList<>();
+
         //act
-        List<Product> allProducts = testDao.getValidProducts();
-        
+        try {
+            testCarpet = testDao.readProductByID(testProductKeyCarpet);
+            testLaminate = testDao.readProductByID(testProductKeyLaminate);
+        } catch (InvalidProductException | ProductReadException e) {
+            fail("Valid Products");
+        }
+
+        //act
+        try {
+            allProducts = testDao.getValidProducts();
+        } catch (ProductReadException e) {
+            fail("Valid products data file");
+        }
         //assert
         assertTrue(allProducts.contains(testCarpet), "List should contain Carpet");
         assertTrue(allProducts.contains(testLaminate), "List should contain Laminate");
