@@ -16,10 +16,12 @@ public class OrderDaoImpl implements OrderDao {
     private final String DELIMITER = ",";
     private final String DELIMITER_REPLACEMENT = "::";
 
+    //production
     public OrderDaoImpl() {
         this.ORDER_DIRECTORY = ".\\MasteryFileData\\Orders";
     }
 
+    //testing
     public OrderDaoImpl(String orderDirAsText) {
         this.ORDER_DIRECTORY = orderDirAsText;
     }
@@ -51,16 +53,16 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException {
         loadAllOrders();
-        
+
         //retrieve inner treemap then remove order
         TreeMap<Integer, Order> deletionMap = orders.get(removalDate);
         Order deleted = deletionMap.remove(removalID);
-        
+
         //re-enter new map to outer treemap
         orders.put(removalDate, deletionMap);
-        
+
         writeAllOrders();
-        
+
         if (orders.containsValue(deletionMap) && !deletionMap.containsValue(deleted)) {
             return deleted;
         } else {
@@ -106,12 +108,12 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getAllOrders() throws OrderPersistenceException {
         loadAllOrders();
-        
+
         List<Order> allOrdersList = new ArrayList<>();
         orders.forEach((date, orderTree) -> {
             allOrdersList.addAll(orderTree.values());
         });
-        
+
         return allOrdersList;
     }
 
@@ -205,34 +207,41 @@ public class OrderDaoImpl implements OrderDao {
     private void loadAllOrders() throws OrderPersistenceException {
         File dir = new File(ORDER_DIRECTORY);
 
-        for (File file : dir.listFiles()) {
-            TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
-            String currentLine;
-            Order currentOrder;
-            LocalDate ordersDate = null;
+        File[] orderDirList = dir.listFiles();
 
-            Scanner sc;
-            try {
-                sc = new Scanner(new BufferedReader(new FileReader(file)));
-            } catch (FileNotFoundException e) {
-                throw new OrderPersistenceException("Could not load from Order directory", e);
+        if (orderDirList.length == 0) {
+            //nothing to load
+        } else {
+            for (File file : dir.listFiles()) {
+
+                TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
+                String currentLine;
+                Order currentOrder;
+                LocalDate ordersDate = null;
+
+                Scanner sc;
+                try {
+                    sc = new Scanner(new BufferedReader(new FileReader(file)));
+                } catch (FileNotFoundException e) {
+                    throw new OrderPersistenceException("Could not load from Order directory", e);
+                }
+
+                ordersOnDate.clear();
+                sc.nextLine(); //skip header
+
+                while (sc.hasNextLine()) {
+                    currentLine = sc.nextLine();
+                    currentOrder = unmarshallOrder(currentLine, file.getName());
+
+                    ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
+
+                    ordersDate = parseDateFromFilename(file.getName());
+                }
+
+                orders.put(ordersDate, ordersOnDate);
+
+                sc.close();
             }
-
-            ordersOnDate.clear();
-            sc.nextLine(); //skip header
-
-            while (sc.hasNextLine()) {
-                currentLine = sc.nextLine();
-                currentOrder = unmarshallOrder(currentLine, file.getName());
-
-                ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
-
-                ordersDate = parseDateFromFilename(file.getName());
-            }
-
-            orders.put(ordersDate, ordersOnDate);
-
-            sc.close();
         }
     }
 
@@ -250,7 +259,7 @@ public class OrderDaoImpl implements OrderDao {
 
                 //header
                 out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-                
+
                 //marshall the orders on date to file
                 ordersOnDate.values().stream()
                         .forEach((order) -> {
