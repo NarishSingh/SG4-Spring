@@ -149,7 +149,7 @@ public class OrderDaoImpl implements OrderDao {
      * @return new LocalDate obj formatted as MMddyyyy
      */
     private LocalDate parseDateFromFilename(String filename) {
-        String dateString = filename.substring(7, 14); //filename format is Orders_MMddyyyy.txt
+        String dateString = filename.substring(7, 15); //filename format is Orders_MMddyyyy.txt
         LocalDate orderDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("MMddyyyy"));
 
         return orderDate;
@@ -168,15 +168,15 @@ public class OrderDaoImpl implements OrderDao {
         String convertedName = anOrder.getCustomerName().replace(DELIMITER, DELIMITER_REPLACEMENT);
         orderAsText += convertedName + DELIMITER;
 
-        orderAsText += anOrder.getState().getStateAbbreviation();
-        orderAsText += anOrder.getState().getTaxRate().toString();
-        orderAsText += anOrder.getProduct().getProductType();
-        orderAsText += anOrder.getArea().toString();
-        orderAsText += anOrder.getProduct().getCostPerSqFt().toString();
-        orderAsText += anOrder.getProduct().getLaborCostPerSqFt().toString();
-        orderAsText += anOrder.getMaterialCost().toString();
-        orderAsText += anOrder.getLaborCost().toString();
-        orderAsText += anOrder.getTax().toString();
+        orderAsText += anOrder.getState().getStateAbbreviation() + DELIMITER;
+        orderAsText += anOrder.getState().getTaxRate().toString() + DELIMITER;
+        orderAsText += anOrder.getProduct().getProductType() + DELIMITER;
+        orderAsText += anOrder.getArea().toString() + DELIMITER;
+        orderAsText += anOrder.getProduct().getCostPerSqFt().toString() + DELIMITER;
+        orderAsText += anOrder.getProduct().getLaborCostPerSqFt().toString() + DELIMITER;
+        orderAsText += anOrder.getMaterialCost().toString() + DELIMITER;
+        orderAsText += anOrder.getLaborCost().toString() + DELIMITER;
+        orderAsText += anOrder.getTax().toString() + DELIMITER;
         orderAsText += anOrder.getTotal().toString();
 
         return orderAsText;

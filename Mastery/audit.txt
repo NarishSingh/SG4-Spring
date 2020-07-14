@@ -22,3 +22,9 @@
 2020-07-14T13:27:58.463604100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
 2020-07-14T13:27:58.463604100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
 2020-07-14T13:27:58.463604100 : Thrown: run:: Message: Text '0715202' could not be parsed at index 4
+2020-07-14T13:31:07.672643100 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:31:07.672643100 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T13:32:31.964160200 : addOrder: Order{orderDate=2020-07-15, orderNum=1, customerName=Singh, Inc., state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=254, materialCost=1308.10, laborCost=1206.50, tax=628.6500, total=3143.2500}
+2020-07-14T13:33:03.415063100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
+2020-07-14T13:33:03.415063100 : Thrown: getOrdersByDate:: Message: Text '0715202' could not be parsed at index 4
+2020-07-14T13:33:03.415063100 : Thrown: run:: Message: Text '0715202' could not be parsed at index 4

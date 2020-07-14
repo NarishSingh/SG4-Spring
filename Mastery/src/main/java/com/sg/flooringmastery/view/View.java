@@ -215,6 +215,7 @@ public class View {
      * @return {boolean} confirmation to persist order to file
      */
     public boolean confirmNewOrder(Order userOrder) {
+        io.print("");
         displayOrderInfo(userOrder);
 
         String userChoice = io.readString("Confirm order placement? (Y - yes/N - no): ").trim();

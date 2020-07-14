@@ -1,2 +1,2 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-1,Singh:: Inc.,CA25.00Wood23655.154.7512179.7511233.755853.375029266.8750
+1,Singh:: Inc.,CA,25.00,Wood,254,5.15,4.75,1308.10,1206.50,628.6500,3143.2500

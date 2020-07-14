@@ -162,7 +162,7 @@ public class Controller {
         //display, confirmation, add new order
         if (view.confirmNewOrder(newOrder)) {
             serv.addOrder(newOrder);
-            view.displayAddOrderBanner();
+            view.displayAddOrderSuccessBanner();
         } else {
             view.displayAddOrderFailBanner();
         }
