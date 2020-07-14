@@ -1,0 +1,4 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total,OrderDate
+1,Singh, Inc.,CA,25.00,Wood,254,5.15,4.75,1308.10,1206.50,628.6500,3143.2500,07-15-2020
+2,Narad Construction, LLC,WA,9.25,Tile,555,3.50,4.15,1942.50,2303.25,392.731875,4638.481875,07-15-2020
+3,John Cena, the III,TX,4.45,Tile,156,3.50,4.15,546.00,647.40,53.106300,1246.506300,01-01-2021

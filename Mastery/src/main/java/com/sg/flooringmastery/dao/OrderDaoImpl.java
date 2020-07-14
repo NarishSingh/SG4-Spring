@@ -222,7 +222,7 @@ public class OrderDaoImpl implements OrderDao {
         if (orderDirList.length == 0) {
             return; //nothing to load
         } else {
-            for (File file : dir.listFiles()) {
+            for (File ordersFile : dir.listFiles()) {
 
                 TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
                 String currentLine;
@@ -231,7 +231,7 @@ public class OrderDaoImpl implements OrderDao {
 
                 Scanner sc;
                 try {
-                    sc = new Scanner(new BufferedReader(new FileReader(file)));
+                    sc = new Scanner(new BufferedReader(new FileReader(ordersFile)));
                 } catch (FileNotFoundException e) {
                     throw new OrderPersistenceException("Could not load from Order directory", e);
                 }
@@ -241,14 +241,19 @@ public class OrderDaoImpl implements OrderDao {
 
                 while (sc.hasNextLine()) {
                     currentLine = sc.nextLine();
-                    currentOrder = unmarshallOrder(currentLine, file.getName());
+                    currentOrder = unmarshallOrder(currentLine, ordersFile.getName());
 
                     ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
 
-                    ordersDate = parseDateFromFilename(file.getName());
+                    ordersDate = parseDateFromFilename(ordersFile.getName());
                 }
 
-                orders.put(ordersDate, ordersOnDate);
+                //FIXME might not need this check
+                if (ordersOnDate.isEmpty()) {
+                    continue;
+                } else {
+                    orders.put(ordersDate, ordersOnDate);
+                }
 
                 sc.close();
             }
@@ -265,18 +270,25 @@ public class OrderDaoImpl implements OrderDao {
 
             PrintWriter out;
             try {
-                out = new PrintWriter(new FileWriter(new File(ORDER_DIRECTORY, filename)));
+                File newFile = new File(ORDER_DIRECTORY, filename); //make sure its created in dir
+                out = new PrintWriter(new FileWriter(newFile));
 
-                //header
-                out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                if (ordersOnDate.isEmpty()) {
+                    //delete a file if no orders, must close stream first
+                    out.close();
+                    newFile.delete();
+                } else {
+                    //header
+                    out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
-                //marshall the orders on date to file
-                ordersOnDate.values().stream()
-                        .forEach((order) -> {
-                            String orderAsText = marshallOrder(order);
-                            out.println(orderAsText);
-                            out.flush();
-                        });
+                    //marshall the orders on date to file
+                    ordersOnDate.values().stream()
+                            .forEach((order) -> {
+                                String orderAsText = marshallOrder(order);
+                                out.println(orderAsText);
+                                out.flush();
+                            });
+                }
 
                 out.close();
             } catch (IOException e) {

@@ -11,8 +11,16 @@ public class State {
     private BigDecimal taxRate;
 
     /*ctor*/
+    //for orders
     public State(String stateAbbreviation, BigDecimal taxRate) {
         this.stateAbbreviation = stateAbbreviation;
+        this.taxRate = taxRate;
+    }
+
+    //for state dao
+    public State(String stateAbbreviation, String stateName, BigDecimal taxRate) {
+        this.stateAbbreviation = stateAbbreviation;
+        this.stateName = stateName;
         this.taxRate = taxRate;
     }
 

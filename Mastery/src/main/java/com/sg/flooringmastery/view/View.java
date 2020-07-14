@@ -79,10 +79,10 @@ public class View {
             io.print("-------");
             ordersOnDate.stream()
                     .forEach((order) -> {
-                        io.print("Order Number:" + order.getOrderNum());
+                        io.print("Order Number: " + order.getOrderNum());
                         io.print("Customer Name: " + order.getCustomerName());
-                        io.print("State: " + order.getState().getStateName() + "(" + order.getState().getStateAbbreviation() + ")");
-                        io.print("State Tax rate: " + order.getState().getTaxRate().toString() + "%");
+                        io.print("State: " + order.getState().getStateAbbreviation());
+                        io.print("State Tax Rate: " + order.getState().getTaxRate().toString() + "%");
                         io.print("Product: " + order.getProduct().getProductType());
                         io.print("Cost per Sq. Ft.: $" + order.getProduct().getCostPerSqFt().toString());
                         io.print("Labor Cost per Sq. Ft. $" + order.getProduct().getLaborCostPerSqFt().toString());
@@ -196,10 +196,10 @@ public class View {
      */
     public void displayOrderInfo(Order userOrder) {
         io.print("Your order request:");
-        io.print("Date: " + userOrder.getOrderDate());
+        io.print("Date: " + userOrder.getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         io.print("ID: " + userOrder.getOrderNum());
         io.print("Customer Name: " + userOrder.getCustomerName());
-        io.print("State: " + userOrder.getState().getStateName());
+        io.print("State: " + userOrder.getState().getStateAbbreviation());
         io.print("Product: " + userOrder.getProduct().getProductType());
         io.print("Area in sq.ft.: " + userOrder.getArea());
         io.print("Material Cost: $" + userOrder.getMaterialCost());

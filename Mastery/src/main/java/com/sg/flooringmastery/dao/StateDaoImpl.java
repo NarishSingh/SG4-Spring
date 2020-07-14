@@ -41,9 +41,8 @@ public class StateDaoImpl implements StateDao {
         String stateName = stateTokens[1];
         BigDecimal stateTaxRate = new BigDecimal(stateTokens[2]);
 
-        State validState = new State(stateAbbreviation, stateTaxRate);
-        validState.setStateName(stateName);
-
+        State validState = new State(stateAbbreviation, stateName, stateTaxRate);
+        
         return validState;
     }
 
