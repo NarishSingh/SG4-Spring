@@ -56,12 +56,14 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException {
+    public Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
         return dao.removeOrder(date, orderNum);
     }
 
     @Override
-    public Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException {
+    public Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
         return dao.editOrder(originalOrder, editedOrder);
     }
 

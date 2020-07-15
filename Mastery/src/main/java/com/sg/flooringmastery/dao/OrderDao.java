@@ -22,12 +22,15 @@ public interface OrderDao {
      *                    active order
      * @param removalID   {int} the id of an active order
      * @return {Order} the successfully removed and persisted Order obj
-     * @throws OrderPersistenceException if cannot persist removal
+     * @throws OrderPersistenceException   if cannot persist removal
+     * @throws NoOrdersOnDateException     if no orders exist on this date
+     * @throws InvalidOrderNumberException if order does not exist
      */
-    Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException;
+    Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
-     * Retrive an active order
+     * Retrieve an active order
      *
      * @param Date {LocalDate} a future date which contains at least one active
      *             order
@@ -49,9 +52,12 @@ public interface OrderDao {
      *                       fields as the other parameter, but at least one
      *                       field is distinct
      * @return {Order} the replaced order
-     * @throws OrderPersistenceException if cannot persist replacement
+     * @throws OrderPersistenceException   if cannot persist replacement
+     * @throws NoOrdersOnDateException     if dates mismatch
+     * @throws InvalidOrderNumberException if nums mismatch
      */
-    Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException;
+    Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Retrieve the value, the inner orders treemap, for the argument and return

@@ -37,9 +37,12 @@ public interface Service {
      * @param date     {LocalDate} a valid date for an order
      * @param orderNum {int} a valid order number
      * @return {Order} the successfully removed order
-     * @throws OrderPersistenceException if cannot persist removal to file
+     * @throws OrderPersistenceException   if cannot persist removal to file
+     * @throws NoOrdersOnDateException     if no orders exist on this date
+     * @throws InvalidOrderNumberException if order does not exist
      */
-    Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException;
+    Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Edit an active order in treemap and persist to file
@@ -47,9 +50,12 @@ public interface Service {
      * @param editedOrder   {Order} a validated, edited Order obj
      * @param originalOrder {Order} the original order in memory and file
      * @return {Order} the successfully edited order
-     * @throws OrderPersistenceException if cannot persist edit to file
+     * @throws OrderPersistenceException   if cannot persist edit to file
+     * @throws NoOrdersOnDateException     if dates mismatch
+     * @throws InvalidOrderNumberException if nums mismatch
      */
-    Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException;
+    Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Retrieve the info from a single active order

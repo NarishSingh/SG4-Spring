@@ -51,12 +51,20 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException {
+    public Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
         loadAllOrders();
 
-        //retrieve inner treemap then remove order
+        //retrieve inner treemap then remove order with exception
         TreeMap<Integer, Order> deletionMap = orders.get(removalDate);
+        if (deletionMap == null) {
+            throw new NoOrdersOnDateException("No orders on this date to cancel");
+        }
+
         Order deleted = deletionMap.remove(removalID);
+        if (deleted == null) {
+            throw new InvalidOrderNumberException("No such order exists");
+        }
 
         //re-enter new map to outer treemap
         orders.put(removalDate, deletionMap);
@@ -89,14 +97,16 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException {
+    public Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
         //validate and add since both use .put()
-        if (orderEdit.getOrderDate() == orderToReplace.getOrderDate() && orderEdit.getOrderNum() == orderToReplace.getOrderNum()) {
-            return addOrder(orderEdit);
+        if (orderEdit.getOrderDate() != orderToReplace.getOrderDate()) {
+            throw new NoOrdersOnDateException("Cannot edit order due to date mismatch");
+        } else if (orderEdit.getOrderNum() != orderToReplace.getOrderNum()) {
+            throw new InvalidOrderNumberException("Could not edit order due to order number mismatch");
         } else {
-            throw new OrderPersistenceException("Could not edit order.");
+            return addOrder(orderEdit);
         }
-
     }
 
     @Override
