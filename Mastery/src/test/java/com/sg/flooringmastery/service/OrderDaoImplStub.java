@@ -10,14 +10,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class OrderDaoImplStub implements OrderDao {
 
     public Order onlyOrder;
+    public TreeMap<Integer, Order> oneOrder = new TreeMap<>();
 
     public OrderDaoImplStub() {
         final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final int testNum = 1;
+        final String testName = "John Doe";
         final State testTexas = new State("TX", new BigDecimal("4.45"));
         final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
         final BigDecimal testArea100 = new BigDecimal("100");
@@ -26,8 +29,9 @@ public class OrderDaoImplStub implements OrderDao {
         final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
         final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
 
-        onlyOrder = new Order(testDate, testNum, "John Doe", testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
-
+        this.onlyOrder = new Order(testDate, testNum, testName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
+        
+        this.oneOrder.put(testNum, onlyOrder);
     }
     
     public OrderDaoImplStub(Order onlyOrder){
@@ -45,7 +49,7 @@ public class OrderDaoImplStub implements OrderDao {
 
     @Override
     public Order removeOrder(LocalDate removalDate, int removalID) throws OrderPersistenceException {
-        if (removalDate == onlyOrder.getOrderDate() && removalID == onlyOrder.getOrderNum()) {
+        if (removalDate.equals(onlyOrder.getOrderDate()) && removalID == onlyOrder.getOrderNum()) {
             return onlyOrder;
         } else {
             return null;
@@ -53,8 +57,8 @@ public class OrderDaoImplStub implements OrderDao {
     }
 
     @Override
-    public Order getOrder(LocalDate date, int id) throws OrderPersistenceException {
-        if (date == onlyOrder.getOrderDate() && id == onlyOrder.getOrderNum()) {
+    public Order getOrder(LocalDate date, int orderNum) throws OrderPersistenceException {
+        if (date.equals(onlyOrder.getOrderDate()) && orderNum == onlyOrder.getOrderNum()) {
             return onlyOrder;
         } else {
             return null;
@@ -63,7 +67,7 @@ public class OrderDaoImplStub implements OrderDao {
 
     @Override
     public Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException {
-        if (orderToReplace.getOrderDate() == orderEdit.getOrderDate()
+        if (orderToReplace.getOrderDate().equals(orderEdit.getOrderDate())
                 && orderToReplace.getOrderNum() == orderEdit.getOrderNum()) {
             return onlyOrder;
         } else {
@@ -73,9 +77,8 @@ public class OrderDaoImplStub implements OrderDao {
 
     @Override
     public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException {
-        if (date == onlyOrder.getOrderDate()) {
-            List<Order> orderList = new ArrayList<>();
-            orderList.add(onlyOrder);
+        if (date.equals(onlyOrder.getOrderDate())) {
+            List<Order> orderList = new ArrayList<>(oneOrder.values());
             return orderList;
         } else {
             return null;
@@ -84,8 +87,7 @@ public class OrderDaoImplStub implements OrderDao {
 
     @Override
     public List<Order> getAllOrders() throws OrderPersistenceException {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(onlyOrder);
+        List<Order> orderList = new ArrayList<>(oneOrder.values());
         return orderList;
     }
 

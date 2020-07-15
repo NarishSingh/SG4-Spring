@@ -20,17 +20,17 @@ import java.math.RoundingMode;
 
 public class ServiceImpl implements Service {
 
-    StateDao state;
-    ProductDao product;
-    OrderDao dao;
-    AuditDao auditDao;
-    ExportFileDao export;
+    private StateDao state;
+    private ProductDao product;
+    private OrderDao dao;
+    private AuditDao audit;
+    private ExportFileDao export;
 
-    public ServiceImpl(StateDao state, ProductDao product, OrderDao dao, AuditDao auditDao, ExportFileDao export) {
+    public ServiceImpl(StateDao state, ProductDao product, OrderDao dao, AuditDao audit, ExportFileDao export) {
         this.state = state;
         this.product = product;
         this.dao = dao;
-        this.auditDao = auditDao;
+        this.audit = audit;
         this.export = export;
     }
 

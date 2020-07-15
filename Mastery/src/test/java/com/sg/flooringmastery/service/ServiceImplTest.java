@@ -9,46 +9,46 @@ import com.sg.flooringmastery.model.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ServiceImplTest {
 
     private Service testServ;
-    public static Order firstOrderUnval;
-    public static Order firstOrder;
-    public static Order firstOrderReplacement;
-    public static List<State> onlyState;
-    public static List<Product> onlyProduct;
+    public Order firstOrderUnval;
+    public Order firstOrder;
+    public Order firstOrderReplacement;
+    public List<State> onlyState = new ArrayList<>();
+    public List<Product> onlyProduct = new ArrayList<>();
 
     public ServiceImplTest() {
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testServ = actx.getBean("testService", Service.class);
     }
 
-    @BeforeAll
-    public static void setUpClass() {
-        //first order unvalidated
-        final LocalDate testDate = LocalDate.parse("1-1-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
-        final String testCustomerName = "John Doe";
+    @BeforeEach
+    public void setUp() {
+        final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final int testNum = 1;
+        final String testName = "John Doe";
         final State testTexas = new State("TX", new BigDecimal("4.45"));
         final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
         final BigDecimal testArea100 = new BigDecimal("100");
-
-        firstOrderUnval = new Order(testDate, testCustomerName, testTexas, testCarpet, testArea100);
-
-        //first order, fully validated
-        final int testOrderNum = 1;
         final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
         final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
         final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
         final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
 
-        firstOrder = new Order(testDate, testOrderNum, testCustomerName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
+        //first order unvalidated
+        firstOrderUnval = new Order(testDate, testName, testTexas, testCarpet, testArea100);
+
+        //first order, fully validated
+        firstOrder = new Order(testDate, testNum, testName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
 
         //first order replacement
         final String editName = "Juan Dos";
@@ -60,9 +60,11 @@ public class ServiceImplTest {
         final BigDecimal editTax = (editMatCost.add(editLaborCost)).multiply((editCali.getTaxRate().divide(new BigDecimal("100"))));
         final BigDecimal editTotal = editMatCost.add(editLaborCost).add(editTax);
 
-        firstOrderReplacement = new Order(testDate, testOrderNum, editName, editCali, editLaminate, editArea200, editMatCost, editLaborCost, editTax, editTotal);
+        firstOrderReplacement = new Order(testDate, testNum, editName, editCali, editLaminate, editArea200, editMatCost, editLaborCost, editTax, editTotal);
 
         //State and product
+        onlyState.clear();
+        onlyProduct.clear();
         onlyState.add(testTexas);
         onlyProduct.add(testCarpet);
     }
@@ -106,21 +108,16 @@ public class ServiceImplTest {
         System.out.println("addOrder");
 
         //arrange
-        Order firstAdded = null;
-        List<Order> allOrders = null;
-
         //act
         try {
-            firstAdded = testServ.addOrder(firstOrder);
+            Order firstAdded = testServ.addOrder(firstOrder);
 
-            allOrders = testServ.getAllOrders();
+            //assert
+            assertEquals(firstOrder, firstAdded, "First order added should be firstOrder");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
 
-        //assert
-        assertEquals(firstAdded, firstOrder, "First order added should be firstOrder");
-        assertTrue(allOrders.contains(firstAdded), "Should contain first order");
     }
 
     /**
@@ -130,23 +127,16 @@ public class ServiceImplTest {
     public void testRemoveOrder() throws Exception {
         System.out.println("removeOrder");
         //arrange
-        Order firstRemoved = null;
-        List<Order> allOrders = null;
-
         //act
         try {
-            testServ.addOrder(firstOrder);
+            Order firstRemoved = testServ.removeOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
 
-            firstRemoved = testServ.removeOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
-
-            allOrders = testServ.getAllOrders();
+            //assert
+            assertEquals(firstRemoved, firstOrder, "Removed order should be first order");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
 
-        //assert
-        assertEquals(firstRemoved, firstOrder, "Removed order should be first order");
-        assertFalse(allOrders.contains(firstRemoved), "Should contain not first order");
     }
 
     /**
@@ -157,24 +147,20 @@ public class ServiceImplTest {
         System.out.println("editOrder");
 
         //arrange
-        Order original = null;
-        Order edit = null;
-        List<Order> allOrders = null;
-
         //act
         try {
-            original = testServ.addOrder(firstOrder);
+            Order original = testServ.addOrder(firstOrder);
 
-            edit = testServ.editOrder(firstOrderReplacement, firstOrder);
+            Order edit = testServ.editOrder(firstOrder, firstOrderReplacement);
 
-            allOrders = testServ.getAllOrders();
+            //assert
+            assertEquals(original.getOrderDate(), edit.getOrderDate(), "Order date should match for successful edit");
+            assertEquals(original.getOrderNum(), edit.getOrderNum(), "Order num should match for successful edit");
+            assertNotEquals(original, edit, "Replacement should be different from original order");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
 
-        //assert
-        assertTrue(allOrders.contains(edit), "List should contain edited order");
-        assertFalse(allOrders.contains(original), "List should not contain original order");
     }
 
     /**
@@ -185,19 +171,15 @@ public class ServiceImplTest {
         System.out.println("getOrder");
 
         //arrange
-        Order first = null;
-
         //act
         try {
-            testServ.addOrder(firstOrder);
+            Order first = testServ.getOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
 
-            first = testServ.getOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
+            //assert
+            assertEquals(firstOrder, first, "Should've retrieved the first Order");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
-
-        //assert
-        assertEquals(first, firstOrder, "Should've retrieved the first Order");
     }
 
     /**
@@ -208,20 +190,20 @@ public class ServiceImplTest {
         System.out.println("getOrdersByDate");
 
         //arrange
-        Order first = null;
-        List<Order> ordersByDate = null;
+        Order first;
+        List<Order> ordersByDate;
 
         //act
         try {
             first = testServ.addOrder(firstOrder);
 
             ordersByDate = testServ.getOrdersByDate(firstOrder.getOrderDate());
+            assertTrue(ordersByDate.contains(first), "Should've retrieved first order");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
 
         //assert
-        assertTrue(ordersByDate.contains(first), "Should've retrieved first order");
     }
 
     /**
@@ -254,23 +236,23 @@ public class ServiceImplTest {
         System.out.println("getAllOrders");
 
         //arrange
-        Order firstAdded = null;
-        List<Order> allOrders = null;
+        Order firstAdded;
+        List<Order> allOrders;
 
         //act
         try {
             firstAdded = testServ.addOrder(firstOrder);
-
             allOrders = testServ.getAllOrders();
+
+            assertEquals(firstAdded, firstOrder, "First order added should be firstOrder");
+            assertTrue(allOrders.contains(firstAdded), "Should contain first order");
+            assertFalse(allOrders.contains(firstOrderReplacement), "Should only contain firstOrder");
+            assertFalse(allOrders.contains(firstOrderUnval), "Should only contain firstOrder");
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
 
         //assert
-        assertEquals(firstAdded, firstOrder, "First order added should be firstOrder");
-        assertTrue(allOrders.contains(firstAdded), "Should contain first order");
-        assertFalse(allOrders.contains(firstOrderReplacement), "Should only contain firstOrder");
-        assertFalse(allOrders.contains(firstOrderUnval), "Should only contain firstOrder");
     }
 
     /**
@@ -281,17 +263,17 @@ public class ServiceImplTest {
         System.out.println("getValidStateList");
 
         //arrange
-        List<State> retrievedState = null;
+        List<State> retrievedState;
 
         //act
         try {
             retrievedState = testServ.getValidStateList();
+            assertEquals(retrievedState, onlyState, "Only state should be Texas");
         } catch (StateReadException e) {
             fail("Valid retrieval");
         }
 
         //assert
-        assertEquals(retrievedState, onlyState.get(0), "Only state should be Texas");
     }
 
     /**
@@ -312,7 +294,7 @@ public class ServiceImplTest {
         }
 
         //assert
-        assertEquals(retrievedProduct, onlyProduct.get(0), "Only Product should be carpet");
+        assertEquals(retrievedProduct, onlyProduct, "Only Product should be carpet");
     }
 
     /**
@@ -358,5 +340,4 @@ public class ServiceImplTest {
         //arrange
         assertEquals(testProduct, onlyProduct.get(0), "Should've retrieved Carpet");
     }
-
 }
