@@ -134,6 +134,7 @@ public class View {
     public String inputCustomerName() {
         String custName;
 
+        io.print("---");
         do {
             custName = io.readString("Enter customer or company name: ").trim();
         } while (!custName.matches("[a-zA-Z0-9\\,\\.\\s]*"));
@@ -148,7 +149,7 @@ public class View {
      * @return {String} the state's abbreviation, formatted to be capitalized
      */
     public String inputState(List<State> validStates) {
-        io.print("");
+        io.print("---");
         io.print("We are available for business in:");
         validStates.stream()
                 .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
@@ -163,7 +164,7 @@ public class View {
      * @return {String} the product type being ordered
      */
     public String inputProductType(List<Product> validProducts) {
-        io.print("");
+        io.print("---");
         io.print("Our currently available products include (all costs per sq.ft.): ");
         validProducts.stream()
                 .forEach((product) -> io.print(product.getProductType()
@@ -184,7 +185,7 @@ public class View {
      * @return {BigDecimal} an area at or over 100 sq.ft.
      */
     public BigDecimal inputArea() {
-        io.print("");
+        io.print("---");
         return io.readBigDecimal("Please input the area of floor in sq.ft. (minimum 100): ",
                 new BigDecimal("100"), BigDecimal.valueOf(Double.MAX_VALUE));
     }
@@ -195,6 +196,7 @@ public class View {
      * @param userOrder {Order} a newly constructed Order obj from service
      */
     public void displayOrderInfo(Order userOrder) {
+        io.print("---");
         io.print("Your order request:");
         io.print("Date: " + userOrder.getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         io.print("ID: " + userOrder.getOrderNum());
@@ -215,10 +217,13 @@ public class View {
      * @return {boolean} confirmation to persist order to file
      */
     public boolean confirmNewOrder(Order userOrder) {
-        io.print("");
+        String userChoice;
+
         displayOrderInfo(userOrder);
 
-        String userChoice = io.readString("Confirm order placement? (Y - yes/N - no): ").trim();
+        do {
+            userChoice = io.readString("Confirm order placement? (Y - yes/N - no): ").trim();
+        } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
             case "y": {
@@ -297,16 +302,16 @@ public class View {
     public String inputEditedCustomerName(Order orderToEdit) {
         String newCustName;
 
-        io.print("");
+        io.print("---");
         io.print("Current name on order: " + orderToEdit.getCustomerName());
 
         do {
             newCustName = io.readString("Enter new customer or company name, or press ENTER to keep: ").trim();
-
-            if (newCustName.matches("[\n]")) {
-                newCustName = orderToEdit.getCustomerName();
-            }
         } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\n]*"));
+
+        if (newCustName.matches("[\n]")) {
+            newCustName = orderToEdit.getCustomerName();
+        }
 
         return newCustName;
     }
@@ -323,14 +328,18 @@ public class View {
      *         field of the order
      */
     public String inputEditedState(Order orderToEdit, List<State> validStates) {
-        io.print("");
+        String newState;
+
+        io.print("---");
         io.print("Current state on order: " + orderToEdit.getState().getStateAbbreviation());
 
         io.print("You may change state of transaction to:");
         validStates.stream()
                 .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
 
-        String newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep: ").trim().toUpperCase();
+        do {
+            newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep: ").trim().toUpperCase();
+        } while (!newState.matches("[a-zA-Z\n]*"));
 
         if (newState.matches("[\n]")) {
             return orderToEdit.getState().getStateAbbreviation();
@@ -351,7 +360,9 @@ public class View {
      *         order
      */
     public String inputEditedProductType(Order orderToEdit, List<Product> validProducts) {
-        io.print("");
+        String rawProduct;
+
+        io.print("---");
         io.print("Current product on order: " + orderToEdit.getProduct().getProductType());
 
         io.print("You may choose from this product selection (all costs per sq.ft.): ");
@@ -360,7 +371,9 @@ public class View {
                 + " | Material: $" + product.getCostPerSqFt()
                 + " | Labor: $" + product.getLaborCostPerSqFt()));
 
-        String rawProduct = io.readString("Please input new product type, or press ENTER to keep: ").trim();
+        do {
+            rawProduct = io.readString("Please input new product type, or press ENTER to keep: ").trim();
+        } while (!rawProduct.matches("[a-zA-Z\n]*"));
 
         if (rawProduct.matches("[\n]")) {
             return orderToEdit.getProduct().getProductType();
@@ -380,7 +393,7 @@ public class View {
      * @return {BigDecimal} new area of at least 100 sq.ft. of the order
      */
     public BigDecimal inputEditedArea(Order orderToEdit) {
-        io.print("");
+        io.print("---");
         io.print("Current area on order: " + orderToEdit.getArea().toString() + " sq.ft.");
 
         String newAreaString;
@@ -414,9 +427,13 @@ public class View {
      * @return {boolean} confirmation to persist order edits to file
      */
     public boolean confirmOrderEdit(Order orderEdits) {
+        String userChoice;
+
         displayOrderInfo(orderEdits);
 
-        String userChoice = io.readString("Confirm order edit? (Y - yes/N - no): ").trim();
+        do {
+            userChoice = io.readString("Confirm order edit? (Y - yes/N - no): ").trim();
+        } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
             case "y": {
@@ -469,9 +486,12 @@ public class View {
      * @return {boolean} confirmation to persist the removal
      */
     public boolean confirmOrderRemoval(Order orderToRemove) {
+        String userChoice;
         displayOrderInfo(orderToRemove);
 
-        String userChoice = io.readString("Confirm order cancellation? (Y - yes/N - no): ").trim();
+        do {
+            userChoice = io.readString("Confirm order cancellation? (Y - yes/N - no): ").trim();
+        } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
             case "y": {
