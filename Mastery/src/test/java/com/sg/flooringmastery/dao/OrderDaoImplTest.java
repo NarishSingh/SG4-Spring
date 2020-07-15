@@ -10,10 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -139,6 +136,7 @@ public class OrderDaoImplTest {
      */
     @Test
     public void testGetOrderDateFail() throws Exception {
+        System.out.println("removeOrder - fail");
         //arrange
         //act & assert
         testDao.addOrder(firstOrder);
@@ -146,11 +144,13 @@ public class OrderDaoImplTest {
         testDao.addOrder(thirdOrder);
 
         try {
-            Order noDate1 = testDao.getOrder(LocalDate.MAX, 1);
-            Order noDate2 = testDao.getOrder(LocalDate.MAX, 2);
-            Order noDate3 = testDao.getOrder(LocalDate.MAX, 3);
+            Order noDate1 = testDao.getOrder(LocalDate.now(), 1);
+            Order noDate2 = testDao.getOrder(LocalDate.now(), 2);
+            Order noDate3 = testDao.getOrder(LocalDate.now(), 3);
         } catch (NoOrdersOnDateException e) {
             return;
+        } catch (InvalidOrderNumberException e) {
+            fail("valid order number");
         }
     }
 
@@ -160,6 +160,7 @@ public class OrderDaoImplTest {
      */
     @Test
     public void testGetOrderNumFail() throws Exception {
+        System.out.println("removeOrder - fail");
         //arrange
         //act & assert
         testDao.addOrder(firstOrder);
@@ -172,11 +173,10 @@ public class OrderDaoImplTest {
             Order badNum3 = testDao.getOrder(thirdOrder.getOrderDate(), 99);
         } catch (InvalidOrderNumberException e) {
             return;
+        } catch (NoOrdersOnDateException e) {
+            fail("valid order dates");
         }
-
     }
-    
-//TODO continue from here down
 
     /**
      * Test of editOrder method, of class OrderDaoImpl.
@@ -185,7 +185,10 @@ public class OrderDaoImplTest {
     public void testEditOrder() throws Exception {
         System.out.println("editOrder");
         //arrange
+
         //act
+        testDao.addOrder(firstOrder);
+
         testDao.editOrder(firstOrder, firstOrderReplacement);
         Order edited = testDao.getOrder(firstOrderReplacement.getOrderDate(), firstOrderReplacement.getOrderNum());
         List<Order> allOrders = testDao.getAllOrders();
@@ -195,6 +198,57 @@ public class OrderDaoImplTest {
         assertNotEquals(edited, firstOrder, "Edited order should not be originalOrder");
         assertTrue(allOrders.contains(firstOrderReplacement), "List should contain editOrder");
         assertFalse(allOrders.contains(firstOrder), "List should not contain originalOrder");
+    }
+
+    /**
+     * Test of editOrder method's NoOrdersOnDateException, of class
+     * OrderDaoImpl.
+     */
+    @Test
+    public void testEditOrderDateFail() throws Exception {
+        System.out.println("editOrder - fail");
+        //arrange
+        Order firstOrderBadDate = new Order(LocalDate.now(), firstOrder.getCustomerName(),
+                firstOrder.getState(), firstOrder.getProduct(), firstOrder.getArea());
+        firstOrderBadDate.setOrderNum(firstOrder.getOrderNum());
+
+        //act and assert
+        testDao.addOrder(firstOrder);
+
+        try {
+            testDao.editOrder(firstOrder, firstOrderBadDate);
+        } catch (NoOrdersOnDateException e) {
+            return;
+        } catch (InvalidOrderNumberException e) {
+            fail("valid order num");
+        }
+
+//        Order editFail = testDao.getOrder(firstOrderBadDate.getOrderDate(), firstOrderBadDate.getOrderNum());
+//        List<Order> allOrders = testDao.getAllOrders();
+    }
+
+    /**
+     * Test of editOrder method's InvalidOrderNumberException, of class
+     * OrderDaoImpl.
+     */
+    @Test
+    public void testEditOrderNumFail() throws Exception {
+        System.out.println("editOrder - fail");
+        //arrange
+        Order firstOrderBadNum = new Order(firstOrder.getOrderDate(), firstOrder.getCustomerName(),
+                firstOrder.getState(), firstOrder.getProduct(), firstOrder.getArea());
+        firstOrderBadNum.setOrderNum(99);
+
+        //act and assert
+        testDao.addOrder(firstOrder);
+
+        try {
+            testDao.editOrder(firstOrder, firstOrderBadNum);
+        } catch (InvalidOrderNumberException e) {
+            return;
+        } catch (NoOrdersOnDateException e) {
+            fail("valid order date");
+        }
     }
 
     /**
@@ -214,6 +268,26 @@ public class OrderDaoImplTest {
         assertTrue(ordersOnDate.contains(firstOrder), "List should contain first order");
         assertTrue(ordersOnDate.contains(secondOrder), "List should contain second order");
         assertFalse(ordersOnDate.contains(thirdOrder), "List should not contain third order");
+    }
+
+    /**
+     * Test of getOrdersByDate method's NoOrdersOnDateException, of class
+     * OrderDaoImpl.
+     */
+    @Test
+    public void testGetOrdersByDateFail() throws Exception {
+        System.out.println("getOrdersByDate - fail");
+        //arrange
+        //act and assert
+        testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
+        testDao.addOrder(thirdOrder);
+
+        try {
+            List<Order> ordersOnDate = testDao.getOrdersByDate(LocalDate.now());
+        } catch (NoOrdersOnDateException e) {
+            return;
+        }
     }
 
     /**
