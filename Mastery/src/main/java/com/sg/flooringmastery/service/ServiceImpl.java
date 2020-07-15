@@ -16,7 +16,7 @@ import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.dao.StateDao;
 import com.sg.flooringmastery.dao.StateReadException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.math.RoundingMode;
 
 public class ServiceImpl implements Service {
 
@@ -137,14 +137,18 @@ public class ServiceImpl implements Service {
      */
     private void calculateOrderCosts(Order newOrder) {
         BigDecimal matCosts = newOrder.getProduct().getCostPerSqFt().multiply(newOrder.getArea());
+        BigDecimal matCostsScaled = matCosts.setScale(2, RoundingMode.HALF_UP);
         BigDecimal laborCosts = newOrder.getArea().multiply(newOrder.getProduct().getLaborCostPerSqFt());
-        BigDecimal taxCosts = matCosts.add(laborCosts).multiply(newOrder.getState().getTaxRate().divide(new BigDecimal("100")));
+        BigDecimal laborCostsScaled = laborCosts.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal taxCosts = matCosts.add(laborCosts).multiply(newOrder.getState().getTaxRate().divide(new BigDecimal("100").setScale(2, RoundingMode.HALF_UP)));
+        BigDecimal taxCostsScaled = taxCosts.setScale(2, RoundingMode.HALF_UP);
         BigDecimal totalCosts = matCosts.add(laborCosts).add(taxCosts);
+        BigDecimal totalCostsScaled = totalCosts.setScale(2, RoundingMode.HALF_UP);
 
-        newOrder.setMaterialCost(matCosts);
-        newOrder.setLaborCost(laborCosts);
-        newOrder.setTax(taxCosts);
-        newOrder.setTotal(totalCosts);
+        newOrder.setMaterialCost(matCostsScaled);
+        newOrder.setLaborCost(laborCostsScaled);
+        newOrder.setTax(taxCostsScaled);
+        newOrder.setTotal(totalCostsScaled);
     }
 
     /**

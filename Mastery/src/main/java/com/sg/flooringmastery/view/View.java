@@ -149,12 +149,18 @@ public class View {
      * @return {String} the state's abbreviation, formatted to be capitalized
      */
     public String inputState(List<State> validStates) {
+        String userState;
+
         io.print("---");
         io.print("We are available for business in:");
         validStates.stream()
                 .forEach((state) -> io.print(state.getStateAbbreviation() + " | " + state.getStateName()));
 
-        return io.readString("Please input your state's abbreviation: ").trim().toUpperCase();
+        do {
+            userState = io.readString("Please input your state's abbreviation: ").trim().toUpperCase();
+        } while (!userState.matches("[a-zA-Z]{2}"));
+
+        return userState;
     }
 
     /**
@@ -164,6 +170,8 @@ public class View {
      * @return {String} the product type being ordered
      */
     public String inputProductType(List<Product> validProducts) {
+        String rawProduct;
+
         io.print("---");
         io.print("Our currently available products include (all costs per sq.ft.): ");
         validProducts.stream()
@@ -171,7 +179,9 @@ public class View {
                 + " | Material: $" + product.getCostPerSqFt()
                 + " | Labor: $" + product.getLaborCostPerSqFt()));
 
-        String rawProduct = io.readString("Please input your desired product type: ").trim();
+        do {
+            rawProduct = io.readString("Please input your desired product type: ").trim();
+        } while (!rawProduct.matches("[a-zA-Z]*"));
 
         String productSelection = rawProduct.substring(0, 1).toUpperCase()
                 + rawProduct.substring(1).toLowerCase(); //format to match map key
@@ -296,7 +306,7 @@ public class View {
      *
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
-     *                    \n
+     *                    \\r
      * @return {String} the new customer name field for the order
      */
     public String inputEditedCustomerName(Order orderToEdit) {
@@ -307,11 +317,11 @@ public class View {
 
         do {
             newCustName = io.readString("Enter new customer or company name, or press ENTER to keep: ").trim();
-        } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\n]*"));
 
-        if (newCustName.matches("[\n]")) {
-            newCustName = orderToEdit.getCustomerName();
-        }
+            if (newCustName.matches("\\r?")) {
+                return orderToEdit.getCustomerName();
+            }
+        } while (!newCustName.matches("[a-zA-Z0-9\\,\\.\\s\\n\\r]*"));
 
         return newCustName;
     }
@@ -321,7 +331,7 @@ public class View {
      *
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
-     *                    \n
+     *                    \\r
      * @param validStates {List} all valid states for business, read in from
      *                    file
      * @return {String} the new State name or abbreviation for the respective
@@ -339,13 +349,13 @@ public class View {
 
         do {
             newState = io.readString("Please input the new state's abbreviation, or press ENTER to keep: ").trim().toUpperCase();
-        } while (!newState.matches("[a-zA-Z\n]*"));
 
-        if (newState.matches("[\n]")) {
-            return orderToEdit.getState().getStateAbbreviation();
-        } else {
-            return newState;
-        }
+            if (newState.matches("\\r?")) {
+                return orderToEdit.getState().getStateAbbreviation();
+            }
+        } while (!newState.matches("[a-zA-Z\\n\\r]{1,2}"));
+
+        return newState;
     }
 
     /**
@@ -353,7 +363,7 @@ public class View {
      *
      * @param orderToEdit   {Order} the original order obj, used to fill in
      *                      original value if user elects not to edit by
-     *                      inputting \n
+     *                      inputting \\r
      * @param validProducts {List} all valid products for purchase, read in from
      *                      file
      * @return {String} the new product name for the respective field for the
@@ -373,15 +383,15 @@ public class View {
 
         do {
             rawProduct = io.readString("Please input new product type, or press ENTER to keep: ").trim();
-        } while (!rawProduct.matches("[a-zA-Z\n]*"));
+            
+            if (rawProduct.matches("\\r?")) {
+                return orderToEdit.getProduct().getProductType();
+            }
+        } while (!rawProduct.matches("[a-zA-Z\\n\\r]*"));
 
-        if (rawProduct.matches("[\n]")) {
-            return orderToEdit.getProduct().getProductType();
-        } else {
-            String productSelection = rawProduct.substring(0, 1).toUpperCase()
-                    + rawProduct.substring(1).toLowerCase(); //format to match map key
-            return productSelection;
-        }
+        String productSelection = rawProduct.substring(0, 1).toUpperCase()
+                + rawProduct.substring(1).toLowerCase(); //format to match map key
+        return productSelection;
     }
 
     /**
@@ -389,7 +399,7 @@ public class View {
      *
      * @param orderToEdit {Order} the original order obj, used to fill in
      *                    original value if user elects not to edit by inputting
-     *                    \n
+     *                    \\r
      * @return {BigDecimal} new area of at least 100 sq.ft. of the order
      */
     public BigDecimal inputEditedArea(Order orderToEdit) {
@@ -404,12 +414,13 @@ public class View {
             do {
                 newAreaString = io.readString("Please input new area of floor in sq.ft. (minimum 100),"
                         + " or press ENTER to keep: ");
-            } while (!newAreaString.matches("[0-9\n]*"));
 
-            if (newAreaString.matches("[\n]")) {
-                newArea = orderToEdit.getArea();
-                hasErrors = false;
-            } else if (new BigDecimal(newAreaString).compareTo(new BigDecimal("100")) < 0) {
+                if (newAreaString.matches("\\r?")) {
+                    return orderToEdit.getArea();
+                }
+            } while (!newAreaString.matches("[0-9\\n\\r]*"));
+
+            if (new BigDecimal(newAreaString).compareTo(new BigDecimal("100")) < 0) {
                 hasErrors = true;
             } else {
                 newArea = new BigDecimal(newAreaString);

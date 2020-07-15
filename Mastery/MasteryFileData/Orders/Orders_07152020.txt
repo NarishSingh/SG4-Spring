@@ -1,3 +1,0 @@
-OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-1,,KY,6.00,Tile,101,3.50,4.15,353.50,419.15,46.3590,819.0090
-2,Narad Construction:: LLC,WA,9.25,Tile,555,3.50,4.15,1942.50,2303.25,392.731875,4638.481875

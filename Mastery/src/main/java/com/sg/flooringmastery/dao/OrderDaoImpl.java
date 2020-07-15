@@ -103,7 +103,6 @@ public class OrderDaoImpl implements OrderDao {
     public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
             NoOrdersOnDateException {
         loadAllOrders();
-        List<Order> ordersOnDate;
 
         try {
             return new ArrayList<>(orders.get(date).values());
@@ -222,7 +221,7 @@ public class OrderDaoImpl implements OrderDao {
         if (orderDirList.length == 0) {
             return; //nothing to load
         } else {
-            for (File ordersFile : dir.listFiles()) {
+            for (File ordersFile : orderDirList) {
 
                 TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
                 String currentLine;
@@ -279,7 +278,8 @@ public class OrderDaoImpl implements OrderDao {
                     newFile.delete();
                 } else {
                     //header
-                    out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,"
+                            + "CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
                     //marshall the orders on date to file
                     ordersOnDate.values().stream()

@@ -76,3 +76,33 @@
 2020-07-14T15:35:41.038829 : Thrown: run:: Message: begin 0, end 1, length 0
 2020-07-14T16:02:48.272657 : Thrown: readInt:: Message: For input string: ""
 2020-07-14T16:03:23.603894300 : editOrder: Order{orderDate=2020-07-15, orderNum=1, customerName=, state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=101, materialCost=353.50, laborCost=419.15, tax=46.3590, total=819.0090}Order{orderDate=2020-07-15, orderNum=1, customerName=Singh, Inc., state=State{stateAbbreviation=CA, stateName=null, taxRate=25.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=254, materialCost=1308.10, laborCost=1206.50, tax=628.6500, total=3143.2500}
+2020-07-14T21:05:19.618566200 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:05:19.618566200 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:05:34.074795800 : Thrown: inputEditedProductType:: Message: begin 0, end 1, length 0
+2020-07-14T21:05:34.076112900 : Thrown: run:: Message: begin 0, end 1, length 0
+2020-07-14T21:06:29.636504500 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:06:29.640424200 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:06:35.721823800 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:06:35.723728400 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:13:06.285238 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:13:06.285238 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:13:17.337160600 : Thrown: inputEditedProductType:: Message: begin 0, end 1, length 0
+2020-07-14T21:13:17.337160600 : Thrown: run:: Message: begin 0, end 1, length 0
+2020-07-14T21:15:30.558739300 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:15:30.561057900 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:15:31.812850200 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:15:31.812850200 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:15:39.721656700 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:15:39.721976700 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T21:51:53.387801900 : editOrder: Order{orderDate=2020-07-15, orderNum=1, customerName=John Cena, state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=150, materialCost=525.00, laborCost=622.50, tax=68.8500, total=1216.3500}Order{orderDate=2020-07-15, orderNum=1, customerName=, state=State{stateAbbreviation=KY, stateName=null, taxRate=6.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=101, materialCost=353.50, laborCost=419.15, tax=46.3590, total=819.0090}
+2020-07-14T21:52:36.997607100 : removeOrder: 2020-07-151
+2020-07-14T21:52:54.692476900 : Thrown: getOrder:: Message: No such order exists
+2020-07-14T21:52:54.692476900 : Thrown: getOrder:: Message: No such order exists
+2020-07-14T21:53:15.806770900 : removeOrder: 2020-07-152
+2020-07-14T21:53:37.420838200 : exportOrder: 
+2020-07-14T21:57:35.904232800 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T21:57:35.905449600 : Thrown: getOrdersByDate:: Message: No orders to display
+2020-07-14T21:57:59.489344700 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-14T21:57:59.489344700 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-14T22:06:35.672988100 : addOrder: Order{orderDate=2021-01-01, orderNum=1, customerName=Narish Singh, state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=999, materialCost=3496.50, laborCost=4145.85, tax=1910.59, total=9552.94}
+2020-07-14T22:06:55.562979600 : exportOrder: 
