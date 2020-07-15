@@ -66,11 +66,8 @@ public class Controller {
                     }
                 }
             }
-        } catch (OrderPersistenceException
-                | StateReadException
-                | ProductReadException
-                | NoOrdersOnDateException
-                | InvalidOrderNumberException e) {
+        } catch (OrderPersistenceException | StateReadException | ProductReadException
+                | NoOrdersOnDateException | InvalidOrderNumberException e) {
             view.displayErrorMessage(e.getMessage());
         }
     }
@@ -112,6 +109,10 @@ public class Controller {
      *
      * @throws OrderPersistenceException if cannot read from or write to data
      *                                   files
+     * @throws StateReadException        if cannot load from state data
+     *                                   directory
+     * @throws ProductReadException      if cannot load from state data
+     *                                   directory
      */
     private void addOrder() throws StateReadException, ProductReadException, OrderPersistenceException {
         boolean hasErrors;
@@ -177,6 +178,10 @@ public class Controller {
      *                                     files
      * @throws NoOrdersOnDateException     if user inputs invalid date
      * @throws InvalidOrderNumberException if user inputs invalid order number
+     * @throws StateReadException          if cannot load from state data
+     *                                     directory
+     * @throws ProductReadException        if cannot load from state data
+     *                                     directory
      */
     private void editOrder() throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException, StateReadException, ProductReadException {
@@ -253,10 +258,12 @@ public class Controller {
      * Remove an existing order, getting a date and order number from user to
      * delete from order directory
      *
-     * @throws OrderPersistenceException if cannot read from or write to data
-     *                                   files
+     * @throws OrderPersistenceException   if cannot read from or write to data
+     *                                     files
+     * @throws NoOrdersOnDateException     if user inputs a date with no orders
+     * @throws InvalidOrderNumberException if user inputs a invalid order num
      */
-    private void removeOrder() throws OrderPersistenceException {
+    private void removeOrder() throws OrderPersistenceException, NoOrdersOnDateException, InvalidOrderNumberException {
         boolean hasErrors;
 
         view.displayRemoveOrderBanner();

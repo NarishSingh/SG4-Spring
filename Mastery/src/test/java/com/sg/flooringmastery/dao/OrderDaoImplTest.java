@@ -3,9 +3,7 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.model.Order;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -87,10 +85,14 @@ public class OrderDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        String testDirPath = ".\\TestingFileData\\Orders";
-        File testDir = new File(testDirPath);
+//        String testDirPath = ".\\TestingFileData\\Orders";
 //        new FileWriter(new File(testDir, "testOrder.txt"));
-        new FileWriter(testDir);
+//        new FileWriter(testDir);
+
+        File testDir = new File(".\\TestingFileData\\Orders");
+        for (File file : testDir.listFiles()) {
+            file.delete();
+        }
 
         ApplicationContext actx = new ClassPathXmlApplicationContext("applicationContext.xml");
         testDao = actx.getBean("testOrderDao", OrderDaoImpl.class);
@@ -102,7 +104,6 @@ public class OrderDaoImplTest {
     @Test
     public void testAddGetOrder() throws Exception {
         System.out.println("addOrder");
-
         //arrange
         //act
         testDao.addOrder(firstOrder);

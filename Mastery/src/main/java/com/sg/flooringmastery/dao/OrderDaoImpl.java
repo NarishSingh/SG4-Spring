@@ -225,47 +225,45 @@ public class OrderDaoImpl implements OrderDao {
      */
     private void loadAllOrders() throws OrderPersistenceException {
         File dir = new File(ORDER_DIRECTORY);
-
         File[] orderDirList = dir.listFiles();
 
-        if (orderDirList.length == 0) {
-            return; //nothing to load
-        } else {
-            for (File ordersFile : orderDirList) {
-
-                TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
-                String currentLine;
-                Order currentOrder;
-                LocalDate ordersDate = null;
-
-                Scanner sc;
-                try {
-                    sc = new Scanner(new BufferedReader(new FileReader(ordersFile)));
-                } catch (FileNotFoundException e) {
-                    throw new OrderPersistenceException("Could not load from Order directory", e);
-                }
-
-                ordersOnDate.clear();
-                sc.nextLine(); //skip header
-
-                while (sc.hasNextLine()) {
-                    currentLine = sc.nextLine();
-                    currentOrder = unmarshallOrder(currentLine, ordersFile.getName());
-
-                    ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
-
-                    ordersDate = parseDateFromFilename(ordersFile.getName());
-                }
-
-                //FIXME might not need this check
-                if (ordersOnDate.isEmpty()) {
-                    continue;
-                } else {
-                    orders.put(ordersDate, ordersOnDate);
-                }
-
-                sc.close();
+        for (File ordersFile : orderDirList) {
+            if (orderDirList.length == 0) {
+                break; //nothing to load
             }
+
+            TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
+            String currentLine;
+            Order currentOrder;
+            LocalDate ordersDate = null;
+
+            Scanner sc;
+            try {
+                sc = new Scanner(new BufferedReader(new FileReader(ordersFile)));
+            } catch (FileNotFoundException e) {
+                throw new OrderPersistenceException("Could not load from Order directory", e);
+            }
+
+            ordersOnDate.clear();
+            sc.nextLine(); //skip header
+
+            while (sc.hasNextLine()) {
+                currentLine = sc.nextLine();
+                currentOrder = unmarshallOrder(currentLine, ordersFile.getName());
+
+                ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
+
+                ordersDate = parseDateFromFilename(ordersFile.getName());
+            }
+
+            //FIXME might not need this check
+            if (ordersOnDate.isEmpty()) {
+                continue;
+            } else {
+                orders.put(ordersDate, ordersOnDate);
+            }
+
+            sc.close();
         }
     }
 
