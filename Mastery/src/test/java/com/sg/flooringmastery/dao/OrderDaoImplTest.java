@@ -135,6 +135,50 @@ public class OrderDaoImplTest {
     }
 
     /**
+     * Test of getOrder method's NoOrdersOnDateException, of class OrderDaoImpl.
+     */
+    @Test
+    public void testGetOrderDateFail() throws Exception {
+        //arrange
+        //act & assert
+        testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
+        testDao.addOrder(thirdOrder);
+
+        try {
+            Order noDate1 = testDao.getOrder(LocalDate.MAX, 1);
+            Order noDate2 = testDao.getOrder(LocalDate.MAX, 2);
+            Order noDate3 = testDao.getOrder(LocalDate.MAX, 3);
+        } catch (NoOrdersOnDateException e) {
+            return;
+        }
+    }
+
+    /**
+     * Test of getOrder method's InvalidOrderNumberException, of class
+     * OrderDaoImpl.
+     */
+    @Test
+    public void testGetOrderNumFail() throws Exception {
+        //arrange
+        //act & assert
+        testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
+        testDao.addOrder(thirdOrder);
+
+        try {
+            Order badNum1 = testDao.getOrder(firstOrder.getOrderDate(), 99);
+            Order badNum2 = testDao.getOrder(secondOrder.getOrderDate(), 99);
+            Order badNum3 = testDao.getOrder(thirdOrder.getOrderDate(), 99);
+        } catch (InvalidOrderNumberException e) {
+            return;
+        }
+
+    }
+    
+//TODO continue from here down
+
+    /**
      * Test of editOrder method, of class OrderDaoImpl.
      */
     @Test
@@ -170,5 +214,38 @@ public class OrderDaoImplTest {
         assertTrue(ordersOnDate.contains(firstOrder), "List should contain first order");
         assertTrue(ordersOnDate.contains(secondOrder), "List should contain second order");
         assertFalse(ordersOnDate.contains(thirdOrder), "List should not contain third order");
+    }
+
+    /**
+     * Test of getAllOrders method, of class OrderDaoImpl.
+     */
+    @Test
+    public void testGetAllOrders() throws Exception {
+        //arrange
+        //act
+        testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
+        testDao.addOrder(thirdOrder);
+        List<Order> allOrders = testDao.getAllOrders();
+
+        //assert
+        assertTrue(allOrders.contains(firstOrder), "List should contain first order");
+        assertTrue(allOrders.contains(secondOrder), "List should contain second order");
+        assertTrue(allOrders.contains(thirdOrder), "List should contain third order");
+    }
+
+    /**
+     * Test of getHighestOrderNumber method, of class OrderDaoImpl.
+     */
+    @Test
+    public void testGetHighestOrderNumber() throws Exception {
+        //arrange
+        //act
+        testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
+        int maxNum = testDao.getHighestOrderNumber();
+
+        //assert
+        assertEquals(maxNum, 2, "Highest order num should be 2");
     }
 }
