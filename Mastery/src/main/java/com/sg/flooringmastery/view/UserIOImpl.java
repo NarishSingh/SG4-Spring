@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.view;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -197,6 +198,7 @@ public class UserIOImpl implements UserIO {
         do {
             try {
                 userInput = new BigDecimal(input.nextLine());
+                userInput.setScale(2, RoundingMode.HALF_UP);
                 hasErrors = false;
             } catch (NumberFormatException e) {
                 hasErrors = true;
@@ -226,6 +228,7 @@ public class UserIOImpl implements UserIO {
             System.out.print("Enter number: ");
             try {
                 userInput = new BigDecimal(input.nextLine());
+                userInput.setScale(2, RoundingMode.HALF_UP);
                 hasErrors = false;
             } catch (NumberFormatException e) {
                 hasErrors = true;
