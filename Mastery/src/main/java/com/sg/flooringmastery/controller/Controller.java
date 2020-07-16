@@ -96,6 +96,7 @@ public class Controller {
         try {
             ordersOnDate = serv.getOrdersByDate(ordersDate);
             view.displayOrdersByDate(ordersOnDate);
+            view.displayDisplayOrdersSuccessBanner();
         } catch (OrderPersistenceException | NoOrdersOnDateException e) {
             view.displayErrorMessage(e.getMessage());
             view.displayDisplayOrdersFailBanner();
@@ -114,7 +115,8 @@ public class Controller {
      * @throws ProductReadException      if cannot load from state data
      *                                   directory
      */
-    private void addOrder() throws StateReadException, ProductReadException, OrderPersistenceException {
+    private void addOrder() throws StateReadException, ProductReadException,
+            OrderPersistenceException {
         boolean hasErrors;
 
         view.displayAddOrderBanner();
@@ -157,7 +159,8 @@ public class Controller {
         BigDecimal userArea = view.inputArea();
 
         //order request validation
-        Order orderRequest = new Order(validOrderDate, customerName, stateSelection, productSelection, userArea);
+        Order orderRequest = new Order(validOrderDate, customerName, stateSelection,
+                productSelection, userArea);
         Order newOrder = serv.validateOrder(orderRequest);
 
         //display, confirmation, add new order
@@ -184,7 +187,8 @@ public class Controller {
      *                                     directory
      */
     private void editOrder() throws OrderPersistenceException,
-            NoOrdersOnDateException, InvalidOrderNumberException, StateReadException, ProductReadException {
+            NoOrdersOnDateException, InvalidOrderNumberException, StateReadException,
+            ProductReadException {
         boolean hasErrors;
         Order originalOrder = null;
 
@@ -240,14 +244,15 @@ public class Controller {
         BigDecimal newArea = view.inputEditedArea(originalOrder);
 
         //validation
-        Order newEditRequest = new Order(originalOrder.getOrderDate(), editName, newStateSelection, newProductSelection, newArea);
+        Order newEditRequest = new Order(originalOrder.getOrderDate(), editName,
+                newStateSelection, newProductSelection, newArea);
         newEditRequest.setOrderNum(originalOrder.getOrderNum());
         Order editedOrder = serv.validateOrder(newEditRequest);
 
         //display, confirmation, and edit
         if (view.confirmOrderEdit(editedOrder)) {
             serv.editOrder(editedOrder, originalOrder);
-//            view.displayOrderInfo(editedOrder);
+            view.displayOrderInfo(editedOrder);
             view.displayEditOrderSuccessBanner();
         } else {
             view.displayEditOrderFailBanner();
@@ -263,7 +268,8 @@ public class Controller {
      * @throws NoOrdersOnDateException     if user inputs a date with no orders
      * @throws InvalidOrderNumberException if user inputs a invalid order num
      */
-    private void removeOrder() throws OrderPersistenceException, NoOrdersOnDateException, InvalidOrderNumberException {
+    private void removeOrder() throws OrderPersistenceException, NoOrdersOnDateException,
+            InvalidOrderNumberException {
         boolean hasErrors;
 
         view.displayRemoveOrderBanner();

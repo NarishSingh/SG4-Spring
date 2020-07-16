@@ -74,9 +74,9 @@ public class View {
         if (ordersOnDate.isEmpty()) {
             io.print("No orders to display");
         } else {
-            io.print("-------");
+            io.print("----------");
             io.print(ordersOnDate.get(0).getOrderDate().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-            io.print("-------");
+            io.print("----------");
             ordersOnDate.stream()
                     .forEach((order) -> {
                         io.print("Order Number: " + order.getOrderNum());
@@ -94,10 +94,16 @@ public class View {
                         io.print("***");
                     });
         }
-
-        io.readString("Press ENTER to continue");
     }
 
+    /**
+     * Display closing Display Order banner for a successful date entry
+     */
+    public void displayDisplayOrdersSuccessBanner() {
+        io.print("***End of orders for this date***");
+        io.readString("Press ENTER to continue");
+    }
+    
     /**
      * Display closing Display Order banner for a failed date entry
      */
@@ -232,7 +238,7 @@ public class View {
         displayOrderInfo(userOrder);
 
         do {
-            userChoice = io.readString("Confirm order placement? (Y - yes/N - no): ").trim();
+            userChoice = io.readString("Confirm order placement? (Y - Yes | N - No): ").trim();
         } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
@@ -443,7 +449,7 @@ public class View {
         displayOrderInfo(orderEdits);
 
         do {
-            userChoice = io.readString("Confirm order edit? (Y - yes/N - no): ").trim();
+            userChoice = io.readString("Confirm order edit? (Y - Yes | N - No): ").trim();
         } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
@@ -501,7 +507,7 @@ public class View {
         displayOrderInfo(orderToRemove);
 
         do {
-            userChoice = io.readString("Confirm order cancellation? (Y - yes/N - no): ").trim();
+            userChoice = io.readString("Confirm order cancellation? (Y - Yes | N - No): ").trim();
         } while (!userChoice.matches("[nyNY]{1}"));
 
         switch (userChoice) {
