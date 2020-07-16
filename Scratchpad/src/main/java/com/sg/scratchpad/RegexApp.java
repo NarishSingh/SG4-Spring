@@ -20,11 +20,17 @@ public class RegexApp {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
+        final String override = "ITS JOHN CENA";
         String charDigitOnly;
 
         do {
             System.out.print("Enter a string [A-Z, 0-9, commas, and periods] only: ");
             charDigitOnly = input.nextLine();
+            
+            if (charDigitOnly.matches("\\r?")) {
+                charDigitOnly = override;
+                break;
+            }
         } while (!charDigitOnly.matches("[a-zA-Z0-9\\,\\.\\s]*"));
 
         System.out.println(charDigitOnly + " - String accepted");
