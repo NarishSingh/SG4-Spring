@@ -353,11 +353,9 @@ public class ServiceImplTest {
     public void testGetAllOrders() throws Exception {
         System.out.println("getAllOrders");
 
-        //arrange
         Order firstAdded;
         List<Order> allOrders;
 
-        //act
         try {
             firstAdded = testServ.addOrder(firstOrder);
             allOrders = testServ.getAllOrders();
@@ -369,8 +367,6 @@ public class ServiceImplTest {
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
-
-        //assert
     }
 
     /**
@@ -380,18 +376,14 @@ public class ServiceImplTest {
     public void testGetValidStateList() throws Exception {
         System.out.println("getValidStateList");
 
-        //arrange
         List<State> retrievedState;
 
-        //act
         try {
             retrievedState = testServ.getValidStateList();
             assertEquals(retrievedState, onlyState, "Only state should be Texas");
         } catch (StateReadException e) {
             fail("Valid retrieval");
         }
-
-        //assert
     }
 
     /**
@@ -401,17 +393,14 @@ public class ServiceImplTest {
     public void testGetValidProductList() throws Exception {
         System.out.println("getValidProductList");
 
-        //arrange
         List<Product> retrievedProduct = null;
 
-        //act
         try {
             retrievedProduct = testServ.getValidProductList();
         } catch (ProductReadException e) {
             fail("Valid retrieval");
         }
 
-        //assert
         assertEquals(retrievedProduct, onlyProduct, "Only Product should be carpet");
     }
 
@@ -422,18 +411,15 @@ public class ServiceImplTest {
     public void testValidateState() throws Exception {
         System.out.println("validateState");
 
-        //assert
         final String testTX = "TX";
         State testState = null;
 
-        //act
         try {
             testState = testServ.validateState(testTX);
         } catch (InvalidStateException e) {
             fail("Valid State");
         }
 
-        //arrange
         assertEquals(testState, onlyState.get(0), "Should've retrieved TX");
     }
 
@@ -444,18 +430,15 @@ public class ServiceImplTest {
     public void testValidateProduct() throws Exception {
         System.out.println("validateProduct");
 
-        //assert
         final String testProd = "Carpet";
         Product testProduct = null;
 
-        //act
         try {
             testProduct = testServ.validateProduct(testProd);
         } catch (InvalidProductException e) {
             fail("Valid State");
         }
 
-        //arrange
         assertEquals(testProduct, onlyProduct.get(0), "Should've retrieved Carpet");
     }
 }
