@@ -7,6 +7,7 @@ import com.sg.flooringmastery.model.Order;
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.model.State;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -36,13 +37,13 @@ public class ServiceImplTest {
         final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final int testNum = 1;
         final String testName = "John Doe";
-        final State testTexas = new State("TX", new BigDecimal("4.45"));
-        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10"));
-        final BigDecimal testArea100 = new BigDecimal("100");
-        final BigDecimal testMatCost = testCarpet.getCostPerSqFt().multiply(testArea100);
-        final BigDecimal testLaborCost = testArea100.multiply(testCarpet.getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
+        final State testTexas = new State("TX", new BigDecimal("4.45").setScale(2, RoundingMode.HALF_UP));
+        final Product testCarpet = new Product("Carpet", new BigDecimal("2.25").setScale(2, RoundingMode.HALF_UP), new BigDecimal("2.10").setScale(2, RoundingMode.HALF_UP));
+        final BigDecimal testArea100 = new BigDecimal("100").setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testMatCost = (testCarpet.getCostPerSqFt().multiply(testArea100)).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testLaborCost = (testArea100.multiply(testCarpet.getLaborCostPerSqFt())).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testTax = ((testMatCost.add(testLaborCost)).multiply((testTexas.getTaxRate().divide(new BigDecimal("100").setScale(2, RoundingMode.HALF_UP))))).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testTotal = (testMatCost.add(testLaborCost).add(testTax)).setScale(2, RoundingMode.HALF_UP);
 
         //first order unvalidated
         firstOrderUnval = new Order(testDate, testName, testTexas, testCarpet, testArea100);
@@ -77,11 +78,12 @@ public class ServiceImplTest {
         System.out.println("validateOrder");
 
         //arrange
-        final int testOrderNum = 1;
-        final BigDecimal testMatCost = firstOrderUnval.getProduct().getCostPerSqFt().multiply(firstOrderUnval.getArea());
-        final BigDecimal testLaborCost = firstOrderUnval.getArea().multiply(firstOrderUnval.getProduct().getLaborCostPerSqFt());
-        final BigDecimal testTax = (testMatCost.add(testLaborCost)).multiply((firstOrderUnval.getState().getTaxRate().divide(new BigDecimal("100"))));
-        final BigDecimal testTotal = testMatCost.add(testLaborCost).add(testTax);
+        final int testOrderNum = 2;
+
+        final BigDecimal testMatCost = (firstOrderUnval.getProduct().getCostPerSqFt().multiply(firstOrderUnval.getArea())).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testLaborCost = (firstOrderUnval.getArea().multiply(firstOrderUnval.getProduct().getLaborCostPerSqFt())).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testTax = ((testMatCost.add(testLaborCost)).multiply((firstOrderUnval.getState().getTaxRate().divide(new BigDecimal("100").setScale(2, RoundingMode.HALF_UP))))).setScale(2, RoundingMode.HALF_UP);
+        final BigDecimal testTotal = (testMatCost.add(testLaborCost).add(testTax)).setScale(2, RoundingMode.HALF_UP);
 
         Order firstOrderVal = null;
 
@@ -154,8 +156,6 @@ public class ServiceImplTest {
             Order edit = testServ.editOrder(firstOrder, firstOrderReplacement);
 
             //assert
-            assertEquals(original.getOrderDate(), edit.getOrderDate(), "Order date should match for successful edit");
-            assertEquals(original.getOrderNum(), edit.getOrderNum(), "Order num should match for successful edit");
             assertNotEquals(original, edit, "Replacement should be different from original order");
         } catch (OrderPersistenceException e) {
             fail("valid order");
