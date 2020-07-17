@@ -40,38 +40,63 @@ public class ServiceImpl implements Service {
 
         int newOrderNum;
         if (orderRequest.getOrderNum() == 0) {
-            newOrderNum = generateOrderNumber(); //new order
+            newOrderNum = generateOrderNumber(); //new order will initialize to 0
         } else {
             newOrderNum = orderRequest.getOrderNum(); //edit order
         }
 
         return new Order(orderRequest.getOrderDate(), newOrderNum, orderRequest.getCustomerName(),
                 orderRequest.getState(), orderRequest.getProduct(), orderRequest.getArea(),
-                orderRequest.getMaterialCost(), orderRequest.getLaborCost(), orderRequest.getTax(), orderRequest.getTotal());
+                orderRequest.getMaterialCost(), orderRequest.getLaborCost(), orderRequest.getTax(),
+                orderRequest.getTotal());
     }
 
     @Override
-    public Order addOrder(Order newOrder) throws OrderPersistenceException
-            , NoOrdersOnDateException, InvalidOrderNumberException {
-        return dao.addOrder(newOrder);
+    public Order addOrder(Order newOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
+        try {
+            return dao.addOrder(newOrder);
+        } catch (NoOrdersOnDateException e) {
+            throw new NoOrdersOnDateException("Invalid date", e);
+        } catch (InvalidOrderNumberException e) {
+            throw new InvalidOrderNumberException("Invalid order num", e);
+        }
     }
 
     @Override
     public Order removeOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException {
-        return dao.removeOrder(date, orderNum);
+        try {
+            return dao.removeOrder(date, orderNum);
+        } catch (NoOrdersOnDateException e) {
+            throw new NoOrdersOnDateException("No orders on date to cancel", e);
+        } catch (InvalidOrderNumberException e) {
+            throw new InvalidOrderNumberException("Order of this number does not exist", e);
+        }
     }
 
     @Override
     public Order editOrder(Order editedOrder, Order originalOrder) throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException {
-        return dao.editOrder(originalOrder, editedOrder);
+        try {
+            return dao.editOrder(originalOrder, editedOrder);
+        } catch (NoOrdersOnDateException e) {
+            throw new NoOrdersOnDateException("Invalid date - mismatch", e);
+        } catch (InvalidOrderNumberException e) {
+            throw new InvalidOrderNumberException("Invalid number - mismatch", e);
+        }
     }
 
     @Override
     public Order getOrder(LocalDate date, int orderNum) throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException {
-        return dao.getOrder(date, orderNum);
+        try {
+            return dao.getOrder(date, orderNum);
+        } catch (NoOrdersOnDateException e) {
+            throw new NoOrdersOnDateException("Invalid date - no orders to retrieve", e);
+        } catch (InvalidOrderNumberException e) {
+            throw new InvalidOrderNumberException("Invalid order num - order does not exist", e);
+        }
     }
 
     @Override
@@ -82,18 +107,25 @@ public class ServiceImpl implements Service {
         } catch (NoOrdersOnDateException | OrderPersistenceException e) {
             throw new NoOrdersOnDateException("No orders to display", e);
         }
-
     }
 
     @Override
     public void exportOrder() throws OrderPersistenceException {
-        List<Order> allActiveOrders = getAllOrders();
-        export.exportOrders(allActiveOrders);
+        try {
+            List<Order> allActiveOrders = getAllOrders();
+            export.exportOrders(allActiveOrders);
+        } catch (OrderPersistenceException e) {
+            throw new OrderPersistenceException("Could not export order directory", e);
+        }
     }
 
     @Override
     public List<Order> getAllOrders() throws OrderPersistenceException {
-        return dao.getAllOrders();
+        try {
+            return dao.getAllOrders();
+        } catch (OrderPersistenceException e) {
+            throw new OrderPersistenceException("Could not list order directory", e);
+        }
     }
 
     @Override

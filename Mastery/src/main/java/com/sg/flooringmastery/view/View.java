@@ -103,7 +103,7 @@ public class View {
         io.print("***End of orders for this date***");
         io.readString("Press ENTER to continue");
     }
-    
+
     /**
      * Display closing Display Order banner for a failed date entry
      */
@@ -125,10 +125,11 @@ public class View {
      *
      * @return {LocalDate} a future date
      */
-    public LocalDate inputOrderDate() {
+    public LocalDate inputOrderAddDate() {
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         return io.readLocalDate("Enter the order's date (must be later than today, "
-                + LocalDate.now().format(mmddyyyy) + ")", LocalDate.now(), LocalDate.parse("12-31-9999", mmddyyyy));
+                + LocalDate.now().format(mmddyyyy) + ")",
+                LocalDate.now().plusDays(1), LocalDate.parse("12-31-9999", mmddyyyy));
     }
 
     /**
@@ -286,6 +287,15 @@ public class View {
     }
 
     /**
+     * Enter Order day for retrieval in non-addOrder functions
+     *
+     * @return {LocalDate} user's date
+     */
+    public LocalDate inputOrderDate() {
+        return io.readLocalDate("Enter the order's date");
+    }
+
+    /**
      * Get order number for retrieval or removal
      *
      * @return {int} an existing order ID
@@ -389,7 +399,7 @@ public class View {
 
         do {
             rawProduct = io.readString("Please input new product type, or press ENTER to keep: ").trim();
-            
+
             if (rawProduct.matches("\\r?")) {
                 return orderToEdit.getProduct().getProductType();
             }

@@ -112,7 +112,7 @@ public class OrderDaoImpl implements OrderDao {
         } else if (orderEdit.getOrderNum() != orderToReplace.getOrderNum()) {
             throw new InvalidOrderNumberException("Could not edit order due to order number mismatch");
         } else {
-            return addOrder(orderEdit);
+            return addOrder(orderEdit); //will write via this method
         }
     }
 
@@ -137,7 +137,11 @@ public class OrderDaoImpl implements OrderDao {
             allOrdersList.addAll(orderTree.values());
         });
 
-        return allOrdersList;
+        if (allOrdersList.isEmpty()) {
+            throw new OrderPersistenceException("No orders retrieved - directory empty");
+        } else {
+            return allOrdersList;
+        }
     }
 
     @Override
@@ -275,7 +279,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     /**
-     * Persist all active orders to order's directory
+     * Persist all active orders to order's directory, or delete an empty orders
+     * file
      */
     private void writeAllOrders() throws OrderPersistenceException {
         orders.forEach((date, ordersOnDate) -> {

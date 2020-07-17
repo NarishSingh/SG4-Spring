@@ -249,6 +249,7 @@ public class UserIOImpl implements UserIO {
         boolean hasErrors;
         LocalDate date = LocalDate.now(); //just for initialization
 
+        System.out.println(prompt);
         do {
             try {
                 date = LocalDate.parse(readString("Enter date in MM-dd-yyyy format: "), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
@@ -275,6 +276,7 @@ public class UserIOImpl implements UserIO {
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         LocalDate date = LocalDate.now(); //just for initialization
 
+        System.out.println(prompt);
         do {
             try {
                 date = LocalDate.parse(readString("Enter date in MM-dd-yyyy format between " + earliest.format(mmddyyyy)

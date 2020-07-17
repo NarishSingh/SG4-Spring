@@ -83,7 +83,8 @@ public interface Service {
      * @throws NoOrdersOnDateException   if inputted date is invalid or there
      *                                   are no orders to display
      */
-    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException, NoOrdersOnDateException;
+    List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
+            NoOrdersOnDateException;
 
     /**
      * Export and persist all active orders to a single file

@@ -116,13 +116,13 @@ public class Controller {
      *                                   directory
      */
     private void addOrder() throws StateReadException, ProductReadException,
-            OrderPersistenceException {
+            OrderPersistenceException, InvalidOrderNumberException, NoOrdersOnDateException {
         boolean hasErrors;
 
         view.displayAddOrderBanner();
 
         //future date
-        LocalDate validOrderDate = view.inputOrderDate();
+        LocalDate validOrderDate = view.inputOrderAddDate();
 
         //cust name, validated
         String customerName = view.inputCustomerName();

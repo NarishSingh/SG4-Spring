@@ -85,10 +85,7 @@ public class OrderDaoImplTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-//        String testDirPath = ".\\TestingFileData\\Orders";
-//        new FileWriter(new File(testDir, "testOrder.txt"));
-//        new FileWriter(testDir);
-
+        //scrub directory every test
         File testDir = new File(".\\TestingFileData\\Orders");
         for (File file : testDir.listFiles()) {
             file.delete();
@@ -124,6 +121,7 @@ public class OrderDaoImplTest {
         //arrange
         //act
         testDao.addOrder(firstOrder);
+        testDao.addOrder(secondOrder);
         Order removed = testDao.removeOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
         List<Order> allOrders = testDao.getAllOrders();
 
@@ -224,8 +222,6 @@ public class OrderDaoImplTest {
             fail("valid order num");
         }
 
-//        Order editFail = testDao.getOrder(firstOrderBadDate.getOrderDate(), firstOrderBadDate.getOrderNum());
-//        List<Order> allOrders = testDao.getAllOrders();
     }
 
     /**

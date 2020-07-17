@@ -401,6 +401,20 @@ public class ServiceImplTest {
             fail("valid order");
         }
     }
+    
+    /**
+     * Test of getAllOrders method, of class ServiceImpl.
+     */
+    @Test
+    public void testGetAllOrdersFail() throws Exception {
+        System.out.println("getAllOrders - fail");
+
+        try {
+            List<Order>allOrders = testServ.getAllOrders();
+        } catch (OrderPersistenceException e) {
+            return;
+        }
+    }
 
     /**
      * Test of getValidStateList method, of class ServiceImpl.

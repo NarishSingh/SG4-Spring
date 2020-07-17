@@ -1,4 +1,4 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total,OrderDate
 1,Narish Singh,CA,25.00,Carpet,786,2.25,2.10,1768.50,1650.60,854.78,4273.88,01-01-2021
 3,Futuristic Simpson,WA,9.25,Tile,986984,3.50,4.15,3454444.00,4095983.60,698414.55,8248842.15,09-29-3020
-4,Singh and Sons,KY,6.00,Laminate,786,1.75,2.10,1375.50,1650.60,181.57,3207.67,09-29-3020
+4,Singh and Sons, LLC,TX,4.45,Wood,786,5.15,4.75,4047.90,3733.50,346.27,8127.67,09-29-3020

@@ -22,5 +22,4 @@ public interface ExportFileDao {
      *                                   backup directory file
      */
     void exportOrders(List<Order> activeOrders) throws OrderPersistenceException;
-
 }
