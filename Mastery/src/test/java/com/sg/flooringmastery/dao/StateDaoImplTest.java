@@ -86,18 +86,14 @@ public class StateDaoImplTest {
         State testWA = null;
         List<State> allStatesFromFile = new ArrayList<>();
 
+        //act
         try {
             testTX = testDao.readStateByID(testStateKeyTX);
             testWA = testDao.readStateByID(testStateKeyWA);
+            
+            allStatesFromFile = testDao.getValidStates();
         } catch (InvalidStateException | StateReadException e) {
             fail("Valid states");
-        }
-
-        //act
-        try {
-            allStatesFromFile = testDao.getValidStates();
-        } catch (StateReadException e) {
-            fail("Valid state data file");
         }
 
         //assert

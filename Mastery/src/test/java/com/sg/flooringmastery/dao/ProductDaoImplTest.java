@@ -67,7 +67,7 @@ public class ProductDaoImplTest {
             testMarble = testDao.readProductByID(testProductMarble);
         } catch (InvalidProductException e) {
             return; //pass
-        } catch (Exception e) {
+        } catch (ProductReadException e) {
             fail("Valid product data file");
         }
     }
@@ -90,16 +90,12 @@ public class ProductDaoImplTest {
         try {
             testCarpet = testDao.readProductByID(testProductKeyCarpet);
             testLaminate = testDao.readProductByID(testProductKeyLaminate);
+            
+            allProducts = testDao.getValidProducts();
         } catch (InvalidProductException | ProductReadException e) {
             fail("Valid Products");
         }
-
-        //act
-        try {
-            allProducts = testDao.getValidProducts();
-        } catch (ProductReadException e) {
-            fail("Valid products data file");
-        }
+        
         //assert
         assertTrue(allProducts.contains(testCarpet), "List should contain Carpet");
         assertTrue(allProducts.contains(testLaminate), "List should contain Laminate");

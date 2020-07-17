@@ -11,9 +11,12 @@ public interface OrderDao {
      *
      * @param newOrder {Order} a valid order obj
      * @return {Order} the successfully added and persisted Order obj
-     * @throws OrderPersistenceException if cannot persist addition
+     * @throws OrderPersistenceException   if cannot persist addition
+     * @throws NoOrdersOnDateException     if an past date is attempted
+     * @throws InvalidOrderNumberException if order num of 0 is attempted
      */
-    Order addOrder(Order newOrder) throws OrderPersistenceException;
+    Order addOrder(Order newOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Remove an active order to treemap and persist to file

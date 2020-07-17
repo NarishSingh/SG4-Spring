@@ -28,6 +28,7 @@ public class ServiceImplTest {
     public Order firstOrderReplacement;
     public Order secondOrderBadDate;
     public Order secondOrderBadNum;
+    public Order secondOrderExceptionNum;
     public List<State> onlyState = new ArrayList<>();
     public List<Product> onlyProduct = new ArrayList<>();
 
@@ -38,7 +39,7 @@ public class ServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        final LocalDate testDate = LocalDate.parse("01-01-2020", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+        final LocalDate testDate = LocalDate.parse("01-01-2021", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
         final int testNum = 1;
         final String testName = "John Doe";
         final State testTexas = new State("TX", new BigDecimal("4.45").setScale(2, RoundingMode.HALF_UP));
@@ -79,6 +80,8 @@ public class ServiceImplTest {
 
         secondOrderBadDate = new Order(LocalDate.now(), testNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
         secondOrderBadNum = new Order(testDate, testNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
+        
+        secondOrderExceptionNum = new Order(testDate, 0, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
 
         //State and product
         onlyState.clear();
@@ -133,7 +136,38 @@ public class ServiceImplTest {
         } catch (OrderPersistenceException e) {
             fail("valid order");
         }
+    }
+    
+    /**
+     * Test of addOrder method's NoOrdersOnDateException, of class ServiceImpl.
+     */
+    @Test
+    public void testAddOrderDateFail() throws Exception {
+        System.out.println("addOrder - fail");
 
+        try {
+            Order badDate = testServ.addOrder(secondOrderBadDate);
+        } catch (NoOrdersOnDateException e) {
+            return;
+        } catch (OrderPersistenceException | InvalidOrderNumberException e) {
+            fail("valid order");
+        }
+    }
+    
+    /**
+     * Test of addOrder method's InvalidOrderNumberException, of class ServiceImpl.
+     */
+    @Test
+    public void testAddOrderNumFail() throws Exception {
+        System.out.println("addOrder - fail");
+
+        try {
+            Order badDate = testServ.addOrder(secondOrderExceptionNum);
+        } catch (InvalidOrderNumberException e) {
+            return;
+        } catch (OrderPersistenceException | NoOrdersOnDateException e) {
+            fail("valid order");
+        }
     }
 
     /**
@@ -343,7 +377,6 @@ public class ServiceImplTest {
         } catch (OrderPersistenceException e) {
             return; //does nothing anyway just pass the test no matter what
         }
-
     }
 
     /**
@@ -422,6 +455,20 @@ public class ServiceImplTest {
 
         assertEquals(testState, onlyState.get(0), "Should've retrieved TX");
     }
+    
+    /**
+     * Test of validateState method's InvalidStateException, of class ServiceImpl.
+     */
+    @Test
+    public void testValidateStateFail() throws Exception {
+        System.out.println("validateState - fail");
+
+        try {
+            State testState = testServ.validateState("NY");
+        } catch (InvalidStateException e) {
+            return;
+        }
+    }
 
     /**
      * Test of validateProduct method, of class ServiceImpl.
@@ -436,9 +483,23 @@ public class ServiceImplTest {
         try {
             testProduct = testServ.validateProduct(testProd);
         } catch (InvalidProductException e) {
-            fail("Valid State");
+            fail("Valid product");
         }
 
         assertEquals(testProduct, onlyProduct.get(0), "Should've retrieved Carpet");
+    }
+    
+    /**
+     * Test of validateProduct method, of class ServiceImpl.
+     */
+    @Test
+    public void testValidateProductFail() throws Exception {
+        System.out.println("validateProduct - fail");
+
+        try {
+            Product testProduct = testServ.validateProduct("Marble");
+        } catch (InvalidProductException e) {
+            return;
+        }
     }
 }

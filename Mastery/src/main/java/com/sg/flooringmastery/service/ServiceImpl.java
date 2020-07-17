@@ -51,7 +51,8 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Order addOrder(Order newOrder) throws OrderPersistenceException {
+    public Order addOrder(Order newOrder) throws OrderPersistenceException
+            , NoOrdersOnDateException, InvalidOrderNumberException {
         return dao.addOrder(newOrder);
     }
 

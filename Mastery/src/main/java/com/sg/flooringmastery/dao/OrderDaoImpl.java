@@ -27,26 +27,33 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order addOrder(Order newOrder) throws OrderPersistenceException {
+    public Order addOrder(Order newOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException {
         loadAllOrders();
 
-        //retrieve inner map or create new one, then add order
-        TreeMap<Integer, Order> incomingOrders = orders.get(newOrder.getOrderDate());
-        if (incomingOrders == null) {
-            incomingOrders = new TreeMap<>();
-        }
-
-        incomingOrders.put(newOrder.getOrderNum(), newOrder);
-
-        //add to outer map field and write
-        orders.put(newOrder.getOrderDate(), incomingOrders);
-
-        writeAllOrders();
-
-        if (orders.containsValue(incomingOrders)) {
-            return newOrder;
+        if (newOrder.getOrderNum() == 0) {
+            throw new InvalidOrderNumberException("Cannot add an order of #0");
+        } else if (newOrder.getOrderDate().isBefore(LocalDate.now())) {
+            throw new NoOrdersOnDateException("Invalid date for order");
         } else {
-            throw new OrderPersistenceException("Could not persist order");
+            //retrieve inner map or create new one, then add order
+            TreeMap<Integer, Order> incomingOrders = orders.get(newOrder.getOrderDate());
+            if (incomingOrders == null) {
+                incomingOrders = new TreeMap<>();
+            }
+
+            incomingOrders.put(newOrder.getOrderNum(), newOrder);
+
+            //add to outer map field and write
+            orders.put(newOrder.getOrderDate(), incomingOrders);
+
+            writeAllOrders();
+
+            if (orders.containsValue(incomingOrders)) {
+                return newOrder;
+            } else {
+                throw new OrderPersistenceException("Could not persist order");
+            }
         }
     }
 
@@ -152,10 +159,11 @@ public class OrderDaoImpl implements OrderDao {
 
     /*DATA (UN)MARSHALLING*/
     /**
-     * Retrieve the date from the orders dir filenames and
+     * Retrieve the date from the order filenames
      *
-     * @param filename {String} the filename of the orders file for that day
-     * @return new LocalDate obj formatted as MMddyyyy
+     * @param filename {String} the filename of the orders file for that day,
+     *                 contains a date formatted as MMddyyyy
+     * @return new LocalDate obj parsed from the filename
      */
     private LocalDate parseDateFromFilename(String filename) {
         String dateString = filename.substring(7, 15); //filename format is Orders_MMddyyyy.txt
@@ -171,7 +179,6 @@ public class OrderDaoImpl implements OrderDao {
      * @return {String} a delimited string of text with all obj information
      */
     private String marshallOrder(Order anOrder) {
-//        OrderNumber,CustomerName,StateAbbrev,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
         String orderAsText = anOrder.getOrderNum() + DELIMITER;
 
         String convertedName = anOrder.getCustomerName().replace(DELIMITER, DELIMITER_REPLACEMENT);
@@ -214,7 +221,8 @@ public class OrderDaoImpl implements OrderDao {
         BigDecimal orderTax = new BigDecimal(orderTokens[10]);
         BigDecimal orderTotal = new BigDecimal(orderTokens[11]);
 
-        return new Order(orderDate, orderNum, orderCustName, orderState, orderProduct, orderArea, orderMatCost, orderLaborCost, orderTax, orderTotal);
+        return new Order(orderDate, orderNum, orderCustName, orderState, orderProduct,
+                orderArea, orderMatCost, orderLaborCost, orderTax, orderTotal);
     }
 
     /**
@@ -256,9 +264,8 @@ public class OrderDaoImpl implements OrderDao {
                 ordersDate = parseDateFromFilename(ordersFile.getName());
             }
 
-            //FIXME might not need this check
             if (ordersOnDate.isEmpty()) {
-                continue;
+                continue; //any inner map emptied in last run will be cleaned on load
             } else {
                 orders.put(ordersDate, ordersOnDate);
             }

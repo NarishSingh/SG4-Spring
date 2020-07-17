@@ -27,9 +27,12 @@ public interface Service {
      *
      * @param newOrder {Order} a validated new Order
      * @return {Order} the successfully added order
-     * @throws OrderPersistenceException if cannot persist addition to file
+     * @throws OrderPersistenceException   if cannot persist addition to file
+     * @throws NoOrdersOnDateException     if invalid/past date on order
+     * @throws InvalidOrderNumberException if invalid order num of 0 on order
      */
-    Order addOrder(Order newOrder) throws OrderPersistenceException;
+    Order addOrder(Order newOrder) throws OrderPersistenceException,
+            NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
      * Remove an active order from treemap and persist to file
