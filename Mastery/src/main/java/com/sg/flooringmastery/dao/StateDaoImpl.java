@@ -2,15 +2,9 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.State;
 import com.sg.flooringmastery.service.InvalidStateException;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class StateDaoImpl implements StateDao {
 
@@ -42,7 +36,7 @@ public class StateDaoImpl implements StateDao {
         BigDecimal stateTaxRate = new BigDecimal(stateTokens[2]);
 
         State validState = new State(stateAbbreviation, stateName, stateTaxRate);
-        
+
         return validState;
     }
 

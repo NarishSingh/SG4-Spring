@@ -2,15 +2,9 @@ package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.model.Product;
 import com.sg.flooringmastery.service.InvalidProductException;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ProductDaoImpl implements ProductDao {
 
@@ -76,7 +70,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Product readProductByID(String userProduct) throws InvalidProductException, ProductReadException {
         loadProducts();
-        
+
         if (products.containsKey(userProduct)) {
             return products.get(userProduct);
         } else {

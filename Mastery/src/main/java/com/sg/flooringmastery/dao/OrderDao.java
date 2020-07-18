@@ -90,5 +90,4 @@ public interface OrderDao {
      * @throws OrderPersistenceException if cannot read from orders directory
      */
     int getHighestOrderNumber() throws OrderPersistenceException;
-
 }

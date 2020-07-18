@@ -63,6 +63,7 @@ public class Controller {
                     }
                     default: {
                         unknownCommand();
+                        break;
                     }
                 }
             }
@@ -92,9 +93,8 @@ public class Controller {
         view.displayDisplayOrderBanner();
         LocalDate ordersDate = view.inputDisplayOrderDate();
 
-        List<Order> ordersOnDate = null;
         try {
-            ordersOnDate = serv.getOrdersByDate(ordersDate);
+            List<Order> ordersOnDate = serv.getOrdersByDate(ordersDate);
             view.displayOrdersByDate(ordersOnDate);
             view.displayDisplayOrdersSuccessBanner();
         } catch (OrderPersistenceException | NoOrdersOnDateException e) {
@@ -108,12 +108,15 @@ public class Controller {
      * calculating the remaining order info. A successful Order creation will be
      * displayed in full for the user
      *
-     * @throws OrderPersistenceException if cannot read from or write to data
-     *                                   files
-     * @throws StateReadException        if cannot load from state data
-     *                                   directory
-     * @throws ProductReadException      if cannot load from state data
-     *                                   directory
+     * @throws OrderPersistenceException   if cannot read from or write to data
+     *                                     files
+     * @throws StateReadException          if cannot load from state data
+     *                                     directory
+     * @throws ProductReadException        if cannot load from state data
+     *                                     directory
+     * @throws InvalidOrderNumberException for an invalid order number of 0
+     * @throws NoOrdersOnDateException     for an invalid date earlier than
+     *                                     today
      */
     private void addOrder() throws StateReadException, ProductReadException,
             OrderPersistenceException, InvalidOrderNumberException, NoOrdersOnDateException {
@@ -276,12 +279,10 @@ public class Controller {
 
         //retrieve order
         Order orderToRemove = null;
-        LocalDate orderDate = null;
-        int orderNum = 0;
         do {
             try {
-                orderDate = view.inputOrderDate();
-                orderNum = view.inputOrderNumber();
+                LocalDate orderDate = view.inputOrderDate();
+                int orderNum = view.inputOrderNumber();
                 orderToRemove = serv.getOrder(orderDate, orderNum);
                 hasErrors = false;
             } catch (NoOrdersOnDateException
@@ -317,7 +318,6 @@ public class Controller {
             view.displayErrorMessage(e.getMessage());
             view.displayExportOrderFailBanner();
         }
-
     }
 
     /**

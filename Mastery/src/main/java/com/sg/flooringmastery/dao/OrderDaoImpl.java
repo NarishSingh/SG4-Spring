@@ -171,9 +171,7 @@ public class OrderDaoImpl implements OrderDao {
      */
     private LocalDate parseDateFromFilename(String filename) {
         String dateString = filename.substring(7, 15); //filename format is Orders_MMddyyyy.txt
-        LocalDate orderDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("MMddyyyy"));
-
-        return orderDate;
+        return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("MMddyyyy"));
     }
 
     /**
@@ -312,10 +310,8 @@ public class OrderDaoImpl implements OrderDao {
 
                 out.close();
             } catch (IOException e) {
-                //FIXME I have no idea why but it wants a try catch to catch itself...
 //              throw new OrderPersistenceException("Could not create order file");
             }
         });
     }
-
 }
