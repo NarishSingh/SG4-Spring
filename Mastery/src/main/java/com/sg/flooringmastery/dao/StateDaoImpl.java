@@ -8,7 +8,7 @@ import java.util.*;
 
 public class StateDaoImpl implements StateDao {
 
-    private Map<String, State> states = new HashMap<>(); //uses abbrev. as key
+    private Map<String, State> states = new HashMap<>(); //state abbrev. as key
     private final String STATES_FILE;
     private final String DELIMITER = ",";
 

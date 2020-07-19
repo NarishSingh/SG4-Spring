@@ -246,7 +246,7 @@ public class Controller {
         //area
         BigDecimal newArea = view.inputEditedArea(originalOrder);
 
-        //validation
+        //validation, partial -> complete obj if valid
         Order newEditRequest = new Order(originalOrder.getOrderDate(), editName,
                 newStateSelection, newProductSelection, newArea);
         newEditRequest.setOrderNum(originalOrder.getOrderNum());

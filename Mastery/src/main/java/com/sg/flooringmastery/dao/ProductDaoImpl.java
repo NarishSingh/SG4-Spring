@@ -8,7 +8,7 @@ import java.util.*;
 
 public class ProductDaoImpl implements ProductDao {
 
-    private Map<String, Product> products = new HashMap<>();
+    private Map<String, Product> products = new HashMap<>(); //product name key
     private final String PRODUCTS_FILE;
     private final String DELIMITER = ",";
 

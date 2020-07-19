@@ -123,3 +123,15 @@
 2020-07-17T13:04:16.820161900 : exportOrder: 
 2020-07-17T13:04:36.988440700 : removeOrder: 2022-08-235
 2020-07-17T15:39:56.886660600 : exportOrder: 
+2020-07-19T19:19:52.351148800 : Thrown: readStateByID:: Message: We are unavailable for business in this state for now
+2020-07-19T19:19:52.355244900 : Thrown: validateState:: Message: We are unavailable for business in this state for now
+2020-07-19T19:20:10.441681100 : Thrown: readProductByID:: Message: We do not floor with this type of material at this time
+2020-07-19T19:20:10.441681100 : Thrown: validateProduct:: Message: We do not floor with this type of material at this time
+2020-07-19T19:20:19.235409 : Thrown: readProductByID:: Message: We do not floor with this type of material at this time
+2020-07-19T19:20:19.236430900 : Thrown: validateProduct:: Message: We do not floor with this type of material at this time
+2020-07-19T19:20:46.408688400 : addOrder: Order{orderDate=2023-10-31, orderNum=5, customerName=The Rock, state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=178, materialCost=623.00, laborCost=738.70, tax=340.43, total=1702.13}
+2020-07-19T19:21:43.138718700 : addOrder: Order{orderDate=2025-11-09, orderNum=6, customerName=El Chapo, state=State{stateAbbreviation=TX, stateName=Texas, taxRate=4.45}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=458, materialCost=2358.70, laborCost=2175.50, tax=201.77, total=4735.97}
+2020-07-19T19:22:29.790897700 : addOrder: Order{orderDate=2023-10-31, orderNum=7, customerName=AEUG, state=State{stateAbbreviation=WA, stateName=Washington, taxRate=9.25}, product=Product{productType=Laminate, costPerSqFt=1.75, laborCostPerSqFt=2.10}, area=682, materialCost=1193.50, laborCost=1432.20, tax=242.88, total=2868.58}
+2020-07-19T19:22:33.671390700 : exportOrder: 
+2020-07-19T19:23:08.015821700 : removeOrder: 2025-11-096
+2020-07-19T19:23:12.122094900 : exportOrder: 
