@@ -40,9 +40,10 @@ public class ServiceImpl implements Service {
 
         int newOrderNum;
         if (orderRequest.getOrderNum() == 0) {
-            newOrderNum = generateOrderNumber(); //new order will initialize to 0
+            //new order request will initialize to 0, generate a new order number
+            newOrderNum = generateOrderNumber();
         } else {
-            newOrderNum = orderRequest.getOrderNum(); //edit order
+            newOrderNum = orderRequest.getOrderNum(); //edit order request will already have an order number
         }
 
         return new Order(orderRequest.getOrderDate(), newOrderNum, orderRequest.getCustomerName(),

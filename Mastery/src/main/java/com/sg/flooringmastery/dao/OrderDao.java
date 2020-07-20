@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrderDao {
 
     /**
-     * Add an active order to treemap and persist to file
+     * Add an active order to orders map and persist to file
      *
      * @param newOrder {Order} a valid order obj
      * @return {Order} the successfully added and persisted Order obj
@@ -19,12 +19,12 @@ public interface OrderDao {
             NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
-     * Remove an active order to treemap and persist to file
+     * Remove an active order from orders map and persist to file
      *
      * @param removalDate {LocalDate} a future date which contains at least one
      *                    active order
      * @param removalID   {int} the id of an active order
-     * @return {Order} the successfully removed and persisted Order obj
+     * @return {Order} the successfully removed obj
      * @throws OrderPersistenceException   if cannot persist removal
      * @throws NoOrdersOnDateException     if no orders exist on this date
      * @throws InvalidOrderNumberException if order does not exist
@@ -48,14 +48,14 @@ public interface OrderDao {
             NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
-     * Edit an active order in the treemap and persist to file
+     * Edit an active order in the orders map and persist to file
      *
      * @param orderToReplace {Order} a valid order obj to be replaced
      * @param orderEdit      {Order} an order obj with matching date and id
-     *                       fields as the other parameter, but at least one
-     *                       field is distinct
-     * @return {Order} the replaced order
-     * @throws OrderPersistenceException   if cannot persist replacement
+     *                       fields as the other parameter
+     * @return {Order} the successfully edited order replacing the original in
+     *         the orders map
+     * @throws OrderPersistenceException   if cannot persist edit
      * @throws NoOrdersOnDateException     if dates mismatch
      * @throws InvalidOrderNumberException if nums mismatch
      */
@@ -63,11 +63,10 @@ public interface OrderDao {
             NoOrdersOnDateException, InvalidOrderNumberException;
 
     /**
-     * Retrieve the value, the inner orders treemap, for the argument and return
-     * as list
+     * Retrieve the orders for one valid date
      *
      * @param date {LocalDate} a future date that corresponds to an existing key
-     *             in the treemap
+     *             in the orders map
      * @return {List} list of all active orders for that date
      * @throws OrderPersistenceException if cannot read from orders directory
      * @throws NoOrdersOnDateException   if no orders exist on this date
@@ -84,7 +83,7 @@ public interface OrderDao {
     List<Order> getAllOrders() throws OrderPersistenceException;
 
     /**
-     * Find highest key value of internal order maps
+     * Find highest key value of all internal order maps
      *
      * @return {int} highest order number thus far
      * @throws OrderPersistenceException if cannot read from orders directory

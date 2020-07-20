@@ -1,0 +1,3 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+9,Daily Bugle,WA,9.25,Tile,230,3.50,4.15,805.00,954.50,162.75,1922.25
+10,John Cena,CA,25.00,Carpet,333,2.25,2.10,749.25,699.30,362.14,1810.69

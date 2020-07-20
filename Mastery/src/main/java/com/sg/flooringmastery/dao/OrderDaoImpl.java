@@ -73,7 +73,7 @@ public class OrderDaoImpl implements OrderDao {
             throw new InvalidOrderNumberException("No such order exists");
         }
 
-        //re-enter new map to outer treemap
+        //re-enter new map to outer treemap and write to file
         orders.put(removalDate, deletionMap);
 
         writeAllOrders();
@@ -112,7 +112,7 @@ public class OrderDaoImpl implements OrderDao {
         } else if (orderEdit.getOrderNum() != orderToReplace.getOrderNum()) {
             throw new InvalidOrderNumberException("Could not edit order due to order number mismatch");
         } else {
-            return addOrder(orderEdit); //will write via this method
+            return addOrder(orderEdit); //will persist via this method also
         }
     }
 
@@ -228,7 +228,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     /**
-     * Load all persisted orders to treemap
+     * Load all persisted orders to orders map
      *
      * @throws OrderPersistenceException if cannot read from orders directory or
      *                                   if directory is empty
@@ -245,7 +245,6 @@ public class OrderDaoImpl implements OrderDao {
             TreeMap<Integer, Order> ordersOnDate = new TreeMap<>(); //inner tree map
             String currentLine;
             Order currentOrder;
-            LocalDate ordersDate = null;
 
             Scanner sc;
             try {
@@ -255,6 +254,7 @@ public class OrderDaoImpl implements OrderDao {
             }
 
             ordersOnDate.clear();
+            LocalDate ordersDate = parseDateFromFilename(ordersFile.getName());
             sc.nextLine(); //skip header
 
             while (sc.hasNextLine()) {
@@ -263,7 +263,6 @@ public class OrderDaoImpl implements OrderDao {
 
                 ordersOnDate.put(currentOrder.getOrderNum(), currentOrder);
 
-                ordersDate = parseDateFromFilename(ordersFile.getName());
             }
 
             if (ordersOnDate.isEmpty()) {

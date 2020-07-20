@@ -1,4 +1,6 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total,OrderDate
+9,Daily Bugle,WA,9.25,Tile,230,3.50,4.15,805.00,954.50,162.75,1922.25,08-31-2020
+10,John Cena,CA,25.00,Carpet,333,2.25,2.10,749.25,699.30,362.14,1810.69,08-31-2020
 1,Narish Singh,CA,25.00,Carpet,786,2.25,2.10,1768.50,1650.60,854.78,4273.88,01-01-2021
 5,The Rock,CA,25.00,Tile,178,3.50,4.15,623.00,738.70,340.43,1702.13,10-31-2023
 7,AEUG,WA,9.25,Laminate,682,1.75,2.10,1193.50,1432.20,242.88,2868.58,10-31-2023

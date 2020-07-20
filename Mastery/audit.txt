@@ -135,3 +135,12 @@
 2020-07-19T19:22:33.671390700 : exportOrder: 
 2020-07-19T19:23:08.015821700 : removeOrder: 2025-11-096
 2020-07-19T19:23:12.122094900 : exportOrder: 
+2020-07-20T11:39:27.695309400 : addOrder: Order{orderDate=2020-08-31, orderNum=8, customerName=Thanos Industies, Inc., state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Laminate, costPerSqFt=1.75, laborCostPerSqFt=2.10}, area=235, materialCost=411.25, laborCost=493.50, tax=54.29, total=959.04}
+2020-07-20T11:39:33.541035300 : exportOrder: 
+2020-07-20T11:42:08.583502100 : addOrder: Order{orderDate=2020-08-31, orderNum=9, customerName=Daily Bugle, state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=125, materialCost=437.50, laborCost=518.75, tax=239.06, total=1195.31}
+2020-07-20T11:42:14.822800 : exportOrder: 
+2020-07-20T11:44:48.679568100 : editOrder: Order{orderDate=2020-08-31, orderNum=9, customerName=Daily Bugle, state=State{stateAbbreviation=WA, stateName=Washington, taxRate=9.25}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=230, materialCost=805.00, laborCost=954.50, tax=162.75, total=1922.25}Order{orderDate=2020-08-31, orderNum=9, customerName=Daily Bugle, state=State{stateAbbreviation=CA, stateName=null, taxRate=25.00}, product=Product{productType=Tile, costPerSqFt=3.50, laborCostPerSqFt=4.15}, area=125, materialCost=437.50, laborCost=518.75, tax=239.06, total=1195.31}
+2020-07-20T11:45:09.216560100 : removeOrder: 2020-08-318
+2020-07-20T11:45:13.021470700 : exportOrder: 
+2020-07-20T11:46:10.684852800 : addOrder: Order{orderDate=2020-08-31, orderNum=10, customerName=John Cena, state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Carpet, costPerSqFt=2.25, laborCostPerSqFt=2.10}, area=333, materialCost=749.25, laborCost=699.30, tax=362.14, total=1810.69}
+2020-07-20T11:46:16.819281700 : exportOrder: 

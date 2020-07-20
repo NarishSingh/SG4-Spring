@@ -100,5 +100,4 @@ public class ProductDaoImplTest {
         assertTrue(allProducts.contains(testCarpet), "List should contain Carpet");
         assertTrue(allProducts.contains(testLaminate), "List should contain Laminate");
     }
-
 }
