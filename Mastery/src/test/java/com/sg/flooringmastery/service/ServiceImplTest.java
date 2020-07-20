@@ -79,8 +79,8 @@ public class ServiceImplTest {
         final BigDecimal nextTotal = nextMatCost.add(nextLaborCost).add(nextTax);
 
         secondOrderBadDate = new Order(LocalDate.now(), testNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
-        secondOrderBadNum = new Order(testDate, testNum, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
-        
+        secondOrderBadNum = new Order(testDate, 2, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
+
         secondOrderExceptionNum = new Order(testDate, 0, nextName, nextCali, nextLaminate, nextArea200, nextMatCost, nextLaborCost, nextTax, nextTotal);
 
         //State and product
@@ -137,7 +137,7 @@ public class ServiceImplTest {
             fail("valid order");
         }
     }
-    
+
     /**
      * Test of addOrder method's NoOrdersOnDateException, of class ServiceImpl.
      */
@@ -147,15 +147,17 @@ public class ServiceImplTest {
 
         try {
             Order badDate = testServ.addOrder(secondOrderBadDate);
+            fail("Bad date");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (OrderPersistenceException | InvalidOrderNumberException e) {
             fail("valid order");
         }
     }
-    
+
     /**
-     * Test of addOrder method's InvalidOrderNumberException, of class ServiceImpl.
+     * Test of addOrder method's InvalidOrderNumberException, of class
+     * ServiceImpl.
      */
     @Test
     public void testAddOrderNumFail() throws Exception {
@@ -163,6 +165,7 @@ public class ServiceImplTest {
 
         try {
             Order badDate = testServ.addOrder(secondOrderExceptionNum);
+            fail("Bad order num");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (OrderPersistenceException | NoOrdersOnDateException e) {
@@ -194,6 +197,7 @@ public class ServiceImplTest {
         System.out.println("removeOrder - fail");
         try {
             Order firstRemoved = testServ.removeOrder(LocalDate.now(), firstOrder.getOrderNum());
+            fail("Bad date");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (InvalidOrderNumberException e) {
@@ -209,6 +213,7 @@ public class ServiceImplTest {
     public void testRemoveOrderNumFail() throws Exception {
         try {
             Order firstRemoved = testServ.removeOrder(firstOrder.getOrderDate(), 99);
+            fail("Bad order number");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (NoOrdersOnDateException e) {
@@ -247,6 +252,7 @@ public class ServiceImplTest {
             Order original = testServ.addOrder(firstOrder);
 
             Order edit = testServ.editOrder(firstOrder, secondOrderBadDate);
+            fail("Bad edit - date mismatch");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (InvalidOrderNumberException e) {
@@ -266,6 +272,7 @@ public class ServiceImplTest {
             Order original = testServ.addOrder(firstOrder);
 
             Order edit = testServ.editOrder(firstOrder, secondOrderBadNum);
+            fail("Bad edit - number mismatch");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (NoOrdersOnDateException e) {
@@ -298,6 +305,7 @@ public class ServiceImplTest {
 
         try {
             Order first = testServ.getOrder(secondOrderBadDate.getOrderDate(), secondOrderBadDate.getOrderNum());
+            fail("Can't retrieve");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (InvalidOrderNumberException e) {
@@ -314,7 +322,8 @@ public class ServiceImplTest {
         System.out.println("getOrder - fail");
 
         try {
-            Order first = testServ.getOrder(secondOrderBadNum.getOrderDate(), secondOrderBadNum.getOrderNum());
+            Order first = testServ.getOrder(secondOrderExceptionNum.getOrderDate(), secondOrderExceptionNum.getOrderNum());
+            fail("Can't retrieve - order number doesn't exist");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (NoOrdersOnDateException e) {
@@ -341,7 +350,7 @@ public class ServiceImplTest {
             fail("valid order");
         }
     }
-    
+
     /**
      * Test of getOrdersByDate method, of class ServiceImpl.
      */
@@ -356,6 +365,7 @@ public class ServiceImplTest {
             first = testServ.addOrder(firstOrder);
 
             ordersByDate = testServ.getOrdersByDate(secondOrderBadDate.getOrderDate());
+            fail("Can't retrieve");
         } catch (NoOrdersOnDateException e) {
             return;
         }
@@ -401,7 +411,7 @@ public class ServiceImplTest {
             fail("valid order");
         }
     }
-    
+
     /**
      * Test of getAllOrders method, of class ServiceImpl.
      */
@@ -410,7 +420,9 @@ public class ServiceImplTest {
         System.out.println("getAllOrders - fail");
 
         try {
-            List<Order>allOrders = testServ.getAllOrders();
+            Order removal = testServ.removeOrder(firstOrder.getOrderDate(), firstOrder.getOrderNum());
+            List<Order> allOrders = testServ.getAllOrders();
+            fail("Can't retrieve");
         } catch (OrderPersistenceException e) {
             return;
         }
@@ -469,9 +481,10 @@ public class ServiceImplTest {
 
         assertEquals(testState, onlyState.get(0), "Should've retrieved TX");
     }
-    
+
     /**
-     * Test of validateState method's InvalidStateException, of class ServiceImpl.
+     * Test of validateState method's InvalidStateException, of class
+     * ServiceImpl.
      */
     @Test
     public void testValidateStateFail() throws Exception {
@@ -479,6 +492,7 @@ public class ServiceImplTest {
 
         try {
             State testState = testServ.validateState("NY");
+            fail("Bad State");
         } catch (InvalidStateException e) {
             return;
         }
@@ -502,7 +516,7 @@ public class ServiceImplTest {
 
         assertEquals(testProduct, onlyProduct.get(0), "Should've retrieved Carpet");
     }
-    
+
     /**
      * Test of validateProduct method, of class ServiceImpl.
      */
@@ -512,6 +526,7 @@ public class ServiceImplTest {
 
         try {
             Product testProduct = testServ.validateProduct("Marble");
+            fail("Bad product");
         } catch (InvalidProductException e) {
             return;
         }

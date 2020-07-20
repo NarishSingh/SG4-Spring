@@ -65,6 +65,7 @@ public class ProductDaoImplTest {
         //act and assert
         try {
             testMarble = testDao.readProductByID(testProductMarble);
+            fail("invalid product");
         } catch (InvalidProductException e) {
             return; //pass
         } catch (ProductReadException e) {
@@ -90,12 +91,12 @@ public class ProductDaoImplTest {
         try {
             testCarpet = testDao.readProductByID(testProductKeyCarpet);
             testLaminate = testDao.readProductByID(testProductKeyLaminate);
-            
+
             allProducts = testDao.getValidProducts();
         } catch (InvalidProductException | ProductReadException e) {
             fail("Valid Products");
         }
-        
+
         //assert
         assertTrue(allProducts.contains(testCarpet), "List should contain Carpet");
         assertTrue(allProducts.contains(testLaminate), "List should contain Laminate");

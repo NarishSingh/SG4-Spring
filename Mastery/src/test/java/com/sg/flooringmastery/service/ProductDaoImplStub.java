@@ -1,6 +1,7 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.ProductDao;
+import com.sg.flooringmastery.dao.ProductReadException;
 import com.sg.flooringmastery.model.Product;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,19 +15,27 @@ public class ProductDaoImplStub implements ProductDao {
     public ProductDaoImplStub() {
         onlyProduct.put("Carpet", new Product("Carpet", new BigDecimal("2.25"), new BigDecimal("2.10")));
     }
-    
-    public ProductDaoImplStub(TreeMap<String, Product> onlyProduct){
+
+    public ProductDaoImplStub(TreeMap<String, Product> onlyProduct) {
         this.onlyProduct = onlyProduct;
-    }
-    
-    @Override
-    public List<Product> getValidProducts() {
-        return new ArrayList<>(onlyProduct.values());
     }
 
     @Override
-    public Product readProductByID(String productAsText) {
-        return onlyProduct.get(productAsText);
+    public List<Product> getValidProducts() throws ProductReadException {
+        if (onlyProduct.isEmpty()) {
+            throw new ProductReadException("No products to read");
+        } else {
+            return new ArrayList<>(onlyProduct.values());
+        }
+    }
+
+    @Override
+    public Product readProductByID(String productAsText) throws InvalidProductException {
+        if (onlyProduct.get(productAsText) == null) {
+            throw new InvalidProductException("Invalid product");
+        } else {
+            return onlyProduct.get(productAsText);
+        }
     }
 
 }

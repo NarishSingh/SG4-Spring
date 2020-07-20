@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class OrderDaoImplStub implements OrderDao {
 
     public Order onlyOrder;
-    public TreeMap<Integer, Order> oneOrder = new TreeMap<>();
+    public TreeMap<Integer, Order> oneOrderMap = new TreeMap<>();
 
     public OrderDaoImplStub() {
         final LocalDate testDate = LocalDate.parse("01-01-2021", DateTimeFormatter.ofPattern("MM-dd-yyyy"));
@@ -34,7 +34,7 @@ public class OrderDaoImplStub implements OrderDao {
 
         this.onlyOrder = new Order(testDate, testNum, testName, testTexas, testCarpet, testArea100, testMatCost, testLaborCost, testTax, testTotal);
 
-        this.oneOrder.put(testNum, onlyOrder);
+        this.oneOrderMap.put(testNum, onlyOrder);
     }
 
     public OrderDaoImplStub(Order onlyOrder) {
@@ -42,9 +42,13 @@ public class OrderDaoImplStub implements OrderDao {
     }
 
     @Override
-    public Order addOrder(Order newOrder) throws OrderPersistenceException {
-        if (newOrder.equals(onlyOrder)) {
-            return onlyOrder;
+    public Order addOrder(Order newOrder) throws OrderPersistenceException, NoOrdersOnDateException, InvalidOrderNumberException {
+        if (newOrder.equals(onlyOrder) && newOrder.getOrderDate().isAfter(LocalDate.now())) {
+            return oneOrderMap.put(newOrder.getOrderNum(), newOrder);
+        } else if (newOrder.getOrderNum() == 0) {
+            throw new InvalidOrderNumberException("Cannot add order number of 0");
+        } else if (newOrder.getOrderDate().isBefore(LocalDate.now().plusDays(1))) {
+            throw new NoOrdersOnDateException("Bad date for add - must be in future");
         } else {
             return null;
         }
@@ -58,9 +62,8 @@ public class OrderDaoImplStub implements OrderDao {
         } else if (removalID != onlyOrder.getOrderNum()) {
             throw new InvalidOrderNumberException("Invalid order number");
         } else {
-            return onlyOrder;
+            return oneOrderMap.remove(onlyOrder.getOrderNum());
         }
-
     }
 
     @Override
@@ -71,7 +74,7 @@ public class OrderDaoImplStub implements OrderDao {
         } else if (orderNum != onlyOrder.getOrderNum()) {
             throw new InvalidOrderNumberException("Invalid order number");
         } else {
-            return onlyOrder;
+            return oneOrderMap.get(orderNum);
         }
     }
 
@@ -79,7 +82,13 @@ public class OrderDaoImplStub implements OrderDao {
     public Order editOrder(Order orderToReplace, Order orderEdit) throws OrderPersistenceException,
             NoOrdersOnDateException, InvalidOrderNumberException {
         if (orderToReplace.equals(orderEdit)) {
-            return onlyOrder;
+            return oneOrderMap.put(orderToReplace.getOrderNum(), orderEdit);
+        } else if (orderEdit.getOrderDate().isBefore(LocalDate.now().plusDays(1))
+                || orderEdit.getOrderDate() != orderToReplace.getOrderDate()) {
+            throw new NoOrdersOnDateException("Past or mismatched date");
+        } else if (orderEdit.getOrderNum() == 0
+                || orderEdit.getOrderNum() != orderToReplace.getOrderNum()) {
+            throw new InvalidOrderNumberException("0 or mismatched order number");
         } else {
             return null;
         }
@@ -89,15 +98,21 @@ public class OrderDaoImplStub implements OrderDao {
     public List<Order> getOrdersByDate(LocalDate date) throws OrderPersistenceException,
             NoOrdersOnDateException {
         if (date.equals(onlyOrder.getOrderDate())) {
-            return new ArrayList<>(oneOrder.values());
+            List<Order> orderList = new ArrayList<>();
+            orderList.add(oneOrderMap.get(onlyOrder.getOrderNum()));
+            return orderList;
         } else {
-            return null;
+            throw new NoOrdersOnDateException("No orders to retrieve");
         }
     }
 
     @Override
     public List<Order> getAllOrders() throws OrderPersistenceException {
-        return new ArrayList<>(oneOrder.values());
+        if (oneOrderMap.isEmpty()) {
+            throw new OrderPersistenceException("nothing to retrieve");
+        } else {
+            return new ArrayList<>(oneOrderMap.values());
+        }
     }
 
     @Override

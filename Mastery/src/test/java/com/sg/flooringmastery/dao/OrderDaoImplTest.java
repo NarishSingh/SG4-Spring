@@ -146,6 +146,7 @@ public class OrderDaoImplTest {
             Order noDate1 = testDao.getOrder(LocalDate.now(), 1);
             Order noDate2 = testDao.getOrder(LocalDate.now(), 2);
             Order noDate3 = testDao.getOrder(LocalDate.now(), 3);
+            fail("All orders invalid");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (InvalidOrderNumberException e) {
@@ -170,6 +171,7 @@ public class OrderDaoImplTest {
             Order badNum1 = testDao.getOrder(firstOrder.getOrderDate(), 99);
             Order badNum2 = testDao.getOrder(secondOrder.getOrderDate(), 99);
             Order badNum3 = testDao.getOrder(thirdOrder.getOrderDate(), 99);
+            fail("All orders invalid");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (NoOrdersOnDateException e) {
@@ -216,6 +218,7 @@ public class OrderDaoImplTest {
 
         try {
             testDao.editOrder(firstOrder, firstOrderBadDate);
+            fail("Bad edit");
         } catch (NoOrdersOnDateException e) {
             return;
         } catch (InvalidOrderNumberException e) {
@@ -241,6 +244,7 @@ public class OrderDaoImplTest {
 
         try {
             testDao.editOrder(firstOrder, firstOrderBadNum);
+            fail("Bad edit");
         } catch (InvalidOrderNumberException e) {
             return;
         } catch (NoOrdersOnDateException e) {
@@ -282,6 +286,7 @@ public class OrderDaoImplTest {
 
         try {
             List<Order> ordersOnDate = testDao.getOrdersByDate(LocalDate.now());
+            fail("No dates to get");
         } catch (NoOrdersOnDateException e) {
             return;
         }

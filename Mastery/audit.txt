@@ -144,3 +144,8 @@
 2020-07-20T11:45:13.021470700 : exportOrder: 
 2020-07-20T11:46:10.684852800 : addOrder: Order{orderDate=2020-08-31, orderNum=10, customerName=John Cena, state=State{stateAbbreviation=CA, stateName=California, taxRate=25.00}, product=Product{productType=Carpet, costPerSqFt=2.25, laborCostPerSqFt=2.10}, area=333, materialCost=749.25, laborCost=699.30, tax=362.14, total=1810.69}
 2020-07-20T11:46:16.819281700 : exportOrder: 
+2020-07-20T13:18:55.831860200 : addOrder: Order{orderDate=2030-01-01, orderNum=11, customerName=Randy Hash, LLC., state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=850, materialCost=4377.50, laborCost=4037.50, tax=504.90, total=8919.90}
+2020-07-20T13:21:10.421238200 : editOrder: Order{orderDate=2030-01-01, orderNum=11, customerName=Hash Ventures, LLC, state=State{stateAbbreviation=KY, stateName=Kentucky, taxRate=6.00}, product=Product{productType=Carpet, costPerSqFt=2.25, laborCostPerSqFt=2.10}, area=800, materialCost=1800.00, laborCost=1680.00, tax=208.80, total=3688.80}Order{orderDate=2030-01-01, orderNum=11, customerName=Randy Hash, LLC., state=State{stateAbbreviation=KY, stateName=null, taxRate=6.00}, product=Product{productType=Wood, costPerSqFt=5.15, laborCostPerSqFt=4.75}, area=850, materialCost=4377.50, laborCost=4037.50, tax=504.90, total=8919.90}
+2020-07-20T13:21:33.329629500 : exportOrder: 
+2020-07-20T13:24:10.472952300 : removeOrder: 2020-08-3110
+2020-07-20T13:24:48.547461900 : removeOrder: 2020-08-319

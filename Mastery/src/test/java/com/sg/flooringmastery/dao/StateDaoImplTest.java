@@ -59,12 +59,13 @@ public class StateDaoImplTest {
         System.out.println("readStateByID");
 
         //arrange
-        final String testStateKeyCA = "CA";
+        final String testStateKeyNY = "NY";
         State testCA = null;
 
         //act and assert
         try {
-            testCA = testDao.readStateByID(testStateKeyCA);
+            testCA = testDao.readStateByID(testStateKeyNY);
+            fail("State does not exist");
         } catch (InvalidStateException e) {
             return; //pass
         } catch (StateReadException e) {
@@ -90,7 +91,7 @@ public class StateDaoImplTest {
         try {
             testTX = testDao.readStateByID(testStateKeyTX);
             testWA = testDao.readStateByID(testStateKeyWA);
-            
+
             allStatesFromFile = testDao.getValidStates();
         } catch (InvalidStateException | StateReadException e) {
             fail("Valid states");
