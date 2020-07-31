@@ -28,7 +28,7 @@ public class ProductDaoImplTest {
      * Test of readProductByID method, of class ProductDaoImpl.
      */
     @Test
-    public void testReadProductByID() throws InvalidProductException, ProductReadException {
+    public void testReadProductByID() throws Exception {
         System.out.println("readProductByID");
 
         //arrange
@@ -55,7 +55,7 @@ public class ProductDaoImplTest {
      * ProductDaoImpl.
      */
     @Test
-    public void testReadProductByIDInvalidProductFail() throws InvalidProductException, ProductReadException {
+    public void testReadProductByIDInvalidProductFail() throws Exception {
         System.out.println("readProductByID");
 
         //arrange
@@ -77,7 +77,7 @@ public class ProductDaoImplTest {
      * Test of getValidProducts method, of class ProductDaoImpl.
      */
     @Test
-    public void testGetValidProducts() throws ProductReadException, InvalidProductException {
+    public void testGetValidProducts() throws Exception {
         System.out.println("getValidProducts");
 
         //arrange

@@ -28,7 +28,7 @@ public class StateDaoImplTest {
      * Test of readStateByID method, of class StateDaoImpl.
      */
     @Test
-    public void testReadStateByID() throws InvalidStateException, StateReadException {
+    public void testReadStateByID() throws Exception {
         System.out.println("readStateByID");
 
         //arrange
@@ -55,7 +55,7 @@ public class StateDaoImplTest {
      * StateDaoImpl.
      */
     @Test
-    public void testReadStateByIDInvalidStateFail() throws InvalidStateException, StateReadException {
+    public void testReadStateByIDInvalidStateFail() throws Exception {
         System.out.println("readStateByID");
 
         //arrange
@@ -77,7 +77,7 @@ public class StateDaoImplTest {
      * Test of getValidStates method, of class StateDaoImpl.
      */
     @Test
-    public void testGetValidStates() throws StateReadException, InvalidStateException {
+    public void testGetValidStates() throws Exception {
         System.out.println("getValidStates");
 
         //arrange
